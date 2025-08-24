@@ -335,18 +335,20 @@ export function App() {
     );
   };
 
+  const handleDeadlineClick = (deadline: Deadline) => {
+    const highlight = highlights.find(h => h.id === deadline.highlightId);
+    if (highlight && scrollViewerTo.current) {
+      scrollViewerTo.current(highlight);
+    }
+  }
+
   return (
     <div className="App" style={{ display: "flex", height: "100vh" }}>
       <Sidebar
         deadlines={deadlines}
         highlights={highlights}
         resetToUpload={resetToUpload}
-        onDeadlineClick={(deadline) => {
-          const highlight = highlights.find(h => h.id === deadline.highlightId);
-          if (highlight && scrollViewerTo.current) {
-            scrollViewerTo.current(highlight);
-          }
-        }}
+        onDeadlineClick={handleDeadlineClick}
         onDeleteDeadline={deleteDeadline}
         showAddForm={showAddForm}
         onShowAddForm={setShowAddForm}
