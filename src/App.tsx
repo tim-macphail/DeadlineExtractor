@@ -47,13 +47,13 @@ const HighlightPopup = ({
 
 
 const PRIMARY_PDF_URL = "https://arxiv.org/pdf/1708.08021";
-const SECONDARY_PDF_URL = "https://arxiv.org/pdf/1604.02480";
 
 export function App() {
   const searchParams = new URLSearchParams(document.location.search);
   const initialUrl = searchParams.get("url") || PRIMARY_PDF_URL;
 
   const [url, setUrl] = useState(initialUrl);
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [highlights, setHighlights] = useState<Array<IHighlight>>(
     testHighlights[initialUrl] ? [...testHighlights[initialUrl]] : [],
   );
@@ -62,11 +62,15 @@ export function App() {
     setHighlights([]);
   };
 
-  const toggleDocument = () => {
-    const newUrl =
-      url === PRIMARY_PDF_URL ? SECONDARY_PDF_URL : PRIMARY_PDF_URL;
-    setUrl(newUrl);
-    setHighlights(testHighlights[newUrl] ? [...testHighlights[newUrl]] : []);
+  const handleFileUpload = (file: File) => {
+    if (file.type === "application/pdf") {
+      setUploadedFile(file);
+      const fileUrl = URL.createObjectURL(file);
+      setUrl(fileUrl);
+      setHighlights([]); // Reset highlights for new document
+    } else {
+      alert("Please upload a PDF file.");
+    }
   };
 
   const scrollViewerTo = useRef((_highlight: IHighlight) => { });
@@ -207,7 +211,7 @@ export function App() {
       <Sidebar
         highlights={highlights}
         resetHighlights={resetHighlights}
-        toggleDocument={toggleDocument}
+        onFileUpload={handleFileUpload}
       />
       <div
         style={{

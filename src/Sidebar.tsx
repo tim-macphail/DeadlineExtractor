@@ -3,7 +3,7 @@ import type { IHighlight } from "react-pdf-highlighter";
 interface Props {
   highlights: Array<IHighlight>;
   resetHighlights: () => void;
-  toggleDocument: () => void;
+  onFileUpload: (file: File) => void;
 }
 
 const updateHash = (highlight: IHighlight) => {
@@ -26,9 +26,16 @@ const sortHighlights = (a: IHighlight, b: IHighlight) => {
 
 export function Sidebar({
   highlights,
-  toggleDocument,
+  onFileUpload,
   resetHighlights,
 }: Props) {
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      onFileUpload(file);
+    }
+  };
+
   return (
     <div className="sidebar" style={{ width: "25vw" }}>
       <div className="description" style={{ padding: "1rem" }}>
@@ -42,6 +49,20 @@ export function Sidebar({
             drag.
           </small>
         </p>
+
+        <div style={{ marginTop: "1rem" }}>
+          <input
+            type="file"
+            accept=".pdf"
+            onChange={handleFileChange}
+            style={{
+              padding: "0.5rem",
+              border: "1px solid #ccc",
+              borderRadius: "4px",
+              width: "100%",
+            }}
+          />
+        </div>
       </div>
 
       <ul className="sidebar__highlights">
@@ -76,11 +97,6 @@ export function Sidebar({
           </li>
         ))}
       </ul>
-      <div style={{ padding: "1rem" }}>
-        <button type="button" onClick={toggleDocument}>
-          Toggle PDF document
-        </button>
-      </div>
       {highlights.length > 0 ? (
         <div style={{ padding: "1rem" }}>
           <button type="button" onClick={resetHighlights}>
