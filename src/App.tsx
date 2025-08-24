@@ -21,7 +21,6 @@ import { testHighlights as _testHighlights } from "./test-highlights";
 
 import "./style/App.css";
 import "react-pdf-highlighter/dist/style.css";
-const testHighlights: Record<string, Array<IHighlight>> = _testHighlights;
 
 const getNextId = () => String(Math.random()).slice(2);
 
@@ -48,7 +47,6 @@ const HighlightPopup = ({
 
 export function App() {
   const [url, setUrl] = useState<string>("");
-  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [highlights, setHighlights] = useState<Array<IHighlight>>([]);
   const [isDragOver, setIsDragOver] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -59,7 +57,6 @@ export function App() {
 
   const handleFileUpload = (file: File) => {
     if (file.type === "application/pdf") {
-      setUploadedFile(file);
       const fileUrl = URL.createObjectURL(file);
       setUrl(fileUrl);
       setHighlights([]); // Reset highlights for new document
@@ -105,7 +102,6 @@ export function App() {
 
   const resetToUpload = () => {
     setUrl("");
-    setUploadedFile(null);
     setHighlights([]);
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
