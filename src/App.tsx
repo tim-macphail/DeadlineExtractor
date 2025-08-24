@@ -58,11 +58,6 @@ export function App() {
   const [isDragOver, setIsDragOver] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const resetHighlights = () => {
-    setHighlights([]);
-    setDeadlines([]);
-  };
-
   const handleFileUpload = (file: File) => {
     if (file.type === "application/pdf") {
       const fileUrl = URL.createObjectURL(file);
@@ -195,6 +190,19 @@ export function App() {
     setDeadlines((prevDeadlines) => [newDeadline, ...prevDeadlines]);
   };
 
+  const deleteDeadline = (deadlineId: string) => {
+    setDeadlines((prevDeadlines) =>
+      prevDeadlines.filter(deadline => deadline.id !== deadlineId)
+    );
+    // Also remove the associated highlight
+    setHighlights((prevHighlights) =>
+      prevHighlights.filter(highlight => {
+        const associatedDeadline = deadlines.find(d => d.id === deadlineId);
+        return associatedDeadline ? highlight.id !== associatedDeadline.highlightId : true;
+      })
+    );
+  };
+
   const handleSelectionFinished = (
     position: ScaledPosition,
     content: { text?: string; image?: string },
@@ -276,7 +284,6 @@ export function App() {
       <Sidebar
         deadlines={deadlines}
         highlights={highlights}
-        resetHighlights={resetHighlights}
         resetToUpload={resetToUpload}
         onDeadlineClick={(deadline) => {
           const highlight = highlights.find(h => h.id === deadline.highlightId);
@@ -284,6 +291,7 @@ export function App() {
             scrollViewerTo.current(highlight);
           }
         }}
+        onDeleteDeadline={deleteDeadline}
       />
       <div
         style={{

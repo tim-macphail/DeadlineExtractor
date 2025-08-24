@@ -5,6 +5,7 @@ interface DeadlineListProps {
   deadlines: Array<Deadline>;
   highlights: Array<IHighlight>;
   onDeadlineClick?: (deadline: Deadline) => void;
+  onDeleteDeadline?: (deadlineId: string) => void;
 }
 
 const updateHash = (highlight: IHighlight) => {
@@ -40,6 +41,7 @@ export function DeadlineList({
   deadlines,
   highlights,
   onDeadlineClick,
+  onDeleteDeadline,
 }: DeadlineListProps) {
   return (
     <ul className="sidebar__highlights" style={{ margin: 0 }}>
@@ -51,6 +53,7 @@ export function DeadlineList({
             key={index}
             className="sidebar__highlight"
             onClick={() => handleDeadlineClick(deadline, highlights, onDeadlineClick)}
+            style={{ position: "relative" }}
           >
             <div>
               <strong style={{ fontSize: "1.1em", color: "#333" }}>
@@ -74,6 +77,38 @@ export function DeadlineList({
               <div className="highlight__location">
                 Page {associatedHighlight.position.pageNumber}
               </div>
+            )}
+            {onDeleteDeadline && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDeleteDeadline(deadline.id);
+                }}
+                style={{
+                  position: "absolute",
+                  top: "0.5rem",
+                  right: "0.5rem",
+                  background: "none",
+                  border: "none",
+                  fontSize: "1.2em",
+                  cursor: "pointer",
+                  color: "#999",
+                  padding: "0.2rem 0.4rem",
+                  borderRadius: "3px",
+                  transition: "all 0.2s ease"
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.backgroundColor = "#ffebee";
+                  e.currentTarget.style.color = "#d32f2f";
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.backgroundColor = "transparent";
+                  e.currentTarget.style.color = "#999";
+                }}
+                title="Delete deadline"
+              >
+                ×
+              </button>
             )}
           </li>
         );
