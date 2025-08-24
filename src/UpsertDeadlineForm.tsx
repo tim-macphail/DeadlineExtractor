@@ -6,13 +6,33 @@ interface DeadlineData {
   description?: string;
 }
 
-interface AddDeadlineFormProps {
+interface Deadline {
+  id: string;
+  name: string;
+  date: string;
+  description?: string;
+  highlightId: string;
+}
+
+interface UpsertDeadlineFormProps {
   onAdd: (deadlineData: DeadlineData) => void;
   onOpen: () => void;
   onClose: () => void;
+  isEditing?: boolean;
+  editingDeadline?: Deadline;
+  onUpdate?: (deadlineId: string, deadlineData: DeadlineData) => void;
 }
 
-export const AddDeadlineForm = ({ onAdd, onOpen, onClose }: AddDeadlineFormProps) => {
+const defaultOnAdd = () => {};
+
+export const UpsertDeadlineForm = ({
+  onAdd,
+  onOpen,
+  onClose,
+  isEditing = false,
+  editingDeadline,
+  onUpdate
+}: UpsertDeadlineFormProps) => {
   const [name, setName] = useState("");
   const [date, setDate] = useState("");
   const [description, setDescription] = useState("");
@@ -21,16 +41,34 @@ export const AddDeadlineForm = ({ onAdd, onOpen, onClose }: AddDeadlineFormProps
     onOpen();
   }, []);
 
+  useEffect(() => {
+    if (isEditing && editingDeadline) {
+      setName(editingDeadline.name);
+      setDate(editingDeadline.date);
+      setDescription(editingDeadline.description || "");
+    }
+  }, [isEditing, editingDeadline]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onAdd({
+    const deadlineData = {
       name: name.trim(),
       date,
       description: description.trim() || undefined
-    });
-    setName("");
-    setDate("");
-    setDescription("");
+    };
+
+    if (isEditing && editingDeadline && onUpdate) {
+      onUpdate(editingDeadline.id, deadlineData);
+    } else {
+      onAdd(deadlineData);
+    }
+
+    // Only clear form if not editing
+    if (!isEditing) {
+      setName("");
+      setDate("");
+      setDescription("");
+    }
   };
 
   const handleClose = () => {
@@ -63,6 +101,15 @@ export const AddDeadlineForm = ({ onAdd, onOpen, onClose }: AddDeadlineFormProps
         }}>
           Add New Deadline
         </h3> */}
+        <h3 style={{
+          margin: "0",
+          color: "#1a1a1a",
+          fontSize: "18px",
+          fontWeight: "600",
+          flex: 1
+        }}>
+          {isEditing ? "Edit Deadline" : "Add New Deadline"}
+        </h3>
         <button onClick={handleClose}>x</button>
       </div>
 
@@ -175,7 +222,7 @@ export const AddDeadlineForm = ({ onAdd, onOpen, onClose }: AddDeadlineFormProps
           onMouseOver={(e) => e.currentTarget.style.backgroundColor = "#2563eb"}
           onMouseOut={(e) => e.currentTarget.style.backgroundColor = "#3b82f6"}
         >
-          Save
+          {isEditing ? "Update Deadline" : "Save Deadline"}
         </button>
       </form>
     </div>

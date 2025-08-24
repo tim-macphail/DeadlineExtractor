@@ -5,8 +5,9 @@ interface DeadlineListProps {
   deadlines: Array<Deadline>;
   highlights: Array<IHighlight>;
   onDeadlineClick?: (deadline: Deadline) => void;
-  onDeleteDeadline?: (deadlineId: string) => void;
+  onDeleteDeadline: (deadlineId: string) => void;
   onShowAddForm?: () => void;
+  onEditDeadline: (deadline: Deadline) => void;
 }
 
 const updateHash = (highlight: IHighlight) => {
@@ -44,6 +45,7 @@ export function DeadlineList({
   onDeadlineClick,
   onDeleteDeadline,
   onShowAddForm,
+  onEditDeadline,
 }: DeadlineListProps) {
   return (
     <ul className="sidebar__highlights" style={{ margin: 0 }}>
@@ -112,7 +114,29 @@ export function DeadlineList({
                 Page {associatedHighlight.position.pageNumber}
               </div>
             )}
-            {onDeleteDeadline && (
+
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onEditDeadline(deadline);
+              }}
+              style={{
+                position: "absolute",
+                top: "0.5rem",
+                right: "2.5rem",
+                background: "none",
+                border: "none",
+                fontSize: "1.1em",
+                cursor: "pointer",
+                color: "#666",
+                padding: "0.2rem 0.4rem",
+                borderRadius: "3px",
+                transition: "all 0.2s ease"
+              }}
+              title="Edit deadline"
+            >
+              ✏️
+            </button>
               <button
                 onClick={(e) => {
                   e.stopPropagation();
@@ -143,7 +167,6 @@ export function DeadlineList({
               >
                 ×
               </button>
-            )}
           </li>
         );
       })}

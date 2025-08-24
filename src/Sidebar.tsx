@@ -2,17 +2,21 @@ import type { IHighlight } from "react-pdf-highlighter";
 import type { Deadline } from "./App";
 import { DeadlineCalendar } from "./Calendar";
 import { DeadlineList } from "./DeadlineList";
-import { AddDeadlineForm } from "./AddDeadlineForm";
+import { UpsertDeadlineForm } from "./UpsertDeadlineForm";
 
 interface Props {
   deadlines: Array<Deadline>;
   highlights: Array<IHighlight>;
   resetToUpload: () => void;
   onDeadlineClick?: (deadline: Deadline) => void;
-  onDeleteDeadline?: (deadlineId: string) => void;
+  onDeleteDeadline: (deadlineId: string) => void;
   showAddForm?: boolean;
   onShowAddForm?: (show: boolean) => void;
   onAddDeadline?: (deadlineData: { name: string; date: string; description?: string }) => void;
+  editingDeadline?: Deadline;
+  showEditForm?: boolean;
+  onShowEditForm?: (show: boolean, deadline?: Deadline) => void;
+  onUpdateDeadline?: (deadlineId: string, deadlineData: { name: string; date: string; description?: string }) => void;
 }
 
 const updateHash = (highlight: IHighlight) => {
@@ -40,6 +44,10 @@ export function Sidebar({
   showAddForm,
   onShowAddForm,
   onAddDeadline,
+  editingDeadline,
+  showEditForm,
+  onShowEditForm,
+  onUpdateDeadline,
 }: Props) {
   return (
     <div className="sidebar" style={{
@@ -73,12 +81,24 @@ export function Sidebar({
           paddingBottom: "1rem"
         }}>
           {showAddForm ? (
-            <AddDeadlineForm
+            <UpsertDeadlineForm
               onClose={() => onShowAddForm?.(false)}
               onOpen={() => { }}
               onAdd={(deadlineData) => {
                 onAddDeadline?.(deadlineData);
                 onShowAddForm?.(false);
+              }}
+            />
+          ) : showEditForm ? (
+            <UpsertDeadlineForm
+              isEditing={true}
+              editingDeadline={editingDeadline}
+              onAdd={() => {}} // Not used in edit mode
+              onClose={() => onShowEditForm?.(false)}
+              onOpen={() => { }}
+              onUpdate={(deadlineId, deadlineData) => {
+                onUpdateDeadline?.(deadlineId, deadlineData);
+                onShowEditForm?.(false);
               }}
             />
           ) : (
@@ -88,6 +108,7 @@ export function Sidebar({
               onDeadlineClick={onDeadlineClick}
               onDeleteDeadline={onDeleteDeadline}
               onShowAddForm={() => onShowAddForm?.(true)}
+              onEditDeadline={(deadline) => onShowEditForm?.(true, deadline)}
             />
           )}
         </div>

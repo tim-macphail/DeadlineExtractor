@@ -15,7 +15,7 @@ import type {
 
 import { Sidebar } from "./Sidebar";
 import { Spinner } from "./Spinner";
-import { AddDeadlineForm } from "./AddDeadlineForm";
+import { UpsertDeadlineForm } from "./UpsertDeadlineForm";
 import { testHighlights as _testHighlights } from "./test-highlights";
 
 import "./style/App.css";
@@ -57,6 +57,8 @@ export function App() {
   const [deadlines, setDeadlines] = useState<Array<Deadline>>([]);
   const [isDragOver, setIsDragOver] = useState(false);
   const [showAddForm, setShowAddForm] = useState(false);
+  const [editingDeadline, setEditingDeadline] = useState<Deadline>();
+  const [showEditForm, setShowEditForm] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileUpload = (file: File) => {
@@ -201,6 +203,7 @@ export function App() {
     };
     setDeadlines((prevDeadlines) => [newDeadline, ...prevDeadlines]);
     setShowAddForm(false); // Hide the form after adding
+    setShowEditForm(false); // Also hide edit form if it's open
   };
 
   const deleteDeadline = (deadlineId: string) => {
@@ -216,13 +219,49 @@ export function App() {
     );
   };
 
+  const updateDeadline = (deadlineId: string, deadlineData: { name: string; date: string; description?: string }) => {
+    setDeadlines((prevDeadlines) =>
+      prevDeadlines.map(deadline =>
+        deadline.id === deadlineId
+          ? { ...deadline, ...deadlineData }
+          : deadline
+      )
+    );
+
+    // Also update the associated highlight comment
+    setHighlights((prevHighlights) =>
+      prevHighlights.map(highlight => {
+        const associatedDeadline = deadlines.find(d => d.id === deadlineId);
+        if (associatedDeadline && highlight.id === associatedDeadline.highlightId) {
+          const deadlineText = `${deadlineData.name} - ${new Date(deadlineData.date).toLocaleString()}`;
+          return {
+            ...highlight,
+            comment: {
+              text: deadlineText,
+              emoji: "⏰"
+            }
+          };
+        }
+        return highlight;
+      })
+    );
+  };
+
+  const handleShowEditForm = (show: boolean, deadline?: Deadline) => {
+    setShowEditForm(show);
+    setEditingDeadline(deadline);
+    if (!show) {
+      setEditingDeadline(undefined);
+    }
+  };
+
   const handleSelectionFinished = (
     position: ScaledPosition,
     content: { text?: string; image?: string },
     hideTipAndSelection: () => void,
     transformSelection: () => void,
   ) => (
-    <AddDeadlineForm
+    <UpsertDeadlineForm
       onClose={hideTipAndSelection}
       onOpen={transformSelection}
       onAdd={(deadlineData: { name: string; date: string; description?: string }) => {
@@ -311,6 +350,10 @@ export function App() {
         showAddForm={showAddForm}
         onShowAddForm={setShowAddForm}
         onAddDeadline={addStandaloneDeadline}
+        editingDeadline={editingDeadline}
+        showEditForm={showEditForm}
+        onShowEditForm={handleShowEditForm}
+        onUpdateDeadline={updateDeadline}
       />
       <div
         style={{
