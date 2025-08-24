@@ -3,7 +3,7 @@ import type { IHighlight } from "react-pdf-highlighter";
 interface Props {
   highlights: Array<IHighlight>;
   resetHighlights: () => void;
-  onFileUpload: (file: File) => void;
+  resetToUpload: () => void;
 }
 
 const updateHash = (highlight: IHighlight) => {
@@ -26,16 +26,9 @@ const sortHighlights = (a: IHighlight, b: IHighlight) => {
 
 export function Sidebar({
   highlights,
-  onFileUpload,
+  resetToUpload,
   resetHighlights,
 }: Props) {
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      onFileUpload(file);
-    }
-  };
-
   return (
     <div className="sidebar" style={{ width: "25vw" }}>
       <div className="description" style={{ padding: "1rem" }}>
@@ -49,20 +42,6 @@ export function Sidebar({
             drag.
           </small>
         </p>
-
-        <div style={{ marginTop: "1rem" }}>
-          <input
-            type="file"
-            accept=".pdf"
-            onChange={handleFileChange}
-            style={{
-              padding: "0.5rem",
-              border: "1px solid #ccc",
-              borderRadius: "4px",
-              width: "100%",
-            }}
-          />
-        </div>
       </div>
 
       <ul className="sidebar__highlights">
@@ -99,8 +78,35 @@ export function Sidebar({
       </ul>
       {highlights.length > 0 ? (
         <div style={{ padding: "1rem" }}>
-          <button type="button" onClick={resetHighlights}>
+          <button
+            type="button"
+            onClick={resetHighlights}
+            style={{
+              width: "100%",
+              padding: "0.5rem",
+              marginBottom: "0.5rem",
+              border: "1px solid #ccc",
+              borderRadius: "4px",
+              backgroundColor: "#f8f9fa",
+              cursor: "pointer",
+            }}
+          >
             Reset highlights
+          </button>
+          <button
+            type="button"
+            onClick={resetToUpload}
+            style={{
+              width: "100%",
+              padding: "0.5rem",
+              border: "1px solid #007bff",
+              borderRadius: "4px",
+              backgroundColor: "#007bff",
+              color: "white",
+              cursor: "pointer",
+            }}
+          >
+            Upload New PDF
           </button>
         </div>
       ) : null}

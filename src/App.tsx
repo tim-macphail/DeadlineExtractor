@@ -46,17 +46,12 @@ const HighlightPopup = ({
 
 
 
-const PRIMARY_PDF_URL = "https://arxiv.org/pdf/1708.08021";
-
 export function App() {
-  const searchParams = new URLSearchParams(document.location.search);
-  const initialUrl = searchParams.get("url") || PRIMARY_PDF_URL;
-
-  const [url, setUrl] = useState(initialUrl);
+  const [url, setUrl] = useState<string>("");
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
-  const [highlights, setHighlights] = useState<Array<IHighlight>>(
-    testHighlights[initialUrl] ? [...testHighlights[initialUrl]] : [],
-  );
+  const [highlights, setHighlights] = useState<Array<IHighlight>>([]);
+  const [isDragOver, setIsDragOver] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const resetHighlights = () => {
     setHighlights([]);
@@ -70,6 +65,50 @@ export function App() {
       setHighlights([]); // Reset highlights for new document
     } else {
       alert("Please upload a PDF file.");
+    }
+  };
+
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      handleFileUpload(file);
+    }
+  };
+
+  const handleDrop = (event: React.DragEvent) => {
+    event.preventDefault();
+    setIsDragOver(false);
+
+    const files = Array.from(event.dataTransfer.files);
+    const pdfFile = files.find(file => file.type === "application/pdf");
+
+    if (pdfFile) {
+      handleFileUpload(pdfFile);
+    } else {
+      alert("Please upload a PDF file.");
+    }
+  };
+
+  const handleDragOver = (event: React.DragEvent) => {
+    event.preventDefault();
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = (event: React.DragEvent) => {
+    event.preventDefault();
+    setIsDragOver(false);
+  };
+
+  const handleUploadClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const resetToUpload = () => {
+    setUrl("");
+    setUploadedFile(null);
+    setHighlights([]);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
     }
   };
 
@@ -211,7 +250,7 @@ export function App() {
       <Sidebar
         highlights={highlights}
         resetHighlights={resetHighlights}
-        onFileUpload={handleFileUpload}
+        resetToUpload={resetToUpload}
       />
       <div
         style={{
@@ -220,19 +259,103 @@ export function App() {
           position: "relative",
         }}
       >
-        <PdfLoader url={url} beforeLoad={<Spinner />}>
-          {(pdfDocument) => (
-            <PdfHighlighter
-              pdfDocument={pdfDocument}
-              enableAreaSelection={(event) => event.altKey}
-              onScrollChange={resetHash}
-              scrollRef={handleScrollRef}
-              onSelectionFinished={handleSelectionFinished}
-              highlightTransform={handleHighlightTransform}
-              highlights={highlights}
+        {url ? (
+          <PdfLoader url={url} beforeLoad={<Spinner />}>
+            {(pdfDocument) => (
+              <PdfHighlighter
+                pdfDocument={pdfDocument}
+                enableAreaSelection={(event) => event.altKey}
+                onScrollChange={resetHash}
+                scrollRef={handleScrollRef}
+                onSelectionFinished={handleSelectionFinished}
+                highlightTransform={handleHighlightTransform}
+                highlights={highlights}
+              />
+            )}
+          </PdfLoader>
+        ) : (
+          <div
+            onDrop={handleDrop}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            style={{
+              height: "100%",
+              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              border: isDragOver ? "3px dashed #007bff" : "3px dashed #ccc",
+              borderRadius: "8px",
+              backgroundColor: isDragOver ? "#f0f8ff" : "#fafafa",
+              transition: "all 0.3s ease",
+              padding: "2rem",
+              textAlign: "center",
+            }}
+          >
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".pdf"
+              onChange={handleFileSelect}
+              style={{ display: "none" }}
             />
-          )}
-        </PdfLoader>
+
+            <div style={{ marginBottom: "2rem" }}>
+              <svg
+                width="64"
+                height="64"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                style={{ color: "#666", marginBottom: "1rem" }}
+              >
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14,2 14,8 20,8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10,9 9,9 8,9"></polyline>
+              </svg>
+            </div>
+
+            <h3 style={{ marginBottom: "1rem", color: "#333" }}>
+              Upload a PDF Document
+            </h3>
+
+            <p style={{ marginBottom: "2rem", color: "#666", maxWidth: "400px" }}>
+              Drag and drop a PDF file here, or click the button below to select a file from your computer.
+            </p>
+
+            <button
+              onClick={handleUploadClick}
+              style={{
+                padding: "12px 24px",
+                backgroundColor: "#007bff",
+                color: "white",
+                border: "none",
+                borderRadius: "6px",
+                fontSize: "16px",
+                cursor: "pointer",
+                transition: "background-color 0.3s ease",
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.backgroundColor = "#0056b3";
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.backgroundColor = "#007bff";
+              }}
+            >
+              Choose PDF File
+            </button>
+
+            <p style={{ marginTop: "1rem", color: "#999", fontSize: "14px" }}>
+              Only PDF files are supported
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
