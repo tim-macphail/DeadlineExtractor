@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import type { Deadline } from './App';
@@ -29,38 +29,32 @@ export function DeadlineCalendar({ deadlines, onEventClick }: Props) {
   };
 
   // Custom tile content to show event indicators
-  const tileContent = ({ date, view }: { date: Date; view: string }) => {
+  const tileContent = ({ date, view }: { date: Date; view: string }) => {   
     if (view === 'month' && hasEvents(date)) {
+
       const events = getEventsForDate(date);
+      console.log({ date, events });
       return (
-        <div style={{
-          position: 'absolute',
-          bottom: '2px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          display: 'flex',
-          gap: '2px'
-        }}>
-          {events.slice(0, 3).map((_, index) => (
+        <div style={{ marginTop: '4px', textAlign: 'center' }}>
+          {events.map((event, index) => (
             <div
               key={index}
               style={{
-                width: '4px',
-                height: '4px',
-                borderRadius: '50%',
-                backgroundColor: '#007bff'
+                backgroundColor: '#3b82f6',
+                color: 'white',
+                borderRadius: '12px',
+                padding: '2px 6px',
+                fontSize: '10px',
+                marginTop: '2px',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
               }}
-            />
+              title={event.name + (event.description ? `: ${event.description}` : '')}
+            >
+              {event.name}
+            </div>
           ))}
-          {events.length > 3 && (
-            <span style={{
-              fontSize: '10px',
-              color: '#007bff',
-              fontWeight: 'bold'
-            }}>
-              +{events.length - 3}
-            </span>
-          )}
         </div>
       );
     }
@@ -98,62 +92,6 @@ export function DeadlineCalendar({ deadlines, onEventClick }: Props) {
           tileContent={tileContent}
           className="deadline-calendar"
         />
-
-        {selectedDateEvents.length > 0 && (
-          <div style={{
-            maxHeight: '150px',
-            overflowY: 'auto',
-            border: '1px solid #eee',
-            borderRadius: '4px',
-            padding: '0.5rem'
-          }}>
-            <h4 style={{
-              margin: '0 0 0.5rem 0',
-              fontSize: '14px',
-              color: '#333'
-            }}>
-              Events for {date.toLocaleDateString()}:
-            </h4>
-            {selectedDateEvents.map((deadline) => (
-              <div
-                key={deadline.id}
-                onClick={() => onEventClick?.(deadline)}
-                style={{
-                  padding: '0.5rem',
-                  marginBottom: '0.5rem',
-                  backgroundColor: '#f8f9fa',
-                  borderRadius: '4px',
-                  cursor: 'pointer',
-                  border: '1px solid #dee2e6',
-                  fontSize: '12px'
-                }}
-              >
-                <div style={{
-                  fontWeight: 'bold',
-                  color: '#007bff',
-                  marginBottom: '0.25rem'
-                }}>
-                  {deadline.name}
-                </div>
-                {deadline.description && (
-                  <div style={{
-                    color: '#666',
-                    fontStyle: 'italic',
-                    marginBottom: '0.25rem'
-                  }}>
-                    {deadline.description}
-                  </div>
-                )}
-                <div style={{
-                  color: '#999',
-                  fontSize: '11px'
-                }}>
-                  {new Date(deadline.date).toLocaleTimeString()}
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
       </div>
     </div>
   );
