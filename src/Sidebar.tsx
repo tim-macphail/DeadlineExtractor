@@ -93,23 +93,23 @@ export function Sidebar({
           >
             Reset highlights
           </button>
-          <button
-            type="button"
-            onClick={resetToUpload}
-            style={{
-              width: "100%",
-              padding: "0.5rem",
-              border: "1px solid #007bff",
-              borderRadius: "4px",
-              backgroundColor: "#007bff",
-              color: "white",
-              cursor: "pointer",
-            }}
-          >
-            Upload New PDF
-          </button>
         </div>
       ) : null}
+      <button
+        type="button"
+        onClick={resetToUpload}
+        style={{
+          width: "100%",
+          padding: "0.5rem",
+          border: "1px solid #007bff",
+          borderRadius: "4px",
+          backgroundColor: "#007bff",
+          color: "white",
+          cursor: "pointer",
+        }}
+      >
+        Upload New PDF
+      </button>
     </div>
   );
 }
