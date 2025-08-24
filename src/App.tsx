@@ -222,29 +222,32 @@ export function App() {
     hideTipAndSelection: () => void,
     transformSelection: () => void,
   ) => (
-    <AddDeadlineForm onOpen={transformSelection} onAdd={(deadlineData: { name: string; date: string; description?: string }) => {
-      // Create highlight first
-      const newHighlightId = getNextId();
-      const deadlineText = `${deadlineData.name} - ${new Date(deadlineData.date).toLocaleString()}`;
+    <AddDeadlineForm
+      onClose={hideTipAndSelection}
+      onOpen={transformSelection}
+      onAdd={(deadlineData: { name: string; date: string; description?: string }) => {
+        // Create highlight first
+        const newHighlightId = getNextId();
+        const deadlineText = `${deadlineData.name} - ${new Date(deadlineData.date).toLocaleString()}`;
 
-      const newHighlight: IHighlight = {
-        id: newHighlightId,
-        content,
-        position,
-        comment: {
-          text: deadlineText,
-          emoji: "⏰"
-        }
-      };
+        const newHighlight: IHighlight = {
+          id: newHighlightId,
+          content,
+          position,
+          comment: {
+            text: deadlineText,
+            emoji: "⏰"
+          }
+        };
 
-      // Add highlight to state
-      setHighlights((prevHighlights) => [newHighlight, ...prevHighlights]);
+        // Add highlight to state
+        setHighlights((prevHighlights) => [newHighlight, ...prevHighlights]);
 
-      // Create and add deadline
-      addDeadline(deadlineData, newHighlightId);
+        // Create and add deadline
+        addDeadline(deadlineData, newHighlightId);
 
-      hideTipAndSelection();
-    }} />
+        hideTipAndSelection();
+      }} />
   );
 
   const handleHighlightTransform = (

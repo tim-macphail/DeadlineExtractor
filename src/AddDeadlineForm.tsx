@@ -9,9 +9,10 @@ interface DeadlineData {
 interface AddDeadlineFormProps {
   onAdd: (deadlineData: DeadlineData) => void;
   onOpen: () => void;
+  onClose: () => void;
 }
 
-export const AddDeadlineForm = ({ onAdd, onOpen }: AddDeadlineFormProps) => {
+export const AddDeadlineForm = ({ onAdd, onOpen, onClose }: AddDeadlineFormProps) => {
   const [name, setName] = useState("");
   const [date, setDate] = useState("");
   const [description, setDescription] = useState("");
@@ -32,6 +33,13 @@ export const AddDeadlineForm = ({ onAdd, onOpen }: AddDeadlineFormProps) => {
     setDescription("");
   };
 
+  const handleClose = () => {
+    setName("");
+    setDate("");
+    setDescription("");
+    onClose();
+  };
+
   return (
     <div style={{
       background: "white",
@@ -39,18 +47,24 @@ export const AddDeadlineForm = ({ onAdd, onOpen }: AddDeadlineFormProps) => {
       padding: "24px",
       boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
       border: "1px solid #e1e5e9",
-      minWidth: "320px",
-      maxWidth: "400px"
     }}>
-      <h3 style={{
-        margin: "0 0 20px 0",
-        color: "#1a1a1a",
-        fontSize: "18px",
-        fontWeight: "600",
-        textAlign: "center"
+      <div style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginBottom: "20px"
       }}>
-        Add New Deadline
-      </h3>
+        {/* <h3 style={{
+          margin: "0 0 20px 0",
+          color: "#1a1a1a",
+          fontSize: "18px",
+          fontWeight: "600",
+          textAlign: "center"
+        }}>
+          Add New Deadline
+        </h3> */}
+        <button onClick={handleClose}>x</button>
+      </div>
 
       <form onSubmit={handleSubmit}>
         <div style={{ marginBottom: "16px" }}>
@@ -108,7 +122,7 @@ export const AddDeadlineForm = ({ onAdd, onOpen }: AddDeadlineFormProps) => {
             }}
             onFocus={(e) => e.target.style.borderColor = "#3b82f6"}
             onBlur={(e) => e.target.style.borderColor = "#e5e7eb"}
-            // required
+          // required
           />
         </div>
 
@@ -161,7 +175,7 @@ export const AddDeadlineForm = ({ onAdd, onOpen }: AddDeadlineFormProps) => {
           onMouseOver={(e) => e.currentTarget.style.backgroundColor = "#2563eb"}
           onMouseOut={(e) => e.currentTarget.style.backgroundColor = "#3b82f6"}
         >
-          Add Deadline
+          Save
         </button>
       </form>
     </div>
