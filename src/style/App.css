@@ -62,3 +62,46 @@ blockquote:before {
 blockquote:after {
   content: close-quote;
 }
+
+/* Calendar styles */
+.deadline-calendar .react-calendar {
+  border: none;
+  background: transparent;
+  font-family: inherit;
+}
+
+.deadline-calendar .react-calendar__tile {
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.deadline-calendar .react-calendar__tile:hover {
+  background-color: rgba(0, 123, 255, 0.1);
+}
+
+.deadline-calendar .react-calendar__tile--active {
+  background-color: #007bff;
+  color: white;
+}
+
+.deadline-calendar .react-calendar__tile--active:hover {
+  background-color: #0056b3;
+}
+
+.deadline-calendar .react-calendar__navigation button {
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.deadline-calendar .react-calendar__navigation button:hover {
+  background-color: rgba(0, 123, 255, 0.1);
+}
+
+.deadline-calendar .react-calendar__month-view__days__day--weekend {
+  color: #dc3545;
+}
+
+.deadline-calendar .react-calendar__month-view__weekdays {
+  font-weight: 500;
+  color: #666;
+}

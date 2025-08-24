@@ -6,12 +6,10 @@ import {
   PdfHighlighter,
   PdfLoader,
   Popup,
-  Tip,
 } from "react-pdf-highlighter";
 import type {
   Content,
   IHighlight,
-  NewHighlight,
   ScaledPosition,
 } from "react-pdf-highlighter";
 
@@ -153,14 +151,6 @@ export function App() {
     return highlight;
   };
 
-  const addHighlight = (highlight: NewHighlight) => {
-    console.log("Saving highlight", highlight);
-    setHighlights((prevHighlights) => [
-      { ...highlight, id: getNextId() },
-      ...prevHighlights,
-    ]);
-  };
-
   const updateHighlight = (
     highlightId: string,
     position: Partial<ScaledPosition>,
@@ -288,6 +278,12 @@ export function App() {
         highlights={highlights}
         resetHighlights={resetHighlights}
         resetToUpload={resetToUpload}
+        onDeadlineClick={(deadline) => {
+          const highlight = highlights.find(h => h.id === deadline.highlightId);
+          if (highlight && scrollViewerTo.current) {
+            scrollViewerTo.current(highlight);
+          }
+        }}
       />
       <div
         style={{
