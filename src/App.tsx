@@ -27,7 +27,7 @@ export interface Deadline {
   name: string;
   date: string;
   description?: string;
-  highlightId: string;
+  highlight?: IHighlight;
 }
 
 const getNextId = () => String(Math.random()).slice(2);
@@ -50,11 +50,8 @@ const HighlightPopup = ({
     </div>
   ) : null;
 
-
-
 export function App() {
   const [url, setUrl] = useState<string>("");
-  const [highlights, setHighlights] = useState<Array<IHighlight>>([]);
   const [deadlines, setDeadlines] = useState<Array<Deadline>>([]);
   const [isDragOver, setIsDragOver] = useState(false);
   const [showAddForm, setShowAddForm] = useState(false);
@@ -66,7 +63,7 @@ export function App() {
     if (file.type === "application/pdf") {
       const fileUrl = URL.createObjectURL(file);
       setUrl(fileUrl);
-      setHighlights([]); // Reset highlights for new document
+      setDeadlines([]); // Reset deadlines for new document
     } else {
       alert("Please upload a PDF file.");
     }
@@ -109,7 +106,6 @@ export function App() {
 
   const resetToUpload = () => {
     setUrl("");
-    setHighlights([]);
     setDeadlines([]);
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
@@ -128,7 +124,7 @@ export function App() {
     if (highlight) {
       scrollViewerTo.current(highlight);
     }
-  }, [highlights]);
+  }, [deadlines]);
 
   useEffect(() => {
     window.addEventListener("hashchange", scrollToHighlightFromHash, false);
@@ -142,7 +138,8 @@ export function App() {
   }, [scrollToHighlightFromHash]);
 
   const getHighlightById = (id: string) => {
-    const highlight = highlights.find((highlight) => highlight.id === id);
+    const deadline = deadlines.find((deadline) => deadline.highlight?.id === id);
+    const highlight = deadline?.highlight;
 
     if (!highlight) {
       console.log("Highlight not found");
@@ -156,22 +153,17 @@ export function App() {
     content: Partial<Content>,
   ) => {
     console.log("Updating highlight", highlightId, position, content);
-    setHighlights((prevHighlights) =>
-      prevHighlights.map((h) => {
-        const {
-          id,
-          position: originalPosition,
-          content: originalContent,
-          ...rest
-        } = h;
-        return id === highlightId
-          ? {
-            id,
-            position: { ...originalPosition, ...position },
-            content: { ...originalContent, ...content },
-            ...rest,
-          }
-          : h;
+    setDeadlines((prevDeadlines) =>
+      prevDeadlines.map((deadline) => {
+        if (deadline.highlight?.id === highlightId) {
+          const updatedHighlight = {
+            ...deadline.highlight,
+            position: { ...deadline.highlight.position, ...position },
+            content: { ...deadline.highlight.content, ...content },
+          };
+          return { ...deadline, highlight: updatedHighlight };
+        }
+        return deadline;
       }),
     );
   };
@@ -181,15 +173,13 @@ export function App() {
     scrollToHighlightFromHash();
   };
 
-
-
-  const addDeadline = (deadlineData: { name: string; date: string; description?: string }, highlightId: string) => {
+  const addDeadline = (deadlineData: { name: string; date: string; description?: string }, highlight: IHighlight) => {
     const newDeadline: Deadline = {
       id: getNextId(),
       name: deadlineData.name,
       date: deadlineData.date,
       description: deadlineData.description,
-      highlightId: highlightId,
+      highlight: highlight,
     };
     setDeadlines((prevDeadlines) => [newDeadline, ...prevDeadlines]);
   };
@@ -200,7 +190,7 @@ export function App() {
       name: deadlineData.name,
       date: deadlineData.date,
       description: deadlineData.description,
-      highlightId: "", // No highlight associated
+      // No highlight for standalone deadlines
     };
     setDeadlines((prevDeadlines) => [newDeadline, ...prevDeadlines]);
     setShowAddForm(false); // Hide the form after adding
@@ -211,39 +201,30 @@ export function App() {
     setDeadlines((prevDeadlines) =>
       prevDeadlines.filter(deadline => deadline.id !== deadlineId)
     );
-    // Also remove the associated highlight
-    setHighlights((prevHighlights) =>
-      prevHighlights.filter(highlight => {
-        const associatedDeadline = deadlines.find(d => d.id === deadlineId);
-        return associatedDeadline ? highlight.id !== associatedDeadline.highlightId : true;
-      })
-    );
+    // Highlights are embedded in deadlines, so no separate cleanup needed
   };
 
   const updateDeadline = (deadlineId: string, deadlineData: { name: string; date: string; description?: string }) => {
     setDeadlines((prevDeadlines) =>
-      prevDeadlines.map(deadline =>
-        deadline.id === deadlineId
-          ? { ...deadline, ...deadlineData }
-          : deadline
-      )
-    );
+      prevDeadlines.map(deadline => {
+        if (deadline.id === deadlineId) {
+          const updatedDeadline = { ...deadline, ...deadlineData };
 
-    // Also update the associated highlight comment
-    setHighlights((prevHighlights) =>
-      prevHighlights.map(highlight => {
-        const associatedDeadline = deadlines.find(d => d.id === deadlineId);
-        if (associatedDeadline && highlight.id === associatedDeadline.highlightId) {
-          const deadlineText = `${deadlineData.name} - ${new Date(deadlineData.date).toLocaleString()}`;
-          return {
-            ...highlight,
-            comment: {
-              text: deadlineText,
-              emoji: "⏰"
-            }
-          };
+          // If there's a highlight, update its comment
+          if (updatedDeadline.highlight) {
+            const deadlineText = `${deadlineData.name} - ${new Date(deadlineData.date).toLocaleString()}`;
+            updatedDeadline.highlight = {
+              ...updatedDeadline.highlight,
+              comment: {
+                text: deadlineText,
+                emoji: "⏰"
+              }
+            };
+          }
+
+          return updatedDeadline;
         }
-        return highlight;
+        return deadline;
       })
     );
   };
@@ -280,11 +261,8 @@ export function App() {
           }
         };
 
-        // Add highlight to state
-        setHighlights((prevHighlights) => [newHighlight, ...prevHighlights]);
-
-        // Create and add deadline
-        addDeadline(deadlineData, newHighlightId);
+        // Create and add deadline with embedded highlight
+        addDeadline(deadlineData, newHighlight);
 
         hideTipAndSelection();
       }} />
@@ -336,17 +314,22 @@ export function App() {
   };
 
   const handleDeadlineClick = (deadline: Deadline) => {
-    const highlight = highlights.find(h => h.id === deadline.highlightId);
+    const highlight = deadline.highlight;
     if (highlight && scrollViewerTo.current) {
       scrollViewerTo.current(highlight);
     }
-  }
+  };
 
   const handleAIScan = () => {
     // TODO: Implement AI scan functionality
     console.log("AI Scan button clicked");
     alert("AI Scan functionality will be implemented here");
   };
+
+  // Compute highlights array from deadlines for PdfHighlighter
+  const highlights = deadlines
+    .filter(deadline => deadline.highlight)
+    .map(deadline => deadline.highlight!);
 
   return (
     <div className="App" style={{ display: "flex", height: "100vh" }}>

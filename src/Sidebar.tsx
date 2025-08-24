@@ -23,8 +23,8 @@ const updateHash = (highlight: IHighlight) => {
   document.location.hash = `highlight-${highlight.id}`;
 };
 
-const handleDeadlineClick = (deadline: Deadline, highlights: Array<IHighlight>, onDeadlineClick?: (deadline: Deadline) => void) => {
-  const associatedHighlight = highlights.find(h => h.id === deadline.highlightId);
+const handleDeadlineClick = (deadline: Deadline, onDeadlineClick?: (deadline: Deadline) => void) => {
+  const associatedHighlight = deadline.highlight;
   if (associatedHighlight) {
     updateHash(associatedHighlight);
   }
@@ -115,7 +115,7 @@ export function Sidebar({
 
         <DeadlineCalendar
           deadlines={deadlines}
-          onEventClick={(deadline) => handleDeadlineClick(deadline, highlights, onDeadlineClick)}
+          onEventClick={(deadline) => handleDeadlineClick(deadline, onDeadlineClick)}
         />
       </div>
 

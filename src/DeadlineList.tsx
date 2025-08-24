@@ -27,10 +27,9 @@ const sortDeadlines = (a: Deadline, b: Deadline) => {
 
 const handleDeadlineClick = (
   deadline: Deadline,
-  highlights: Array<IHighlight>,
   onDeadlineClick?: (deadline: Deadline) => void
 ) => {
-  const associatedHighlight = highlights.find(h => h.id === deadline.highlightId);
+  const associatedHighlight = deadline.highlight;
   if (associatedHighlight) {
     updateHash(associatedHighlight);
   }
@@ -82,13 +81,13 @@ export function DeadlineList({
         </div>
       </li>
       {deadlines.sort(sortDeadlines).map((deadline, index) => {
-        const associatedHighlight = highlights.find(h => h.id === deadline.highlightId);
+        const associatedHighlight = deadline.highlight;
         return (
           <li
             // biome-ignore lint/suspicious/noArrayIndexKey: This is an example app
             key={index}
             className="sidebar__highlight"
-            onClick={() => handleDeadlineClick(deadline, highlights, onDeadlineClick)}
+            onClick={() => handleDeadlineClick(deadline, onDeadlineClick)}
             style={{ position: "relative" }}
           >
             <div>
