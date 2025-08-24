@@ -6,7 +6,8 @@ interface DeadlineListProps {
   highlights: Array<IHighlight>;
   onDeadlineClick?: (deadline: Deadline) => void;
   onDeleteDeadline?: (deadlineId: string) => void;
-  onAddDeadline?: () => void;
+  onAddDeadline?: (deadlineData: { name: string; date: string; description?: string }) => void;
+  onShowAddForm?: () => void;
 }
 
 const updateHash = (highlight: IHighlight) => {
@@ -44,6 +45,7 @@ export function DeadlineList({
   onDeadlineClick,
   onDeleteDeadline,
   onAddDeadline,
+  onShowAddForm,
 }: DeadlineListProps) {
   return (
     <ul className="sidebar__highlights" style={{ margin: 0 }}>
@@ -115,41 +117,7 @@ export function DeadlineList({
           </li>
         );
       })}
-      {onAddDeadline && (
-        <li
-          className="sidebar__highlight"
-          onClick={onAddDeadline}
-          style={{
-            position: "relative",
-            cursor: "pointer",
-            border: "2px dashed #007bff",
-            backgroundColor: "#f8f9ff",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            minHeight: "60px",
-            transition: "all 0.2s ease"
-          }}
-          onMouseOver={(e) => {
-            e.currentTarget.style.backgroundColor = "#e8f2ff";
-            e.currentTarget.style.borderColor = "#0056b3";
-          }}
-          onMouseOut={(e) => {
-            e.currentTarget.style.backgroundColor = "#f8f9ff";
-            e.currentTarget.style.borderColor = "#007bff";
-          }}
-          title="Add new deadline"
-        >
-          <span style={{
-            fontSize: "2em",
-            color: "#007bff",
-            fontWeight: "bold",
-            userSelect: "none"
-          }}>
-            +
-          </span>
-        </li>
-      )}
+
     </ul>
   );
 }
