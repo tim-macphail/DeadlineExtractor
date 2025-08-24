@@ -165,7 +165,7 @@ export function DeadlineList({
                 }}
                 title="Delete deadline"
               >
-                ×
+                🗑
               </button>
           </li>
         );

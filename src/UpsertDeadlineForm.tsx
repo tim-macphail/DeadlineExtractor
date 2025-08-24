@@ -23,7 +23,6 @@ interface UpsertDeadlineFormProps {
   onUpdate?: (deadlineId: string, deadlineData: DeadlineData) => void;
 }
 
-const defaultOnAdd = () => {};
 
 export const UpsertDeadlineForm = ({
   onAdd,
@@ -92,15 +91,6 @@ export const UpsertDeadlineForm = ({
         alignItems: "center",
         marginBottom: "20px"
       }}>
-        {/* <h3 style={{
-          margin: "0 0 20px 0",
-          color: "#1a1a1a",
-          fontSize: "18px",
-          fontWeight: "600",
-          textAlign: "center"
-        }}>
-          Add New Deadline
-        </h3> */}
         <h3 style={{
           margin: "0",
           color: "#1a1a1a",
@@ -108,7 +98,7 @@ export const UpsertDeadlineForm = ({
           fontWeight: "600",
           flex: 1
         }}>
-          {isEditing ? "Edit Deadline" : "Add New Deadline"}
+          {isEditing ? "Edit" : "Add"} Deadline
         </h3>
         <button onClick={handleClose}>x</button>
       </div>
@@ -222,7 +212,7 @@ export const UpsertDeadlineForm = ({
           onMouseOver={(e) => e.currentTarget.style.backgroundColor = "#2563eb"}
           onMouseOut={(e) => e.currentTarget.style.backgroundColor = "#3b82f6"}
         >
-          {isEditing ? "Update Deadline" : "Save Deadline"}
+          {isEditing ? "Save" : "Add"}
         </button>
       </form>
     </div>
