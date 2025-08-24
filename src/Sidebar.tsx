@@ -9,6 +9,7 @@ interface Props {
   resetToUpload: () => void;
   onDeadlineClick?: (deadline: Deadline) => void;
   onDeleteDeadline?: (deadlineId: string) => void;
+  onAddDeadline?: () => void;
 }
 
 const updateHash = (highlight: IHighlight) => {
@@ -33,6 +34,7 @@ export function Sidebar({
   resetToUpload,
   onDeadlineClick,
   onDeleteDeadline,
+  onAddDeadline,
 }: Props) {
   return (
     <div className="sidebar" style={{
@@ -71,6 +73,7 @@ export function Sidebar({
             highlights={highlights}
             onDeadlineClick={onDeadlineClick}
             onDeleteDeadline={onDeleteDeadline}
+            onAddDeadline={onAddDeadline}
           />
         </div>
 
