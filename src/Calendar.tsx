@@ -28,29 +28,43 @@ export function DeadlineCalendar({ deadlines, onEventClick }: Props) {
 
   // Custom tile content to show event indicators
   const tileContent = ({ date, view }: { date: Date; view: string }) => {
-    if (view === 'month' && hasEvents(date)) {
+    if (view === 'month') {
       const events = getEventsForDate(date);
       return (
-        <div style={{ marginTop: '4px', textAlign: 'center' }}>
-          {events.map((event, index) => (
+        <div style={{
+          position: 'relative',
+          height: '14px',
+          width: '100%'
+        }}>
+          {hasEvents(date) && (
             <div
-              key={index}
               style={{
-                backgroundColor: '#3b82f6',
+                position: 'absolute',
+                top: '2px',
+                right: '2px',
+                borderRadius: '50%',
+                backgroundColor: '#2563eb',
                 color: 'white',
-                borderRadius: '12px',
-                padding: '2px 6px',
-                fontSize: '10px',
-                marginTop: '2px',
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
+                width: '20px',
+                height: '20px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '12px',
+                fontWeight: 'bold',
+                cursor: onEventClick ? 'pointer' : 'default',
+                zIndex: 1
               }}
-              title={event.name + (event.description ? `: ${event.description}` : '')}
+              onClick={(e) => {
+                if (onEventClick) {
+                  e.stopPropagation();
+                  onEventClick(events[0]); // Pass the first event for now
+                }
+              }}
             >
-              {event.name}
+              {events.length}
             </div>
-          ))}
+          )}
         </div>
       );
     }

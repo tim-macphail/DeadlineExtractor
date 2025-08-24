@@ -120,23 +120,6 @@ export function Sidebar({
       </div>
 
       <div style={{ padding: "1rem", flexShrink: 0 }}>
-        {deadlines.length > 0 ? (
-          <button
-            type="button"
-            onClick={resetHighlights}
-            style={{
-              width: "100%",
-              padding: "0.5rem",
-              marginBottom: "0.5rem",
-              border: "1px solid #ccc",
-              borderRadius: "4px",
-              backgroundColor: "#f8f9fa",
-              cursor: "pointer",
-            }}
-          >
-            Reset deadlines
-          </button>
-        ) : null}
         <button
           type="button"
           onClick={resetToUpload}
