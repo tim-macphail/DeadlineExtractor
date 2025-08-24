@@ -1,4 +1,6 @@
-export const testHighlights = {
+import { IHighlight } from "react-pdf-highlighter";
+
+export const testHighlights: Record<string, Array<IHighlight>> = {
   "https://arxiv.org/pdf/1708.08021": [
     {
       content: {
