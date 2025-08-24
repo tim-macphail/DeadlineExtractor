@@ -1,4 +1,4 @@
-import { useState } from 'react';
+
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import type { Deadline } from './App';
@@ -9,8 +9,6 @@ interface Props {
 }
 
 export function DeadlineCalendar({ deadlines, onEventClick }: Props) {
-  const [date, setDate] = useState(new Date());
-
   // Get events for a specific date
   const getEventsForDate = (date: Date) => {
     return deadlines.filter(deadline => {
@@ -29,11 +27,9 @@ export function DeadlineCalendar({ deadlines, onEventClick }: Props) {
   };
 
   // Custom tile content to show event indicators
-  const tileContent = ({ date, view }: { date: Date; view: string }) => {   
+  const tileContent = ({ date, view }: { date: Date; view: string }) => {
     if (view === 'month' && hasEvents(date)) {
-
       const events = getEventsForDate(date);
-      console.log({ date, events });
       return (
         <div style={{ marginTop: '4px', textAlign: 'center' }}>
           {events.map((event, index) => (
@@ -61,20 +57,6 @@ export function DeadlineCalendar({ deadlines, onEventClick }: Props) {
     return null;
   };
 
-  // Handle date click
-  const handleDateClick = (value: any) => {
-    if (value instanceof Date) {
-      setDate(value);
-      const events = getEventsForDate(value);
-      if (events.length === 1 && onEventClick) {
-        onEventClick(events[0]);
-      }
-    }
-  };
-
-  // Get events for selected date
-  const selectedDateEvents = getEventsForDate(date);
-
   return (
     <div style={{
       borderTop: '1px solid #ddd',
@@ -87,8 +69,8 @@ export function DeadlineCalendar({ deadlines, onEventClick }: Props) {
         gap: '1rem'
       }}>
         <Calendar
-          onChange={handleDateClick}
-          value={date}
+          value={null}
+          onChange={() => { }}
           tileContent={tileContent}
           className="deadline-calendar"
         />

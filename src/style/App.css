@@ -98,7 +98,12 @@ blockquote:after {
 }
 
 .deadline-calendar .react-calendar__month-view__days__day--weekend {
-  color: #dc3545;
+  color: inherit;
+}
+
+.deadline-calendar .react-calendar__tile--now {
+  background-color: transparent !important;
+  color: inherit;
 }
 
 .deadline-calendar .react-calendar__month-view__weekdays {
