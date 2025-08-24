@@ -1,11 +1,10 @@
-import type { IHighlight, ScaledPosition } from "react-pdf-highlighter";
+import type { ScaledPosition } from "react-pdf-highlighter";
 import type { Deadline } from "../types";
 
 export const updateHighlight = (
   highlightId: string,
   position: Partial<ScaledPosition>,
   content: Partial<{ text?: string; image?: string }>,
-  deadlines: Deadline[],
   setDeadlines: React.Dispatch<React.SetStateAction<Deadline[]>>
 ) => {
   console.log("Updating highlight", highlightId, position, content);

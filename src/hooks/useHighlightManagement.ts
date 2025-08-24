@@ -1,5 +1,4 @@
-import { useState } from "react";
-import type { IHighlight, ScaledPosition } from "react-pdf-highlighter";
+import type { ScaledPosition } from "react-pdf-highlighter";
 import { updateHighlight as updateHighlightUtil } from "../utils/highlightUtils";
 import type { Deadline } from "../types";
 
@@ -12,7 +11,7 @@ export const useHighlightManagement = (
     position: Partial<ScaledPosition>,
     content: Partial<{ text?: string; image?: string }>,
   ) => {
-    updateHighlightUtil(highlightId, position, content, deadlines, setDeadlines);
+    updateHighlightUtil(highlightId, position, content, setDeadlines);
   };
 
   // Compute highlights array from deadlines for PdfHighlighter

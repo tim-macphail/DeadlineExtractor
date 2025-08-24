@@ -5,7 +5,7 @@ import type { Deadline } from './App';
 
 interface Props {
   deadlines: Array<Deadline>;
-  onEventClick?: (deadline: Deadline) => void;
+  onEventClick: (deadline: Deadline) => void;
 }
 
 export function DeadlineCalendar({ deadlines, onEventClick }: Props) {
@@ -52,7 +52,7 @@ export function DeadlineCalendar({ deadlines, onEventClick }: Props) {
                 justifyContent: 'center',
                 fontSize: '12px',
                 fontWeight: 'bold',
-                cursor: onEventClick ? 'pointer' : 'default',
+                cursor: 'pointer',
                 zIndex: 1
               }}
               onClick={(e) => {

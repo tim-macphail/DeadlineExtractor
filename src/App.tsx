@@ -2,27 +2,24 @@ import React from "react";
 import {
   AreaHighlight,
   Highlight,
-  PdfHighlighter,
-  PdfLoader,
   Popup,
 } from "react-pdf-highlighter";
 import type {
-  Content,
   IHighlight,
   ScaledPosition,
 } from "react-pdf-highlighter";
 
 import { Sidebar } from "./Sidebar";
-import { Spinner } from "./Spinner";
 import { UpsertDeadlineForm } from "./UpsertDeadlineForm";
 import { UploadPrompt } from "./UploadPrompt";
 import { HighlightPopup } from "./components/HighlightPopup";
+import { PdfViewer } from "./components/PdfViewer";
 import { useFileUpload } from "./hooks/useFileUpload";
 import { useDeadlineManagement } from "./hooks/useDeadlineManagement";
 import { useHighlightManagement } from "./hooks/useHighlightManagement";
 import { useHashNavigation } from "./hooks/useHashNavigation";
-import { getNextId, parseIdFromHash, resetHash } from "./utils/helpers";
-import type { Deadline, DeadlineData } from "./types";
+import { getNextId } from "./utils/helpers";
+import type { Deadline } from "./types";
 
 import "./style/App.css";
 import "react-pdf-highlighter/dist/style.css";
@@ -34,7 +31,6 @@ export function App() {
   // File upload management
   const {
     url,
-    setUrl,
     isDragOver,
     fileInputRef,
     handleFileSelect,
@@ -58,7 +54,6 @@ export function App() {
     deleteDeadline,
     updateDeadline,
     handleShowEditForm,
-    resetDeadlines,
   } = useDeadlineManagement();
 
   // Highlight management
@@ -181,45 +176,15 @@ export function App() {
         }}
       >
         {url ? (
-          <>
-            {/* Floating AI Scan Button */}
-            <button
-              onClick={handleAIScan}
-              style={{
-                position: "absolute",
-                top: "20px",
-                right: "20px",
-                margin: 'auto',
-                zIndex: 1000,
-                padding: "12px 20px",
-                backgroundColor: "#007bff",
-                color: "white",
-                border: "none",
-                borderRadius: "8px",
-                fontSize: "14px",
-                fontWeight: "600",
-                cursor: "pointer",
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              AI Scan
-            </button>
-
-            <PdfLoader url={url} beforeLoad={<Spinner />}>
-              {(pdfDocument) => (
-                <PdfHighlighter
-                  pdfDocument={pdfDocument}
-                  enableAreaSelection={(event) => event.altKey}
-                  onScrollChange={resetHash}
-                  scrollRef={handleScrollRef}
-                  onSelectionFinished={handleSelectionFinished}
-                  highlightTransform={handleHighlightTransform}
-                  highlights={highlights}
-                />
-              )}
-            </PdfLoader>
-          </>
+          <PdfViewer
+            url={url}
+            highlights={highlights}
+            onScrollChange={resetHash}
+            onScrollRef={handleScrollRef}
+            onSelectionFinished={handleSelectionFinished}
+            onHighlightTransform={handleHighlightTransform}
+            onAIScan={handleAIScan}
+          />
         ) : (
           <UploadPrompt
             isDragOver={isDragOver}

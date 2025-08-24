@@ -1,20 +1,13 @@
-import { useState } from "react";
 import {
-  AreaHighlight,
-  Highlight,
   PdfHighlighter,
   PdfLoader,
-  Popup,
 } from "react-pdf-highlighter";
 import type {
-  Content,
   IHighlight,
   ScaledPosition,
 } from "react-pdf-highlighter";
 import { Spinner } from "../Spinner";
-import { UpsertDeadlineForm } from "../UpsertDeadlineForm";
 import { AIScanButton } from "./AIScanButton";
-import { HighlightPopup } from "./HighlightPopup";
 
 interface PdfViewerProps {
   url: string;
