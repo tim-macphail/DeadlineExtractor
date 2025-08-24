@@ -7,7 +7,6 @@ import type {
   ScaledPosition,
 } from "react-pdf-highlighter";
 import { Spinner } from "../Spinner";
-import { AIScanButton } from "./AIScanButton";
 
 interface PdfViewerProps {
   url: string;
@@ -29,7 +28,6 @@ interface PdfViewerProps {
     screenshot: (position: any) => string,
     isScrolledTo: boolean,
   ) => React.JSX.Element;
-  onAIScan: () => void;
 }
 
 export const PdfViewer = ({
@@ -39,7 +37,6 @@ export const PdfViewer = ({
   onScrollRef,
   onSelectionFinished,
   onHighlightTransform,
-  onAIScan,
 }: PdfViewerProps) => {
   return (
     <div
@@ -50,8 +47,6 @@ export const PdfViewer = ({
         overflow: "hidden",
       }}
     >
-      <AIScanButton onClick={onAIScan} />
-
       <PdfLoader url={url} beforeLoad={<Spinner />}>
         {(pdfDocument) => (
           <PdfHighlighter

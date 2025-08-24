@@ -62,12 +62,6 @@ export function App() {
     scrollToDeadline(deadline.id);
   };
 
-  const handleAIScan = () => {
-    // TODO: Implement AI scan functionality
-    console.log("AI Scan button clicked");
-    alert("AI Scan functionality will be implemented here");
-  };
-
   return (
     <div className="App" style={{ display: "flex", height: "100vh" }}>
       <Sidebar
@@ -100,7 +94,6 @@ export function App() {
             onScrollRef={handleScrollRef}
             onSelectionFinished={handleSelectionFinished}
             onHighlightTransform={handleHighlightTransform}
-            onAIScan={handleAIScan}
           />
         ) : (
           <UploadPrompt
