@@ -1,24 +1,11 @@
-import React from "react";
-import {
-  AreaHighlight,
-  Highlight,
-  Popup,
-} from "react-pdf-highlighter";
-import type {
-  IHighlight,
-  ScaledPosition,
-} from "react-pdf-highlighter";
-
 import { Sidebar } from "./Sidebar";
-import { UpsertDeadlineForm } from "./UpsertDeadlineForm";
 import { UploadPrompt } from "./UploadPrompt";
-import { HighlightPopup } from "./components/HighlightPopup";
 import { PdfViewer } from "./components/PdfViewer";
 import { useFileUpload } from "./hooks/useFileUpload";
 import { useDeadlineManagement } from "./hooks/useDeadlineManagement";
 import { useHighlightManagement } from "./hooks/useHighlightManagement";
 import { useHashNavigation } from "./hooks/useHashNavigation";
-import { getNextId } from "./utils/helpers";
+import { usePdfCallbacks } from "./hooks/usePdfCallbacks";
 import type { Deadline } from "./types";
 
 import "./style/App.css";
@@ -65,81 +52,11 @@ export function App() {
   // Hash navigation
   const { handleScrollRef, scrollToDeadline, resetHash } = useHashNavigation(deadlines);
 
-  const handleSelectionFinished = (
-    position: ScaledPosition,
-    content: { text?: string; image?: string },
-    hideTipAndSelection: () => void,
-    transformSelection: () => void,
-  ) => (
-    <UpsertDeadlineForm
-      onClose={hideTipAndSelection}
-      onOpen={transformSelection}
-      onAdd={(deadlineData: { name: string; date: string; description?: string }) => {
-        // Create highlight first
-        const newHighlightId = getNextId();
-        const deadlineText = `${deadlineData.name} - ${new Date(deadlineData.date).toLocaleString()}`;
-
-        const newHighlight: IHighlight = {
-          id: newHighlightId,
-          content,
-          position,
-          comment: {
-            text: deadlineText,
-            emoji: "⏰"
-          }
-        };
-
-        // Create and add deadline with embedded highlight
-        addDeadline(deadlineData, newHighlight);
-
-        hideTipAndSelection();
-      }} />
-  );
-
-  const handleHighlightTransform = (
-    highlight: any,
-    index: number,
-    setTip: (highlight: any, callback: (highlight: any) => React.JSX.Element) => void,
-    hideTip: () => void,
-    viewportToScaled: (rect: any) => any,
-    screenshot: (position: any) => string,
-    isScrolledTo: boolean,
-  ) => {
-    const isTextHighlight = !highlight.content?.image;
-
-    const component = isTextHighlight ? (
-      <Highlight
-        isScrolledTo={isScrolledTo}
-        position={highlight.position}
-        comment={highlight.comment}
-      />
-    ) : (
-      <AreaHighlight
-        isScrolledTo={isScrolledTo}
-        highlight={highlight}
-        onChange={(boundingRect) => {
-          updateHighlight(
-            highlight.id,
-            { boundingRect: viewportToScaled(boundingRect) },
-            { image: screenshot(boundingRect) },
-          );
-        }}
-      />
-    );
-
-    return (
-      <Popup
-        popupContent={<HighlightPopup {...highlight} />}
-        onMouseOver={(popupContent) =>
-          setTip(highlight, (_highlight) => popupContent)
-        }
-        onMouseOut={hideTip}
-        key={index}
-      >
-        {component}
-      </Popup>
-    );
-  };
+  // PDF callbacks
+  const { handleSelectionFinished, handleHighlightTransform } = usePdfCallbacks({
+    addDeadline,
+    updateHighlight,
+  });
 
   const handleDeadlineClick = (deadline: Deadline) => {
     scrollToDeadline(deadline.id);
