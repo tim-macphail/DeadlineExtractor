@@ -1,5 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from "react";
-
+import React from "react";
 import {
   AreaHighlight,
   Highlight,
@@ -17,225 +16,59 @@ import { Sidebar } from "./Sidebar";
 import { Spinner } from "./Spinner";
 import { UpsertDeadlineForm } from "./UpsertDeadlineForm";
 import { UploadPrompt } from "./UploadPrompt";
-import { testHighlights as _testHighlights } from "./test-highlights";
+import { HighlightPopup } from "./components/HighlightPopup";
+import { useFileUpload } from "./hooks/useFileUpload";
+import { useDeadlineManagement } from "./hooks/useDeadlineManagement";
+import { useHighlightManagement } from "./hooks/useHighlightManagement";
+import { useHashNavigation } from "./hooks/useHashNavigation";
+import { getNextId, parseIdFromHash, resetHash } from "./utils/helpers";
+import type { Deadline, DeadlineData } from "./types";
 
 import "./style/App.css";
 import "react-pdf-highlighter/dist/style.css";
 
-export interface Deadline {
-  id: string;
-  name: string;
-  date: string;
-  description?: string;
-  highlight?: IHighlight;
-}
-
-const getNextId = () => String(Math.random()).slice(2);
-
-const parseIdFromHash = () =>
-  document.location.hash.slice("#highlight-".length);
-
-const resetHash = () => {
-  document.location.hash = "";
-};
-
-const HighlightPopup = ({
-  comment,
-}: {
-  comment: { text: string; emoji: string };
-}) =>
-  comment.text ? (
-    <div className="Highlight__popup">
-      {comment.emoji} {comment.text} Yeah yeah
-    </div>
-  ) : null;
+// Re-export Deadline type for other files that import it
+export type { Deadline };
 
 export function App() {
-  const [url, setUrl] = useState<string>("");
-  const [deadlines, setDeadlines] = useState<Array<Deadline>>([]);
-  const [isDragOver, setIsDragOver] = useState(false);
-  const [showAddForm, setShowAddForm] = useState(false);
-  const [editingDeadline, setEditingDeadline] = useState<Deadline>();
-  const [showEditForm, setShowEditForm] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  // File upload management
+  const {
+    url,
+    setUrl,
+    isDragOver,
+    fileInputRef,
+    handleFileSelect,
+    handleDrop,
+    handleDragOver,
+    handleDragLeave,
+    handleUploadClick,
+    resetToUpload,
+  } = useFileUpload();
 
-  const handleFileUpload = (file: File) => {
-    if (file.type === "application/pdf") {
-      const fileUrl = URL.createObjectURL(file);
-      setUrl(fileUrl);
-      setDeadlines([]); // Reset deadlines for new document
-    } else {
-      alert("Please upload a PDF file.");
-    }
-  };
+  // Deadline management
+  const {
+    deadlines,
+    setDeadlines,
+    showAddForm,
+    setShowAddForm,
+    editingDeadline,
+    showEditForm,
+    addDeadline,
+    addStandaloneDeadline,
+    deleteDeadline,
+    updateDeadline,
+    handleShowEditForm,
+    resetDeadlines,
+  } = useDeadlineManagement();
 
-  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      handleFileUpload(file);
-    }
-  };
+  // Highlight management
+  const { updateHighlight, highlights } = useHighlightManagement(
+    deadlines,
+    setDeadlines
+  );
 
-  const handleDrop = (event: React.DragEvent) => {
-    event.preventDefault();
-    setIsDragOver(false);
-
-    const files = Array.from(event.dataTransfer.files);
-    const pdfFile = files.find(file => file.type === "application/pdf");
-
-    if (pdfFile) {
-      handleFileUpload(pdfFile);
-    } else {
-      alert("Please upload a PDF file.");
-    }
-  };
-
-  const handleDragOver = (event: React.DragEvent) => {
-    event.preventDefault();
-    setIsDragOver(true);
-  };
-
-  const handleDragLeave = (event: React.DragEvent) => {
-    event.preventDefault();
-    setIsDragOver(false);
-  };
-
-  const handleUploadClick = () => {
-    fileInputRef.current?.click();
-  };
-
-  const resetToUpload = () => {
-    setUrl("");
-    setDeadlines([]);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
-  };
-
-  const scrollViewerTo = useRef((_highlight: IHighlight) => { });
-
-  const scrollToHighlightFromHash = useCallback(() => {
-    const id = parseIdFromHash();
-    if (!id) {
-      return;
-    }
-    const highlight = getHighlightById(id);
-
-    if (highlight) {
-      scrollViewerTo.current(highlight);
-    }
-  }, [deadlines]);
-
-  useEffect(() => {
-    window.addEventListener("hashchange", scrollToHighlightFromHash, false);
-    return () => {
-      window.removeEventListener(
-        "hashchange",
-        scrollToHighlightFromHash,
-        false,
-      );
-    };
-  }, [scrollToHighlightFromHash]);
-
-  const getHighlightById = (id: string) => {
-    const deadline = deadlines.find((deadline) => deadline.highlight?.id === id);
-    const highlight = deadline?.highlight;
-
-    if (!highlight) {
-      console.log("Highlight not found");
-    }
-    return highlight;
-  };
-
-  const updateHighlight = (
-    highlightId: string,
-    position: Partial<ScaledPosition>,
-    content: Partial<Content>,
-  ) => {
-    console.log("Updating highlight", highlightId, position, content);
-    setDeadlines((prevDeadlines) =>
-      prevDeadlines.map((deadline) => {
-        if (deadline.highlight?.id === highlightId) {
-          const updatedHighlight = {
-            ...deadline.highlight,
-            position: { ...deadline.highlight.position, ...position },
-            content: { ...deadline.highlight.content, ...content },
-          };
-          return { ...deadline, highlight: updatedHighlight };
-        }
-        return deadline;
-      }),
-    );
-  };
-
-  const handleScrollRef = (scrollTo: (highlight: IHighlight) => void) => {
-    scrollViewerTo.current = scrollTo;
-    scrollToHighlightFromHash();
-  };
-
-  const addDeadline = (deadlineData: { name: string; date: string; description?: string }, highlight: IHighlight) => {
-    const newDeadline: Deadline = {
-      id: getNextId(),
-      name: deadlineData.name,
-      date: deadlineData.date,
-      description: deadlineData.description,
-      highlight: highlight,
-    };
-    setDeadlines((prevDeadlines) => [newDeadline, ...prevDeadlines]);
-  };
-
-  const addStandaloneDeadline = (deadlineData: { name: string; date: string; description?: string }) => {
-    const newDeadline: Deadline = {
-      id: getNextId(),
-      name: deadlineData.name,
-      date: deadlineData.date,
-      description: deadlineData.description,
-      // No highlight for standalone deadlines
-    };
-    setDeadlines((prevDeadlines) => [newDeadline, ...prevDeadlines]);
-    setShowAddForm(false); // Hide the form after adding
-    setShowEditForm(false); // Also hide edit form if it's open
-  };
-
-  const deleteDeadline = (deadlineId: string) => {
-    setDeadlines((prevDeadlines) =>
-      prevDeadlines.filter(deadline => deadline.id !== deadlineId)
-    );
-    // Highlights are embedded in deadlines, so no separate cleanup needed
-  };
-
-  const updateDeadline = (deadlineId: string, deadlineData: { name: string; date: string; description?: string }) => {
-    setDeadlines((prevDeadlines) =>
-      prevDeadlines.map(deadline => {
-        if (deadline.id === deadlineId) {
-          const updatedDeadline = { ...deadline, ...deadlineData };
-
-          // If there's a highlight, update its comment
-          if (updatedDeadline.highlight) {
-            const deadlineText = `${deadlineData.name} - ${new Date(deadlineData.date).toLocaleString()}`;
-            updatedDeadline.highlight = {
-              ...updatedDeadline.highlight,
-              comment: {
-                text: deadlineText,
-                emoji: "⏰"
-              }
-            };
-          }
-
-          return updatedDeadline;
-        }
-        return deadline;
-      })
-    );
-  };
-
-  const handleShowEditForm = (show: boolean, deadline?: Deadline) => {
-    setShowEditForm(show);
-    setEditingDeadline(deadline);
-    if (!show) {
-      setEditingDeadline(undefined);
-    }
-  };
+  // Hash navigation
+  const { handleScrollRef, scrollToDeadline, resetHash } = useHashNavigation(deadlines);
 
   const handleSelectionFinished = (
     position: ScaledPosition,
@@ -314,10 +147,7 @@ export function App() {
   };
 
   const handleDeadlineClick = (deadline: Deadline) => {
-    const highlight = deadline.highlight;
-    if (highlight && scrollViewerTo.current) {
-      scrollViewerTo.current(highlight);
-    }
+    scrollToDeadline(deadline.id);
   };
 
   const handleAIScan = () => {
@@ -325,11 +155,6 @@ export function App() {
     console.log("AI Scan button clicked");
     alert("AI Scan functionality will be implemented here");
   };
-
-  // Compute highlights array from deadlines for PdfHighlighter
-  const highlights = deadlines
-    .filter(deadline => deadline.highlight)
-    .map(deadline => deadline.highlight!);
 
   return (
     <div className="App" style={{ display: "flex", height: "100vh" }}>
