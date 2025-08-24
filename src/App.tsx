@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef, JSX } from "react";
+import { useState, useEffect, useCallback, useRef, JSX } from "react";
 
 import {
   AreaHighlight,
@@ -72,13 +72,16 @@ export function App() {
   const scrollViewerTo = useRef((_highlight: IHighlight) => { });
 
   const scrollToHighlightFromHash = useCallback(() => {
-    const highlight = getHighlightById(parseIdFromHash());
-    console.log({ highlight });
+    const id = parseIdFromHash();
+    if (!id) {
+      return;
+    }
+    const highlight = getHighlightById(id);
 
     if (highlight) {
       scrollViewerTo.current(highlight);
     }
-  }, []);
+  }, [highlights]);
 
   useEffect(() => {
     window.addEventListener("hashchange", scrollToHighlightFromHash, false);
@@ -92,7 +95,12 @@ export function App() {
   }, [scrollToHighlightFromHash]);
 
   const getHighlightById = (id: string) => {
-    return highlights.find((highlight) => highlight.id === id);
+    const highlight = highlights.find((highlight) => highlight.id === id);
+
+    if (!highlight) {
+      console.log("Highlight not found");
+    }
+    return highlight;
   };
 
   const addHighlight = (highlight: NewHighlight) => {
