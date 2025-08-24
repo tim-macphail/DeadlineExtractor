@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef, JSX } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 
 import {
   AreaHighlight,
@@ -17,6 +17,7 @@ import type {
 
 import { Sidebar } from "./Sidebar";
 import { Spinner } from "./Spinner";
+import { AddDeadlineForm } from "./AddDeadlineForm";
 import { testHighlights as _testHighlights } from "./test-highlights";
 
 import "./style/App.css";
@@ -39,7 +40,6 @@ const HighlightPopup = ({
   comment.text ? (
     <div className="Highlight__popup">
       {comment.emoji} {comment.text}
-      Custom table in here
     </div>
   ) : null;
 
@@ -181,156 +181,7 @@ export function App() {
     scrollToHighlightFromHash();
   };
 
-  const AddDeadlineForm = ({ onAdd }: { onAdd: (deadlineData: { name: string; date: string; description: string }) => void }) => {
-    const [name, setName] = useState("");
-    const [date, setDate] = useState("");
-    const [description, setDescription] = useState("");
 
-    const handleSubmit = (e: React.FormEvent) => {
-      e.preventDefault();
-      if (name.trim() && date) {
-        onAdd({ name: name.trim(), date, description: description.trim() });
-        setName("");
-        setDate("");
-        setDescription("");
-      }
-    };
-
-    return (
-      <div style={{
-        background: "white",
-        borderRadius: "12px",
-        padding: "24px",
-        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
-        border: "1px solid #e1e5e9",
-        minWidth: "320px",
-        maxWidth: "400px"
-      }}>
-        <h3 style={{
-          margin: "0 0 20px 0",
-          color: "#1a1a1a",
-          fontSize: "18px",
-          fontWeight: "600",
-          textAlign: "center"
-        }}>
-          Add New Deadline
-        </h3>
-
-        <form onSubmit={handleSubmit}>
-          <div style={{ marginBottom: "16px" }}>
-            <label style={{
-              display: "block",
-              marginBottom: "6px",
-              color: "#374151",
-              fontSize: "14px",
-              fontWeight: "500"
-            }}>
-              Name
-            </label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Enter deadline name"
-              style={{
-                width: "100%",
-                padding: "12px 16px",
-                border: "2px solid #e5e7eb",
-                borderRadius: "8px",
-                fontSize: "14px",
-                transition: "border-color 0.2s ease",
-                boxSizing: "border-box"
-              }}
-              onFocus={(e) => e.target.style.borderColor = "#3b82f6"}
-              onBlur={(e) => e.target.style.borderColor = "#e5e7eb"}
-              required
-            />
-          </div>
-
-          <div style={{ marginBottom: "16px" }}>
-            <label style={{
-              display: "block",
-              marginBottom: "6px",
-              color: "#374151",
-              fontSize: "14px",
-              fontWeight: "500"
-            }}>
-              Due Date
-            </label>
-            <input
-              type="datetime-local"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "12px 16px",
-                border: "2px solid #e5e7eb",
-                borderRadius: "8px",
-                fontSize: "14px",
-                transition: "border-color 0.2s ease",
-                boxSizing: "border-box"
-              }}
-              onFocus={(e) => e.target.style.borderColor = "#3b82f6"}
-              onBlur={(e) => e.target.style.borderColor = "#e5e7eb"}
-              required
-            />
-          </div>
-
-          <div style={{ marginBottom: "20px" }}>
-            <label style={{
-              display: "block",
-              marginBottom: "6px",
-              color: "#374151",
-              fontSize: "14px",
-              fontWeight: "500"
-            }}>
-              Description
-            </label>
-            <textarea
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder="Enter deadline description"
-              rows={3}
-              style={{
-                width: "100%",
-                padding: "12px 16px",
-                border: "2px solid #e5e7eb",
-                borderRadius: "8px",
-                fontSize: "14px",
-                fontFamily: "inherit",
-                resize: "vertical",
-                transition: "border-color 0.2s ease",
-                boxSizing: "border-box"
-              }}
-              onFocus={(e) => e.target.style.borderColor = "#3b82f6"}
-              onBlur={(e) => e.target.style.borderColor = "#e5e7eb"}
-            />
-          </div>
-
-          <button
-            type="submit"
-            style={{
-              width: "100%",
-              padding: "12px 16px",
-              backgroundColor: "#3b82f6",
-              color: "white",
-              border: "none",
-              borderRadius: "8px",
-              fontSize: "14px",
-              fontWeight: "600",
-              cursor: "pointer",
-              transition: "background-color 0.2s ease",
-              boxSizing: "border-box"
-            }}
-            onMouseOver={(e) => e.currentTarget.style.backgroundColor = "#2563eb"}
-            onMouseOut={(e) => e.currentTarget.style.backgroundColor = "#3b82f6"}
-          >
-            Add Deadline
-          </button>
-        </form>
-      </div>
-    );
-  };
 
   const handleSelectionFinished = (
     position: ScaledPosition,
@@ -338,7 +189,7 @@ export function App() {
     hideTipAndSelection: () => void,
     transformSelection: () => void,
   ) => (
-    <AddDeadlineForm onAdd={(deadlineData: { name: string; date: string; description: string }) => {
+    <AddDeadlineForm onAdd={(deadlineData: { name: string; date: string; description?: string }) => {
       const deadlineText = `${deadlineData.name} - ${new Date(deadlineData.date).toLocaleString()}`;
       addHighlight({
         content,
@@ -355,7 +206,7 @@ export function App() {
   const handleHighlightTransform = (
     highlight: any,
     index: number,
-    setTip: (highlight: any, callback: (highlight: any) => JSX.Element) => void,
+    setTip: (highlight: any, callback: (highlight: any) => React.JSX.Element) => void,
     hideTip: () => void,
     viewportToScaled: (rect: any) => any,
     screenshot: (position: any) => string,
