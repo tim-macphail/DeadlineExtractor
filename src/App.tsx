@@ -342,6 +342,12 @@ export function App() {
     }
   }
 
+  const handleAIScan = () => {
+    // TODO: Implement AI scan functionality
+    console.log("AI Scan button clicked");
+    alert("AI Scan functionality will be implemented here");
+  };
+
   return (
     <div className="App" style={{ display: "flex", height: "100vh" }}>
       <Sidebar
@@ -367,19 +373,45 @@ export function App() {
         }}
       >
         {url ? (
-          <PdfLoader url={url} beforeLoad={<Spinner />}>
-            {(pdfDocument) => (
-              <PdfHighlighter
-                pdfDocument={pdfDocument}
-                enableAreaSelection={(event) => event.altKey}
-                onScrollChange={resetHash}
-                scrollRef={handleScrollRef}
-                onSelectionFinished={handleSelectionFinished}
-                highlightTransform={handleHighlightTransform}
-                highlights={highlights}
-              />
-            )}
-          </PdfLoader>
+          <>
+            {/* Floating AI Scan Button */}
+            <button
+              onClick={handleAIScan}
+              style={{
+                position: "absolute",
+                top: "20px",
+                right: "20px",
+                margin: 'auto',
+                zIndex: 1000,
+                padding: "12px 20px",
+                backgroundColor: "#007bff",
+                color: "white",
+                border: "none",
+                borderRadius: "8px",
+                fontSize: "14px",
+                fontWeight: "600",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              AI Scan
+            </button>
+
+            <PdfLoader url={url} beforeLoad={<Spinner />}>
+              {(pdfDocument) => (
+                <PdfHighlighter
+                  pdfDocument={pdfDocument}
+                  enableAreaSelection={(event) => event.altKey}
+                  onScrollChange={resetHash}
+                  scrollRef={handleScrollRef}
+                  onSelectionFinished={handleSelectionFinished}
+                  highlightTransform={handleHighlightTransform}
+                  highlights={highlights}
+                />
+              )}
+            </PdfLoader>
+          </>
         ) : (
           <UploadPrompt
             isDragOver={isDragOver}
