@@ -23,6 +23,14 @@ import { testHighlights as _testHighlights } from "./test-highlights";
 import "./style/App.css";
 import "react-pdf-highlighter/dist/style.css";
 
+export interface Deadline {
+  id: string;
+  name: string;
+  date: string;
+  description?: string;
+  highlightId: string;
+}
+
 const getNextId = () => String(Math.random()).slice(2);
 
 const parseIdFromHash = () =>
@@ -39,7 +47,7 @@ const HighlightPopup = ({
 }) =>
   comment.text ? (
     <div className="Highlight__popup">
-      {comment.emoji} {comment.text}
+      {comment.emoji} {comment.text} Yeah yeah
     </div>
   ) : null;
 
@@ -48,11 +56,13 @@ const HighlightPopup = ({
 export function App() {
   const [url, setUrl] = useState<string>("");
   const [highlights, setHighlights] = useState<Array<IHighlight>>([]);
+  const [deadlines, setDeadlines] = useState<Array<Deadline>>([]);
   const [isDragOver, setIsDragOver] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const resetHighlights = () => {
     setHighlights([]);
+    setDeadlines([]);
   };
 
   const handleFileUpload = (file: File) => {
@@ -103,6 +113,7 @@ export function App() {
   const resetToUpload = () => {
     setUrl("");
     setHighlights([]);
+    setDeadlines([]);
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
@@ -183,6 +194,17 @@ export function App() {
 
 
 
+  const addDeadline = (deadlineData: { name: string; date: string; description?: string }, highlightId: string) => {
+    const newDeadline: Deadline = {
+      id: getNextId(),
+      name: deadlineData.name,
+      date: deadlineData.date,
+      description: deadlineData.description,
+      highlightId: highlightId,
+    };
+    setDeadlines((prevDeadlines) => [newDeadline, ...prevDeadlines]);
+  };
+
   const handleSelectionFinished = (
     position: ScaledPosition,
     content: { text?: string; image?: string },
@@ -190,15 +212,26 @@ export function App() {
     transformSelection: () => void,
   ) => (
     <AddDeadlineForm onAdd={(deadlineData: { name: string; date: string; description?: string }) => {
+      // Create highlight first
+      const newHighlightId = getNextId();
       const deadlineText = `${deadlineData.name} - ${new Date(deadlineData.date).toLocaleString()}`;
-      addHighlight({
+
+      const newHighlight: IHighlight = {
+        id: newHighlightId,
         content,
         position,
         comment: {
           text: deadlineText,
           emoji: "⏰"
         }
-      });
+      };
+
+      // Add highlight to state
+      setHighlights((prevHighlights) => [newHighlight, ...prevHighlights]);
+
+      // Create and add deadline
+      addDeadline(deadlineData, newHighlightId);
+
       hideTipAndSelection();
     }} />
   );
@@ -251,6 +284,7 @@ export function App() {
   return (
     <div className="App" style={{ display: "flex", height: "100vh" }}>
       <Sidebar
+        deadlines={deadlines}
         highlights={highlights}
         resetHighlights={resetHighlights}
         resetToUpload={resetToUpload}

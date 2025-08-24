@@ -17,16 +17,14 @@ export const AddDeadlineForm = ({ onAdd }: AddDeadlineFormProps) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (name.trim() && date) {
-      onAdd({
-        name: name.trim(),
-        date,
-        description: description.trim() || undefined
-      });
-      setName("");
-      setDate("");
-      setDescription("");
-    }
+    onAdd({
+      name: name.trim(),
+      date,
+      description: description.trim() || undefined
+    });
+    setName("");
+    setDate("");
+    setDescription("");
   };
 
   return (
@@ -105,7 +103,7 @@ export const AddDeadlineForm = ({ onAdd }: AddDeadlineFormProps) => {
             }}
             onFocus={(e) => e.target.style.borderColor = "#3b82f6"}
             onBlur={(e) => e.target.style.borderColor = "#e5e7eb"}
-            required
+            // required
           />
         </div>
 

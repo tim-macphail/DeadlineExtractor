@@ -1,6 +1,8 @@
 import type { IHighlight } from "react-pdf-highlighter";
+import type { Deadline } from "./App";
 
 interface Props {
+  deadlines: Array<Deadline>;
   highlights: Array<IHighlight>;
   resetHighlights: () => void;
   resetToUpload: () => void;
@@ -10,21 +12,19 @@ const updateHash = (highlight: IHighlight) => {
   document.location.hash = `highlight-${highlight.id}`;
 };
 
-const sortHighlights = (a: IHighlight, b: IHighlight) => {
-  // sort by page number
-  // tie break by y position
-  // secondary tie break by x position
-  if (a.position.pageNumber !== b.position.pageNumber) {
-    return a.position.pageNumber - b.position.pageNumber;
+const sortDeadlines = (a: Deadline, b: Deadline) => {
+  // Sort by date first (earliest first)
+  const dateA = new Date(a.date);
+  const dateB = new Date(b.date);
+  if (dateA.getTime() !== dateB.getTime()) {
+    return dateA.getTime() - dateB.getTime();
   }
-  if (a.position.boundingRect.y1 !== b.position.boundingRect.y1) {
-    return a.position.boundingRect.y1 - b.position.boundingRect.y1;
-  }
-  return a.position.boundingRect.x1 - b.position.boundingRect.x1;
+  // Tie break by name alphabetically
+  return a.name.localeCompare(b.name);
 };
 
-
 export function Sidebar({
+  deadlines,
   highlights,
   resetToUpload,
   resetHighlights,
@@ -45,38 +45,47 @@ export function Sidebar({
       </div>
 
       <ul className="sidebar__highlights">
-        {highlights.sort(sortHighlights).map((highlight, index) => (
-          <li
-            // biome-ignore lint/suspicious/noArrayIndexKey: This is an example app
-            key={index}
-            className="sidebar__highlight"
-            onClick={() => {
-              updateHash(highlight);
-            }}
-          >
-            <div>
-              <strong>{highlight.comment.text}</strong>
-              {highlight.content.text ? (
-                <blockquote style={{ marginTop: "0.5rem" }}>
-                  {`${highlight.content.text.slice(0, 90).trim()}…`}
-                </blockquote>
-              ) : null}
-              {highlight.content.image ? (
-                <div
-                  className="highlight__image"
-                  style={{ marginTop: "0.5rem" }}
-                >
-                  <img src={highlight.content.image} alt={"Screenshot"} />
+        {deadlines.sort(sortDeadlines).map((deadline, index) => {
+          const associatedHighlight = highlights.find(h => h.id === deadline.highlightId);
+          return (
+            <li
+              // biome-ignore lint/suspicious/noArrayIndexKey: This is an example app
+              key={index}
+              className="sidebar__highlight"
+              onClick={() => {
+                if (associatedHighlight) {
+                  updateHash(associatedHighlight);
+                }
+              }}
+            >
+              <div>
+                <strong style={{ fontSize: "1.1em", color: "#333" }}>
+                  {deadline.name}
+                </strong>
+                <div style={{
+                  marginTop: "0.25rem",
+                  fontSize: "0.9em",
+                  color: "#666",
+                  fontWeight: "500"
+                }}>
+                  {new Date(deadline.date).toLocaleDateString()}
                 </div>
-              ) : null}
-            </div>
-            <div className="highlight__location">
-              Page {highlight.position.pageNumber}
-            </div>
-          </li>
-        ))}
+                {deadline.description ? (
+                  <blockquote style={{ marginTop: "0.5rem", fontStyle: "italic" }}>
+                    {deadline.description}
+                  </blockquote>
+                ) : null}
+              </div>
+              {associatedHighlight && (
+                <div className="highlight__location">
+                  Page {associatedHighlight.position.pageNumber}
+                </div>
+              )}
+            </li>
+          );
+        })}
       </ul>
-      {highlights.length > 0 ? (
+      {deadlines.length > 0 ? (
         <div style={{ padding: "1rem" }}>
           <button
             type="button"
@@ -91,7 +100,7 @@ export function Sidebar({
               cursor: "pointer",
             }}
           >
-            Reset highlights
+            Reset deadlines
           </button>
         </div>
       ) : null}
@@ -110,6 +119,7 @@ export function Sidebar({
       >
         Upload New PDF
       </button>
+      <button>Preview Calendar</button>
     </div>
   );
 }
