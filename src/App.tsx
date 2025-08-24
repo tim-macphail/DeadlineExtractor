@@ -211,7 +211,7 @@ export function App() {
     hideTipAndSelection: () => void,
     transformSelection: () => void,
   ) => (
-    <AddDeadlineForm onAdd={(deadlineData: { name: string; date: string; description?: string }) => {
+    <AddDeadlineForm onOpen={transformSelection} onAdd={(deadlineData: { name: string; date: string; description?: string }) => {
       // Create highlight first
       const newHighlightId = getNextId();
       const deadlineText = `${deadlineData.name} - ${new Date(deadlineData.date).toLocaleString()}`;

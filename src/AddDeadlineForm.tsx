@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface DeadlineData {
   name: string;
@@ -8,12 +8,17 @@ interface DeadlineData {
 
 interface AddDeadlineFormProps {
   onAdd: (deadlineData: DeadlineData) => void;
+  onOpen: () => void;
 }
 
-export const AddDeadlineForm = ({ onAdd }: AddDeadlineFormProps) => {
+export const AddDeadlineForm = ({ onAdd, onOpen }: AddDeadlineFormProps) => {
   const [name, setName] = useState("");
   const [date, setDate] = useState("");
   const [description, setDescription] = useState("");
+
+  useEffect(() => {
+    onOpen();
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
