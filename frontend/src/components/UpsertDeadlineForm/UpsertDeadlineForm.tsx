@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Deadline, DeadlineData } from "../../types";
+import { secondary } from "../../style/constants";
 
 
 export interface UpsertDeadlineFormProps {
@@ -65,99 +66,48 @@ export const UpsertDeadlineForm = ({
   };
 
   return (
-    <div style={{
-      background: "white",
-      borderRadius: "12px",
-      padding: "24px",
-      boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
-      border: "1px solid #e1e5e9",
-    }}>
+    <div style={{ backgroundColor: secondary }}>
       <div style={{
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
         marginBottom: "20px"
       }}>
-        <h3 style={{
-          margin: "0",
-          color: "#1a1a1a",
-          fontSize: "18px",
-          fontWeight: "600",
-          flex: 1
-        }}>
+        <h3>
           {isEditing ? "Edit" : "Add"} Deadline
         </h3>
         <button onClick={handleClose}>x</button>
       </div>
 
       <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: "16px" }}>
-          <label style={{
-            display: "block",
-            marginBottom: "6px",
-            color: "#374151",
-            fontSize: "14px",
-            fontWeight: "500"
-          }}>
+        <div>
+          <label>
             Name
           </label>
           <input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="start typing..."
-            style={{
-              width: "100%",
-              padding: "12px 16px",
-              border: "2px solid #e5e7eb",
-              borderRadius: "8px",
-              fontSize: "14px",
-              transition: "border-color 0.2s ease",
-              boxSizing: "border-box"
-            }}
-            onFocus={(e) => e.target.style.borderColor = "#3b82f6"}
-            onBlur={(e) => e.target.style.borderColor = "#e5e7eb"}
+            style={{ width: "100%" }}
             required
           />
         </div>
 
-        <div style={{ marginBottom: "16px" }}>
-          <label style={{
-            display: "block",
-            marginBottom: "6px",
-            color: "#374151",
-            fontSize: "14px",
-            fontWeight: "500"
-          }}>
+        <div>
+          <label>
             Due Date
           </label>
           <input
             type="datetime-local"
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            style={{
-              width: "100%",
-              padding: "12px 16px",
-              border: "2px solid #e5e7eb",
-              borderRadius: "8px",
-              fontSize: "14px",
-              transition: "border-color 0.2s ease",
-              boxSizing: "border-box"
-            }}
-            onFocus={(e) => e.target.style.borderColor = "#3b82f6"}
-            onBlur={(e) => e.target.style.borderColor = "#e5e7eb"}
-          // required
+            style={{ width: "100%" }}
+            required
           />
         </div>
 
-        <div style={{ marginBottom: "20px" }}>
-          <label style={{
-            display: "block",
-            marginBottom: "6px",
-            color: "#374151",
-            fontSize: "14px",
-            fontWeight: "500"
-          }}>
+        <div>
+          <label>
             Description (optional)
           </label>
           <textarea
@@ -167,37 +117,16 @@ export const UpsertDeadlineForm = ({
             rows={3}
             style={{
               width: "100%",
-              padding: "12px 16px",
-              border: "2px solid #e5e7eb",
-              borderRadius: "8px",
-              fontSize: "14px",
-              fontFamily: "inherit",
               resize: "vertical",
-              transition: "border-color 0.2s ease",
-              boxSizing: "border-box"
+              maxHeight: "250px",
+              minHeight: "1em"
             }}
-            onFocus={(e) => e.target.style.borderColor = "#3b82f6"}
-            onBlur={(e) => e.target.style.borderColor = "#e5e7eb"}
           />
         </div>
 
         <button
           type="submit"
-          style={{
-            width: "100%",
-            padding: "12px 16px",
-            backgroundColor: "#3b82f6",
-            color: "white",
-            border: "none",
-            borderRadius: "8px",
-            fontSize: "14px",
-            fontWeight: "600",
-            cursor: "pointer",
-            transition: "background-color 0.2s ease",
-            boxSizing: "border-box"
-          }}
-          onMouseOver={(e) => e.currentTarget.style.backgroundColor = "#2563eb"}
-          onMouseOut={(e) => e.currentTarget.style.backgroundColor = "#3b82f6"}
+          style={{ width: "100%" }}
         >
           {isEditing ? "Save" : "Add"}
         </button>
