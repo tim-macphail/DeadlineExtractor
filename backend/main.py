@@ -21,11 +21,11 @@ response = [
         "highlight": {
             "id": "1",
             "comment": {
-                "emoji": '',
-                "text": "In this paper we",
+                "emoji": "",
+                "text": "In this paper we"
             },
             "content": {
-                "text": "In this paper we",
+                "text": "In this paper we"
             },
             "position": {
                 "boundingRect": {
@@ -47,7 +47,7 @@ response = [
                     }
                 ],
                 "pageNumber": 1
-            },
+            }
         }
     }
 ]

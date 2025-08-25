@@ -56,9 +56,20 @@ def find_text_with_position(pdf_path, search_text):
                 }
                 
                 results.append({
-                    "text": search_text,
-                    "position": position,
-                    "page": page_num + 1
+                    "date": "2023-10-15",
+                    "id": "1",
+                    "name": "Project Proposal",
+                    "highlight": {
+                        "id": "1",
+                        "comment": {
+                            "emoji": '',
+                            "text": search_text,
+                        },
+                        "content": {
+                            "text": search_text,
+                        },
+                        "position": position,
+                    }
                 })
         
         doc.close()

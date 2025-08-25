@@ -12,7 +12,6 @@ export const useFileUpload = (onApiComplete?: (deadlines: any[]) => void) => {
     setError(null); // Clear any previous errors
 
     try {
-      // GET http://localhost:8000/api/document
       const response = await fetch("http://localhost:8000/api/document");
 
       if (!response.ok) {
