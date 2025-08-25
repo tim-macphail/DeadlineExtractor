@@ -13,10 +13,7 @@ export interface SidebarProps {
   showAddForm?: boolean;
   onShowAddForm?: (show: boolean) => void;
   onAddDeadline?: (deadlineData: { name: string; date: string; description?: string }) => void;
-  editingDeadline?: Deadline;
-  showEditForm?: boolean;
-  onShowEditForm?: (show: boolean, deadline?: Deadline) => void;
-  onUpdateDeadline?: (deadlineId: string, deadlineData: { name: string; date: string; description?: string }) => void;
+  onEditDeadline: (deadline: Deadline) => void;
 }
 
 const updateHash = (highlight: IHighlight) => {
@@ -44,10 +41,7 @@ export function Sidebar({
   showAddForm,
   onShowAddForm,
   onAddDeadline,
-  editingDeadline,
-  showEditForm,
-  onShowEditForm,
-  onUpdateDeadline,
+  onEditDeadline,
 }: SidebarProps) {
   return (
     <div className="sidebar" style={{
@@ -71,18 +65,6 @@ export function Sidebar({
               onShowAddForm?.(false);
             }}
           />
-        ) : showEditForm ? (
-          <UpsertDeadlineForm
-            isEditing={true}
-            editingDeadline={editingDeadline}
-            onAdd={() => { }} // Not used in edit mode
-            onClose={() => onShowEditForm?.(false)}
-            onOpen={() => { }}
-            onUpdate={(deadlineId, deadlineData) => {
-              onUpdateDeadline?.(deadlineId, deadlineData);
-              onShowEditForm?.(false);
-            }}
-          />
         ) : (
           <DeadlineList
             deadlines={deadlines}
@@ -90,7 +72,7 @@ export function Sidebar({
             onDeadlineClick={onDeadlineClick}
             onDeleteDeadline={onDeleteDeadline}
             onShowAddForm={() => onShowAddForm?.(true)}
-            onEditDeadline={(deadline) => onShowEditForm?.(true, deadline)}
+            onEditDeadline={onEditDeadline}
           />
         )}
       </div>

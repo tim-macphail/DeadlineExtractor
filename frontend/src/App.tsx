@@ -15,6 +15,7 @@ import { UploadPrompt } from "./components/UploadPrompt/UploadPrompt";
 import ErrorOverlay from "./components/ErrorOverlay/ErrorOverlay";
 import LoadingOverlay from "./components/LoadingOverlay/LoadingOverlay";
 import Modal from "./components/Modal/Modal";
+import { UpsertDeadlineForm } from "./components/UpsertDeadlineForm/UpsertDeadlineForm";
 import { useState } from "react";
 import { DeadlineCalendar } from "./components/DeadlineCalendar/DeadlineCalendar";
 import PreviewModalContent from "./components/PreviewModalContent/PreviewModalContent";
@@ -74,6 +75,17 @@ export function App() {
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
+  // Edit modal state
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const handleOpenEditModal = (deadline: Deadline) => {
+    handleShowEditForm(true, deadline);
+    setIsEditModalOpen(true);
+  };
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false);
+    handleShowEditForm(false);
+  };
+
   return (
     <div className="App" style={{ display: "flex", height: "100vh" }}>
       <Sidebar
@@ -85,10 +97,7 @@ export function App() {
         showAddForm={showAddForm}
         onShowAddForm={setShowAddForm}
         onAddDeadline={addStandaloneDeadline}
-        editingDeadline={editingDeadline}
-        showEditForm={showEditForm}
-        onShowEditForm={handleShowEditForm}
-        onUpdateDeadline={updateDeadline}
+        onEditDeadline={handleOpenEditModal}
       />
       <div
         style={{
@@ -146,6 +155,20 @@ export function App() {
         )}
         <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
           <PreviewModalContent deadlines={deadlines} />
+        </Modal>
+
+        <Modal isOpen={isEditModalOpen} onClose={handleCloseEditModal}>
+          <UpsertDeadlineForm
+            isEditing={true}
+            editingDeadline={editingDeadline}
+            onAdd={() => {}} // Not used in edit mode
+            onClose={handleCloseEditModal}
+            onOpen={() => {}}
+            onUpdate={(deadlineId, deadlineData) => {
+              updateDeadline(deadlineId, deadlineData);
+              handleCloseEditModal();
+            }}
+          />
         </Modal>
       </div>
     </div >
