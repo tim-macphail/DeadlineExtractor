@@ -53,22 +53,15 @@ export function Sidebar({
     <div className="sidebar" style={{
       width: "25vw",
       height: "100vh",
+      maxHeight: "100vh",
       display: "flex",
       flexDirection: "column",
-      overflow: "hidden"
     }}>
       <div style={{
         flex: 1,
-        overflow: "hidden",
-        display: "flex",
-        flexDirection: "column"
+        overflow: 'hidden',
       }}>
-        <div style={{
-          flex: 1,
-          overflowY: "auto",
-          paddingBottom: "1rem"
-        }}>
-          {showAddForm ? (
+        {/* {showAddForm ? (
             <UpsertDeadlineForm
               onClose={() => onShowAddForm?.(false)}
               onOpen={() => { }}
@@ -90,27 +83,26 @@ export function Sidebar({
               }}
             />
           ) : (
-            <DeadlineList
-              deadlines={deadlines}
-              highlights={highlights}
-              onDeadlineClick={onDeadlineClick}
-              onDeleteDeadline={onDeleteDeadline}
-              onShowAddForm={() => onShowAddForm?.(true)}
-              onEditDeadline={(deadline) => onShowEditForm?.(true, deadline)}
-            />
-          )}
-        </div>
+            )} */}
+        <DeadlineList
+          deadlines={deadlines}
+          highlights={highlights}
+          onDeadlineClick={onDeadlineClick}
+          onDeleteDeadline={onDeleteDeadline}
+          onShowAddForm={() => onShowAddForm?.(true)}
+          onEditDeadline={(deadline) => onShowEditForm?.(true, deadline)}
+        />
+      </div>
 
-        <div style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-          <DeadlineCalendar
-            deadlines={deadlines}
-            onEventClick={(deadline) => handleDeadlineClick(deadline, onDeadlineClick)}
-          />
-        </div>
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
+        <DeadlineCalendar
+          deadlines={deadlines}
+          onEventClick={(deadline) => handleDeadlineClick(deadline, onDeadlineClick)}
+        />
       </div>
     </div>
   );

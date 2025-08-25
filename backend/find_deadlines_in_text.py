@@ -1,5 +1,6 @@
 import random
 
+
 def find_deadlines_in_text(text: str):
     apiResponse = []
 
@@ -8,7 +9,7 @@ def find_deadlines_in_text(text: str):
         return apiResponse
 
     # Generate 5 random substrings of 15 characters each
-    for i in range(5):
+    for i in range(15):
         # Generate random starting position (ensure we don't go beyond text length)
         max_start = len(text) - 15
         start_pos = random.randint(0, max_start)
@@ -22,8 +23,9 @@ def find_deadlines_in_text(text: str):
         # Create deadline object
         deadline = {
             "sourceText": substring,
-            "name": f"Assignment {substring}",
-            "date": f"2025-08-{day:02d}",
+            "name": f"Assignment {i+1}",
+            # "date": f"2025-08-{day:02d}",
+            "date": f"2025-08-{i+1}",
             "description": ""
         }
 

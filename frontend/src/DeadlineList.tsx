@@ -1,5 +1,6 @@
 import type { IHighlight } from "react-pdf-highlighter";
 import type { Deadline } from "./App";
+import { primary, secondary } from "./style/constants";
 
 interface DeadlineListProps {
   deadlines: Array<Deadline>;
@@ -47,129 +48,71 @@ export function DeadlineList({
   onEditDeadline,
 }: DeadlineListProps) {
   return (
-    <ul className="sidebar__highlights" style={{ margin: 0 }}>
-      <li>
-        <div style={{ padding: "1rem", paddingBottom: "0.5rem" }}>
-          <button
-            onClick={onShowAddForm}
-            style={{
-              width: "100%",
-              padding: "0.75rem 1rem",
-              backgroundColor: "#007bff",
-              color: "white",
-              border: "none",
-              borderRadius: "6px",
-              fontSize: "14px",
-              fontWeight: "600",
-              cursor: "pointer",
-              transition: "background-color 0.2s ease",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "0.5rem"
-            }}
-            onMouseOver={(e) => {
-              e.currentTarget.style.backgroundColor = "#0056b3";
-            }}
-            onMouseOut={(e) => {
-              e.currentTarget.style.backgroundColor = "#007bff";
-            }}
-          >
-            <span style={{ fontSize: "1.2em" }}>+</span>
-            Add Deadline
-          </button>
-        </div>
-      </li>
-      {deadlines.sort(sortDeadlines).map((deadline, index) => {
-        const associatedHighlight = deadline.highlight;
-        return (
-          <li
-            // biome-ignore lint/suspicious/noArrayIndexKey: This is an example app
-            key={index}
-            className="sidebar__highlight"
-            onClick={() => handleDeadlineClick(deadline, onDeadlineClick)}
-            style={{ position: "relative" }}
-          >
-            <div>
-              <strong style={{ fontSize: "1.1em", color: "#333" }}>
-                {deadline.name}
-              </strong>
-              <div style={{
-                marginTop: "0.25rem",
-                fontSize: "0.9em",
-                color: "#666",
-                fontWeight: "500"
-              }}>
-                {new Date(deadline.date).toLocaleDateString()}
-              </div>
-              {deadline.description ? (
-                <blockquote style={{ marginTop: "0.5rem", fontStyle: "italic" }}>
-                  {deadline.description}
-                </blockquote>
-              ) : null}
-            </div>
-            {associatedHighlight && (
-              <div className="highlight__location">
-                Page {associatedHighlight.position.pageNumber}
-              </div>
-            )}
-
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onEditDeadline(deadline);
-              }}
+    <div
+      style={{
+        backgroundColor: "blue",
+        height: "100%",
+        overflowY: "auto",
+      }}
+    >
+      <button
+        onClick={onShowAddForm}
+        style={{ width: "100%" }}
+      >
+        Add Deadline
+      </button>
+      <div>
+        {deadlines.sort(sortDeadlines).map((deadline, index) => {
+          const associatedHighlight = deadline.highlight;
+          return (
+            <div
+              key={index}
+              onClick={() => handleDeadlineClick(deadline, onDeadlineClick)}
               style={{
-                position: "absolute",
-                top: "0.5rem",
-                right: "2.5rem",
-                background: "none",
-                border: "none",
-                fontSize: "1.1em",
-                cursor: "pointer",
-                color: "#666",
-                padding: "0.2rem 0.4rem",
-                borderRadius: "3px",
-                transition: "all 0.2s ease"
+                borderBottom: "1px solid #ccc",
               }}
-              title="Edit deadline"
             >
-              ✏️
-            </button>
+              <div>
+                <div>
+                  {deadline.name}
+                </div>
+                <div>
+                  {new Date(deadline.date).toLocaleDateString()}
+                </div>
+                {deadline.description &&
+                  <blockquote>
+                    {deadline.description}
+                  </blockquote>
+                }
+              </div>
+              {associatedHighlight && (
+                <div>
+                  Page {associatedHighlight.position.pageNumber}
+                </div>
+              )}
+
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onEditDeadline(deadline);
+                }}
+                title="Edit deadline"
+              >
+                Edit
+              </button>
               <button
                 onClick={(e) => {
                   e.stopPropagation();
                   onDeleteDeadline(deadline.id);
                 }}
-                style={{
-                  position: "absolute",
-                  top: "0.5rem",
-                  right: "0.5rem",
-                  background: "none",
-                  border: "none",
-                  fontSize: "1.2em",
-                  cursor: "pointer",
-                  color: "#999",
-                  padding: "0.2rem 0.4rem",
-                  borderRadius: "3px",
-                  transition: "all 0.2s ease"
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.backgroundColor = "#ffebee";
-                  e.currentTarget.style.color = "#d32f2f";
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.backgroundColor = "transparent";
-                  e.currentTarget.style.color = "#999";
-                }}
                 title="Delete deadline"
               >
-                🗑
+                Delete
               </button>
-          </li>
-        );
-      })}
-
-    </ul>
+            </div>
+          );
+        })}
+      </div>
+    </div>
   );
 }

@@ -19,16 +19,7 @@ body {
   );
 }
 
-.sidebar__highlights {
-  list-style: "none";
-  padding: 0;
-}
 
-.highlight__location {
-  margin-top: 0.5rem;
-  text-align: right;
-  font-size: 10px;
-}
 
 .highlight__image {
   overflow: auto;
@@ -36,16 +27,6 @@ body {
   border: 1px dashed;
 }
 
-.sidebar__highlight {
-  padding: 1rem;
-  cursor: pointer;
-  transition: background 140ms ease-in;
-  border-bottom: 1px solid rgb(119, 119, 119);
-}
-
-.sidebar__highlight:hover {
-  background: rgba(58, 56, 52, 0.08);
-}
 
 a {
   color: #d35400;
