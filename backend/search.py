@@ -1,3 +1,4 @@
+import random
 import pymupdf  # PyMuPDF
 import json
 import sys
@@ -56,12 +57,8 @@ def find_text_with_position(pdf_path, search_text):
                 }
                 
                 results.append({
-                    "date": "2023-10-15", # hardcoded for now
-                    "id": "1", # hardcoded for now
-                    "name": "Project Proposal", # hardcoded for now
-                    "description": "A proposal for the new project", # hardcoded for now
                     "highlight": {
-                        "id": "1",
+                        "id": str(random.randint(1000, 9999)),  # Random ID for the highlight
                         "comment": {
                             "emoji": '',
                             "text": search_text,
