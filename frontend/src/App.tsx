@@ -12,6 +12,8 @@ import "./App.css";
 import "react-pdf-highlighter/dist/style.css";
 import { primary } from "./style/constants";
 import { UploadPrompt } from "./components/UploadPrompt/UploadPrompt";
+import ErrorOverlay from "./components/ErrorOverlay/ErrorOverlay";
+import LoadingOverlay from "./components/LoadingOverlay/LoadingOverlay";
 
 export function App() {
   // Deadline management
@@ -81,12 +83,16 @@ export function App() {
       />
       <div
         style={{
-          height: "100vh",
+          height: "100%",
           flex: 1,
           position: "relative",
           overflow: "hidden",
         }}
       >
+        {/* This div is a button in the bottom right corner */}
+        <div style={{ position: "absolute", bottom: "20px", right: "20px" }}>
+          <button>Next</button>
+        </div>
         {url ? (
           <>
             <PdfViewer
@@ -98,59 +104,9 @@ export function App() {
               onHighlightTransform={handleHighlightTransform}
             />
             {isLoading && (
-              <div
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  width: "100%",
-                  height: "100%",
-                  // backgroundColor: "rgba(255, 255, 255, 0.8)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  zIndex: 1000,
-                }}
-              >
-                <Spinner />
-              </div>
+              <LoadingOverlay />
             )}
-            {error && (
-              <div
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  width: "100%",
-                  height: "100%",
-                  backgroundColor: "#ffffff", // cover the viewer area and block view
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  zIndex: 1000,
-                }}
-              >
-                <div
-                  style={{
-                    backgroundColor: primary,
-                    padding: "20px",
-                    maxWidth: "400px",
-                    textAlign: "center",
-                  }}
-                >
-                  <h2>
-                    Upload Failed
-                  </h2>
-                  <h3>
-                    {error}
-                  </h3>
-                  <button onClick={resetToUpload}>
-                    Try Again
-                  </button>
-                </div>
-              </div>
-            )}
+            {error && <ErrorOverlay error={error} resetToUpload={resetToUpload} />}
           </>
         ) : (
           <UploadPrompt
