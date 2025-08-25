@@ -28,7 +28,7 @@ def process_document(file_content: bytes, filename: str) -> list:
 
     try:
         # Extract text from the PDF (without tables)
-        extracted_text = get_text_from_pdf(temp_file_path, include_tables=False)['text']
+        extracted_text = get_text_from_pdf(temp_file_path, include_tables=True)['text']
         print(f"Extracted {len(extracted_text)} characters")
 
         # Send text to LLM to find deadlines

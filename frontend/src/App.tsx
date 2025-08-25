@@ -14,6 +14,8 @@ import { primary } from "./style/constants";
 import { UploadPrompt } from "./components/UploadPrompt/UploadPrompt";
 import ErrorOverlay from "./components/ErrorOverlay/ErrorOverlay";
 import LoadingOverlay from "./components/LoadingOverlay/LoadingOverlay";
+import Modal from "./components/Modal/Modal";
+import { useState } from "react";
 
 export function App() {
   // Deadline management
@@ -65,6 +67,11 @@ export function App() {
     scrollToDeadline(deadline.id);
   };
 
+  // Modal state
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const handleOpenModal = () => setIsModalOpen(true);
+  const handleCloseModal = () => setIsModalOpen(false);
+
   return (
     <div className="App" style={{ display: "flex", height: "100vh" }}>
       <Sidebar
@@ -89,15 +96,19 @@ export function App() {
           overflow: "hidden",
         }}
       >
-        <div style={{ position: "absolute", bottom: "40px", right: "40px" }}>
-          <button style={{
-            height: "80px",
-            width: "80px",
-            borderRadius: "50%",
-            textAlign: "center",
-            fontSize: "40px",
-          }}
-            disabled={deadlines.length === 0}>
+        <div style={{ position: "absolute", bottom: "40px", right: "40px", zIndex: 900 }}>
+          <button
+            style={{
+              height: "80px",
+              width: "80px",
+              borderRadius: "50%",
+              textAlign: "center",
+              fontSize: "40px",
+            }}
+            disabled={deadlines.length === 0}
+            // onClick={() => { console.log("circle button clicked"); }}
+          onClick={handleOpenModal}
+          >
             ⮕
           </button>
         </div>
@@ -127,6 +138,11 @@ export function App() {
             onUploadClick={handleUploadClick}
           />
         )}
+        <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+          <h2>Modal Title</h2>
+          <p>This is the modal content. You can put any content here, such as a form, list, or message.</p>
+          <button onClick={handleCloseModal}>Close</button>
+        </Modal>
       </div>
     </div >
   );
