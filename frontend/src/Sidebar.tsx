@@ -57,33 +57,29 @@ export function Sidebar({
       display: "flex",
       flexDirection: "column",
     }}>
-      <div style={{
-        flex: 1,
-        overflow: 'hidden',
-      }}>
-        {/* {showAddForm ? (
-            <UpsertDeadlineForm
-              onClose={() => onShowAddForm?.(false)}
-              onOpen={() => { }}
-              onAdd={(deadlineData) => {
-                onAddDeadline?.(deadlineData);
-                onShowAddForm?.(false);
-              }}
-            />
-          ) : showEditForm ? (
-            <UpsertDeadlineForm
-              isEditing={true}
-              editingDeadline={editingDeadline}
-              onAdd={() => { }} // Not used in edit mode
-              onClose={() => onShowEditForm?.(false)}
-              onOpen={() => { }}
-              onUpdate={(deadlineId, deadlineData) => {
-                onUpdateDeadline?.(deadlineId, deadlineData);
-                onShowEditForm?.(false);
-              }}
-            />
-          ) : (
-            )} */}
+
+      {showAddForm ? (
+        <UpsertDeadlineForm
+          onClose={() => onShowAddForm?.(false)}
+          onOpen={() => { }}
+          onAdd={(deadlineData) => {
+            onAddDeadline?.(deadlineData);
+            onShowAddForm?.(false);
+          }}
+        />
+      ) : showEditForm ? (
+        <UpsertDeadlineForm
+          isEditing={true}
+          editingDeadline={editingDeadline}
+          onAdd={() => { }}
+          onClose={() => onShowEditForm?.(false)}
+          onOpen={() => { }}
+          onUpdate={(deadlineId, deadlineData) => {
+            onUpdateDeadline?.(deadlineId, deadlineData);
+            onShowEditForm?.(false);
+          }}
+        />
+      ) : (
         <DeadlineList
           deadlines={deadlines}
           highlights={highlights}
@@ -92,18 +88,7 @@ export function Sidebar({
           onShowAddForm={() => onShowAddForm?.(true)}
           onEditDeadline={(deadline) => onShowEditForm?.(true, deadline)}
         />
-      </div>
-
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}>
-        <DeadlineCalendar
-          deadlines={deadlines}
-          onEventClick={(deadline) => handleDeadlineClick(deadline, onDeadlineClick)}
-        />
-      </div>
+      )}
     </div>
   );
 }
