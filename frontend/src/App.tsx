@@ -11,6 +11,7 @@ import type { Deadline } from "./types";
 
 import "./style/App.css";
 import "react-pdf-highlighter/dist/style.css";
+import { primary } from "./style/constants";
 
 // Re-export Deadline type for other files that import it
 export type { Deadline };
@@ -107,7 +108,7 @@ export function App() {
                   left: 0,
                   width: "100%",
                   height: "100%",
-                  backgroundColor: "rgba(255, 255, 255, 0.8)",
+                  // backgroundColor: "rgba(255, 255, 255, 0.8)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -125,62 +126,29 @@ export function App() {
                   left: 0,
                   width: "100%",
                   height: "100%",
-                  backgroundColor: "rgba(255, 255, 255, 0.95)",
+                  backgroundColor: "#ffffff", // cover the viewer area and block view
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
                   justifyContent: "center",
                   zIndex: 1000,
-                  padding: "20px",
                 }}
               >
                 <div
                   style={{
-                    backgroundColor: "#fee",
-                    border: "2px solid #fcc",
-                    borderRadius: "8px",
+                    backgroundColor: primary,
                     padding: "20px",
                     maxWidth: "400px",
                     textAlign: "center",
-                    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
                   }}
                 >
-                  <div
-                    style={{
-                      color: "#c33",
-                      fontSize: "18px",
-                      fontWeight: "bold",
-                      marginBottom: "10px",
-                    }}
-                  >
-                    ⚠️ Upload Failed
-                  </div>
-                  <div
-                    style={{
-                      color: "#666",
-                      fontSize: "14px",
-                      lineHeight: "1.4",
-                      marginBottom: "15px",
-                    }}
-                  >
+                  <h2>
+                    Upload Failed
+                  </h2>
+                  <h3>
                     {error}
-                  </div>
-                  <button
-                    onClick={() => {
-                      // Clear the error by resetting to upload state
-                      resetToUpload();
-                    }}
-                    style={{
-                      backgroundColor: "#007bff",
-                      color: "white",
-                      border: "none",
-                      borderRadius: "4px",
-                      padding: "8px 16px",
-                      fontSize: "14px",
-                      cursor: "pointer",
-                      fontWeight: "500",
-                    }}
-                  >
+                  </h3>
+                  <button onClick={resetToUpload}>
                     Try Again
                   </button>
                 </div>
@@ -199,6 +167,6 @@ export function App() {
           />
         )}
       </div>
-    </div>
+    </div >
   );
 }

@@ -1,4 +1,6 @@
 import React from "react";
+import { primary, secondary } from "./style/constants";
+import DocumentIcon from "./icons/Document";
 
 interface UploadPromptProps {
   isDragOver: boolean;
@@ -31,14 +33,8 @@ export function UploadPrompt({
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        border: isDragOver ? "3px dashed #007bff" : "3px dashed #ccc",
-        borderRadius: "8px",
-        backgroundColor: isDragOver ? "#f0f8ff" : "#fafafa",
-        transition: "all 0.3s ease",
-        padding: "1rem",
+        backgroundColor: isDragOver ? secondary : primary,
         textAlign: "center",
-        boxSizing: "border-box",
-        overflow: "hidden",
       }}
     >
       <input
@@ -49,60 +45,17 @@ export function UploadPrompt({
         style={{ display: "none" }}
       />
 
-      <div style={{ marginBottom: "1.5rem", flexShrink: 0 }}>
-        <svg
-          width="48"
-          height="48"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          style={{ color: "#666", marginBottom: "0.5rem" }}
-        >
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-          <polyline points="14,2 14,8 20,8"></polyline>
-          <line x1="16" y1="13" x2="8" y2="13"></line>
-          <line x1="16" y1="17" x2="8" y2="17"></line>
-          <polyline points="10,9 9,9 8,9"></polyline>
-        </svg>
-      </div>
+      <DocumentIcon />
 
-      <h3 style={{
-        marginBottom: "1rem",
-        color: "#333",
-        fontSize: "1.5rem",
-        flexShrink: 0
-      }}>
+      <h2>
         Upload a PDF Document
-      </h3>
+      </h2>
 
-      <p style={{
-        marginBottom: "2rem",
-        color: "#666",
-        maxWidth: "90%",
-        fontSize: "1rem",
-        flexShrink: 0
-      }}>
+      <p style={{ maxWidth: "90%" }}>
         Drag and drop a PDF file here, or click the button below to select a file from your computer.
       </p>
 
-      <button
-        onClick={onUploadClick}
-        style={{
-          padding: "12px 24px",
-          backgroundColor: "#007bff",
-          color: "white",
-          border: "none",
-          borderRadius: "6px",
-          fontSize: "16px",
-          cursor: "pointer",
-          transition: "background-color 0.3s ease",
-          flexShrink: 0,
-          whiteSpace: "nowrap",
-        }}
-      >
+      <button onClick={onUploadClick}>
         Choose PDF File
       </button>
     </div>
