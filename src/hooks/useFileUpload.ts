@@ -1,14 +1,35 @@
 import { useState, useRef } from "react";
 
-export const useFileUpload = () => {
+export const useFileUpload = (onMockApiComplete?: (deadlines: any[]) => void) => {
   const [url, setUrl] = useState<string>("");
   const [isDragOver, setIsDragOver] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const mockApiCall = async (file: File) => {
+    setIsLoading(true);
+
+    // Simulate API call delay
+    await new Promise(resolve => setTimeout(resolve, 2000));
+
+    // Import mock response dynamically to avoid circular imports
+    const { mockApiResponse } = await import("../mocks/apiResponse");
+
+    setIsLoading(false);
+
+    // Call the callback with the mock deadlines
+    if (onMockApiComplete) {
+      onMockApiComplete(mockApiResponse);
+    }
+  };
 
   const handleFileUpload = (file: File) => {
     if (file.type === "application/pdf") {
       const fileUrl = URL.createObjectURL(file);
       setUrl(fileUrl);
+
+      // Trigger mock API call after setting the URL
+      mockApiCall(file);
     } else {
       alert("Please upload a PDF file.");
     }
@@ -60,6 +81,7 @@ export const useFileUpload = () => {
     url,
     setUrl,
     isDragOver,
+    isLoading,
     fileInputRef,
     handleFileSelect,
     handleDrop,

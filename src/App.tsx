@@ -1,6 +1,7 @@
 import { Sidebar } from "./Sidebar";
 import { UploadPrompt } from "./UploadPrompt";
 import { PdfViewer } from "./components/PdfViewer";
+import { Spinner } from "./Spinner";
 import { useFileUpload } from "./hooks/useFileUpload";
 import { useDeadlineManagement } from "./hooks/useDeadlineManagement";
 import { useHighlightManagement } from "./hooks/useHighlightManagement";
@@ -15,19 +16,6 @@ import "react-pdf-highlighter/dist/style.css";
 export type { Deadline };
 
 export function App() {
-  // File upload management
-  const {
-    url,
-    isDragOver,
-    fileInputRef,
-    handleFileSelect,
-    handleDrop,
-    handleDragOver,
-    handleDragLeave,
-    handleUploadClick,
-    resetToUpload,
-  } = useFileUpload();
-
   // Deadline management
   const {
     deadlines,
@@ -42,6 +30,20 @@ export function App() {
     updateDeadline,
     handleShowEditForm,
   } = useDeadlineManagement();
+
+  // File upload management
+  const {
+    url,
+    isDragOver,
+    isLoading,
+    fileInputRef,
+    handleFileSelect,
+    handleDrop,
+    handleDragOver,
+    handleDragLeave,
+    handleUploadClick,
+    resetToUpload,
+  } = useFileUpload(setDeadlines);
 
   // Highlight management
   const { updateHighlight, highlights } = useHighlightManagement(
@@ -87,14 +89,34 @@ export function App() {
         }}
       >
         {url ? (
-          <PdfViewer
-            url={url}
-            highlights={highlights}
-            onScrollChange={resetHash}
-            onScrollRef={handleScrollRef}
-            onSelectionFinished={handleSelectionFinished}
-            onHighlightTransform={handleHighlightTransform}
-          />
+          <>
+            <PdfViewer
+              url={url}
+              highlights={highlights}
+              onScrollChange={resetHash}
+              onScrollRef={handleScrollRef}
+              onSelectionFinished={handleSelectionFinished}
+              onHighlightTransform={handleHighlightTransform}
+            />
+            {isLoading && (
+              <div
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  height: "100%",
+                  backgroundColor: "rgba(255, 255, 255, 0.8)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  zIndex: 1000,
+                }}
+              >
+                <Spinner />
+              </div>
+            )}
+          </>
         ) : (
           <UploadPrompt
             isDragOver={isDragOver}
