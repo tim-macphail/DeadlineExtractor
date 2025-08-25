@@ -54,12 +54,6 @@ export function DeadlineList({
         overflowY: "auto",
       }}
     >
-      <button
-        onClick={onShowAddForm}
-        style={{ width: "100%" }}
-      >
-        Add Deadline
-      </button>
       <div>
         {deadlines.sort(sortDeadlines).map((deadline, index) => {
           const associatedHighlight = deadline.highlight;
@@ -70,6 +64,7 @@ export function DeadlineList({
                 borderBottom: "1px solid #ccc",
                 position: "relative",
                 padding: "8px",
+                cursor: "pointer",
               }}
               onClick={(e) => {
                 e.stopPropagation();
@@ -92,6 +87,9 @@ export function DeadlineList({
                       }}
                         href={`#highlight-${associatedHighlight.id}`}
                         style={{ textDecoration: "underline", color: "inherit", cursor: "pointer" }}
+                        title="View source"
+                        onMouseOver={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "#007bff"; }}
+                        onMouseOut={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "inherit"; }}
                       >
                         page {associatedHighlight.position.pageNumber}
                       </a>)
@@ -102,7 +100,7 @@ export function DeadlineList({
                       e.stopPropagation();
                       onDeleteDeadline(deadline.id);
                     }}
-                    title="Delete deadline"
+                    title="Delete"
                     style={{
                       position: "absolute",
                       top: "8px",
@@ -110,7 +108,10 @@ export function DeadlineList({
                       border: "none",
                       background: "none",
                       cursor: "pointer",
+                      borderRadius: "4px",
                     }}
+                    onMouseOver={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#acacacff"; }}
+                    onMouseOut={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "transparent"; }}
                   >
                     <TrashIcon />
                   </button>
@@ -135,6 +136,42 @@ export function DeadlineList({
             </div>
           );
         })}
+        <div
+          style={{
+            borderBottom: "1px solid #ccc",
+            position: "relative",
+          }}
+          // darken when hovered
+          onMouseOver={(e) => { (e.currentTarget as HTMLDivElement).style.backgroundColor = "#dddbdbff"; }}
+          onMouseOut={(e) => { (e.currentTarget as HTMLDivElement).style.backgroundColor = "transparent"; }}
+        >
+          <div style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}>
+            <button
+              onClick={onShowAddForm}
+              style={{
+                borderRadius: "50%",
+                width: "40px",
+                height: "40px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: "#007bff",
+                border: "none",
+                color: "white",
+                fontSize: "24px",
+                cursor: "pointer",
+                margin: "16px",
+                boxShadow: "0 2px 6px black",
+              }}
+            >
+              +
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
