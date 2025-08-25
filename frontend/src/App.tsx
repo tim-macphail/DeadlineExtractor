@@ -101,11 +101,16 @@ export function App() {
         <div style={{ position: "absolute", bottom: "40px", right: "40px", zIndex: 900 }}>
           <button
             style={{
+              border: "none",
+              backgroundColor: "#007bff",
               height: "80px",
               width: "80px",
               borderRadius: "50%",
               textAlign: "center",
               fontSize: "40px",
+              cursor: "pointer",
+              color: "white",
+              boxShadow: "0 4px 10px black",
             }}
             disabled={deadlines.length === 0}
             onClick={handleOpenModal}
