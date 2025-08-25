@@ -1,5 +1,8 @@
 from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
+import tempfile
+import os
+from search import find_text_with_position
 
 app = FastAPI()
 
@@ -13,48 +16,7 @@ app.add_middleware(
 )
 
 
-response = [
-    {
-        "date": "2023-10-15",
-        "id": "1",
-        "name": "Project Proposal",
-        "highlight": {
-            "id": "1",
-            "comment": {
-                "emoji": "",
-                "text": "In this paper we"
-            },
-            "content": {
-                "text": "In this paper we"
-            },
-            "position": {
-                "boundingRect": {
-                    "x1": 45.827999114990234,
-                    "y1": 197.7198028564453,
-                    "x2": 103.40967559814453,
-                    "y2": 206.59608459472656,
-                    "width": 486.0,
-                    "height": 720.0
-                },
-                "rects": [
-                    {
-                        "x1": 45.827999114990234,
-                        "y1": 197.7198028564453,
-                        "x2": 103.40967559814453,
-                        "y2": 206.59608459472656,
-                        "width": 486.0,
-                        "height": 720.0
-                    }
-                ],
-                "pageNumber": 1
-            }
-        }
-    }
-]
 
-@app.get("/api/document")
-async def get_document():
-    return response
 
 @app.post("/api/document")
 async def upload_document(file: UploadFile = File(...)):
@@ -63,13 +25,36 @@ async def upload_document(file: UploadFile = File(...)):
     print(f"Content type: {file.content_type}")
     print(f"File size: {file.size} bytes")
 
-    # Read file content to verify it's a PDF
+    # Read file content
     content = await file.read()
     print(f"File content length: {len(content)} bytes")
 
-    # For now, just return the hardcoded response
-    # In the future, this could process the PDF and extract deadlines
-    return response
+    # Create temporary file
+    with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as temp_file:
+        temp_file.write(content)
+        temp_file_path = temp_file.name
+
+    try:
+        # Search for the specified text in the PDF
+        search_text = "In this paper we"
+        results = find_text_with_position(temp_file_path, search_text)
+
+        # Log search results
+        print(f"Found {len(results)} instances of '{search_text}'")
+
+        # Return search results
+        return results
+
+    except Exception as e:
+        print(f"Error processing PDF: {e}")
+        # Return empty list on error
+        return []
+
+    finally:
+        # Clean up temporary file
+        if os.path.exists(temp_file_path):
+            os.unlink(temp_file_path)
+            print(f"Cleaned up temporary file: {temp_file_path}")
 
 @app.get("/health")
 async def health_check():
