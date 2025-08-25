@@ -8,7 +8,7 @@ import type {
 } from "react-pdf-highlighter";
 import { Spinner } from "../Spinner/Spinner";
 
-interface PdfViewerProps {
+export interface PdfViewerProps {
   url: string;
   highlights: IHighlight[];
   onScrollChange: () => void;

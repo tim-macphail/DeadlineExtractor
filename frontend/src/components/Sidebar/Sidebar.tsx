@@ -4,7 +4,7 @@ import { DeadlineCalendar } from "../DeadlineCalendar/DeadlineCalendar";
 import { DeadlineList } from "../DeadlineList/DeadlineList";
 import { UpsertDeadlineForm } from "../UpsertDeadlineForm/UpsertDeadlineForm";
 
-interface Props {
+export interface SidebarProps {
   deadlines: Array<Deadline>;
   highlights: Array<IHighlight>;
   resetToUpload: () => void;
@@ -48,7 +48,7 @@ export function Sidebar({
   showEditForm,
   onShowEditForm,
   onUpdateDeadline,
-}: Props) {
+}: SidebarProps) {
   return (
     <div className="sidebar" style={{
       width: "25vw",

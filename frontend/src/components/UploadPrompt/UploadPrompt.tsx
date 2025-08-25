@@ -2,7 +2,7 @@ import React from "react";
 import { primary, secondary } from "../../style/constants";
 import DocumentIcon from "../../icons/Document";
 
-interface UploadPromptProps {
+export interface UploadPromptProps {
   isDragOver: boolean;
   onDrop: (event: React.DragEvent) => void;
   onDragOver: (event: React.DragEvent) => void;

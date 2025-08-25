@@ -10,7 +10,7 @@ import type { Deadline as AppDeadline } from "../../App";
 
 interface Deadline extends AppDeadline { }
 
-interface UpsertDeadlineFormProps {
+export interface UpsertDeadlineFormProps {
   onAdd: (deadlineData: DeadlineData) => void;
   onOpen: () => void;
   onClose: () => void;

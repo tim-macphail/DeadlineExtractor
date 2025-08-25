@@ -1,8 +1,7 @@
 import type { IHighlight } from "react-pdf-highlighter";
 import type { Deadline } from "../../App";
-import { primary, secondary } from "../../style/constants";
 
-interface DeadlineListProps {
+export interface DeadlineListProps {
   deadlines: Array<Deadline>;
   highlights: Array<IHighlight>;
   onDeadlineClick?: (deadline: Deadline) => void;

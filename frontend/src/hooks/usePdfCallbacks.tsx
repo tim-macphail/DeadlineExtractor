@@ -13,7 +13,7 @@ import { HighlightPopup } from "../components/HighlightPopup/HighlightPopup";
 import { getNextId } from "../utils/helpers";
 import { UpsertDeadlineForm } from "../components/UpsertDeadlineForm/UpsertDeadlineForm";
 
-interface UsePdfCallbacksProps {
+export interface UsePdfCallbacksProps {
   addDeadline: (deadlineData: { name: string; date: string; description?: string }, highlight: IHighlight) => void;
   updateHighlight: (highlightId: string, position: Partial<ScaledPosition>, content: Partial<{ text?: string; image?: string }>) => void;
 }

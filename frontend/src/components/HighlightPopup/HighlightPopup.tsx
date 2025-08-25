@@ -1,4 +1,4 @@
-interface HighlightPopupProps {
+export interface HighlightPopupProps {
   comment: { text: string; emoji: string };
 }
 

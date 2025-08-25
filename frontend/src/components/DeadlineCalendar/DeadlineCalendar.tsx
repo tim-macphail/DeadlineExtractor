@@ -5,12 +5,12 @@ import type { Deadline } from '../../App';
 
 import './DeadlineCalendar.css';
 
-interface Props {
+export interface DeadlineCalendarProps {
   deadlines: Array<Deadline>;
   onEventClick: (deadline: Deadline) => void;
 }
 
-export function DeadlineCalendar({ deadlines, onEventClick }: Props) {
+export function DeadlineCalendar({ deadlines, onEventClick }: DeadlineCalendarProps) {
   // Get events for a specific date
   const getEventsForDate = (date: Date) => {
     return deadlines.filter(deadline => {
