@@ -1,6 +1,6 @@
 import { Deadline } from "../types";
 
-export const mockApiResponse: Deadline[] = [
+export const mockApiResponse2: Deadline[] = [
     {
         id: "1",
         name: "Project Proposal",
@@ -74,6 +74,46 @@ export const mockApiResponse: Deadline[] = [
                 emoji: "😎",
             },
             id: "29668244118038056",
+        }
+    }
+]
+
+
+export const mockApiResponse: Deadline[] = [
+    {
+        date: "2023-10-15",
+        id: "1",
+        name: "Project Proposal",
+        highlight: {
+            id: "1",
+            comment: {
+                emoji: '',
+                text: "In this paper we",
+            },
+            content: {
+                "text": "In this paper we",
+            },
+            "position": {
+                "boundingRect": {
+                    "x1": 45.827999114990234,
+                    "y1": 197.7198028564453,
+                    "x2": 103.40967559814453,
+                    "y2": 206.59608459472656,
+                    "width": 486.0,
+                    "height": 720.0
+                },
+                "rects": [
+                    {
+                        "x1": 45.827999114990234,
+                        "y1": 197.7198028564453,
+                        "x2": 103.40967559814453,
+                        "y2": 206.59608459472656,
+                        "width": 486.0,
+                        "height": 720.0
+                    }
+                ],
+                "pageNumber": 1
+            },
         }
     }
 ]
