@@ -1,8 +1,8 @@
 import tempfile
 import os
-from search import find_text_with_position
-from parse import extract_pdf_data
-from llm import mock_search_for_deadlines
+from backend.get_highlight_positions import get_highlight_positions
+from backend.get_text_from_pdf import get_text_from_pdf
+from backend.find_deadlines_in_text import find_deadlines_in_text
 
 
 def process_document(file_content: bytes, filename: str) -> list:
@@ -27,34 +27,30 @@ def process_document(file_content: bytes, filename: str) -> list:
 
     try:
         # Extract text from the PDF (without tables)
-        pdf_data = extract_pdf_data(temp_file_path, include_tables=False)
-        extracted_text = pdf_data['text']
-
-        print(f"Extracted text length: {len(extracted_text)} characters")
+        extracted_text = get_text_from_pdf(temp_file_path, include_tables=False)['text']
+        print(f"Extracted {len(extracted_text)} characters")
 
         # Send text to LLM to find deadlines
-        deadlines = mock_search_for_deadlines(extracted_text)
-        print(f"Found {len(deadlines)} potential deadlines")
+        deadlines = find_deadlines_in_text(extracted_text)
+        print(f"LLM found {len(deadlines)} deadlines")
 
         # For each deadline, find its position in the PDF
         results = []
-        for i, deadline in enumerate(deadlines):
+        for deadline in deadlines:
             source_text = deadline['sourceText']
-            print(f"Searching for deadline {i+1}: '{source_text}'")
+            print(f"Searching for deadline: '{source_text}'")
 
             # Find position data for this source text
-            position_results = find_text_with_position(temp_file_path, source_text)
+            highlight_position = get_highlight_positions(temp_file_path, source_text)[0] # only use first result
 
-            if position_results:
-                # Create result objects using actual deadline data instead of hardcoded values
-                result = {
-                    "date": deadline['date'],
-                    "name": deadline['name'],
-                    "description": deadline['description'],
-                    "id": position_results[0]['highlight']['id'],
-                    "highlight": position_results[0]['highlight']
-                }
-                results.append(result)
+            result = {
+                "date": deadline['date'],
+                "name": deadline['name'],
+                "description": deadline['description'],
+                "id": highlight_position['id'],
+                "highlight": highlight_position['highlight']
+            }
+            results.append(result)
 
         # Log final results
         print(f"Total results: {len(results)}")

@@ -1,9 +1,7 @@
 import random
 import pymupdf  # PyMuPDF
-import json
-import sys
 
-def find_text_with_position(pdf_path, search_text):
+def get_highlight_positions(pdf_path, search_text):
     """
     Find specific text in PDF and return position in react-pdf-highlighter format
     
@@ -76,20 +74,3 @@ def find_text_with_position(pdf_path, search_text):
     except Exception as e:
         print(f"Error processing PDF: {e}")
         return []
-
-def main():
-    assert len(sys.argv) > 1, "PDF path is required"
-    assert len(sys.argv) > 2, "Search text is required"
-    pdf_path = sys.argv[1]
-    search_text = sys.argv[2]
-    
-    results = find_text_with_position(pdf_path, search_text)
-    
-    if results:
-        # format the output like
-        print(json.dumps(results, indent=4))
-    else:
-        print("Text not found in the document.")
-
-if __name__ == "__main__":
-    main()

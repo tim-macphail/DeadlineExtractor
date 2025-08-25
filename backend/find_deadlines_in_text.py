@@ -1,6 +1,6 @@
 import random
 
-def mock_search_for_deadlines(text: str):
+def find_deadlines_in_text(text: str):
     apiResponse = []
 
     # Check if text is long enough for 15-character substrings
