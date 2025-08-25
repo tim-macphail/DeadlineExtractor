@@ -3,6 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 import tempfile
 import os
 from search import find_text_with_position
+from parse import extract_pdf_data
+from llm import search_for_deadlines
 
 app = FastAPI()
 
@@ -35,12 +37,38 @@ async def upload_document(file: UploadFile = File(...)):
         temp_file_path = temp_file.name
 
     try:
-        # Search for the specified text in the PDF
-        search_text = "In this paper we"
-        results = find_text_with_position(temp_file_path, search_text)
+        # Extract text from the PDF (without tables)
+        pdf_data = extract_pdf_data(temp_file_path, include_tables=False)
+        extracted_text = pdf_data['text']
 
-        # Log search results
-        print(f"Found {len(results)} instances of '{search_text}'")
+        print(f"Extracted text length: {len(extracted_text)} characters")
+
+        # Send text to LLM to find deadlines
+        deadlines = search_for_deadlines(extracted_text)
+        print(f"Found {len(deadlines)} potential deadlines")
+
+        # For each deadline, find its position in the PDF
+        results = []
+        for i, deadline in enumerate(deadlines):
+            source_text = deadline['sourceText']
+            print(f"Searching for deadline {i+1}: '{source_text}'")
+
+            # Find position data for this source text
+            position_results = find_text_with_position(temp_file_path, source_text)
+
+            # Create result objects using actual deadline data instead of hardcoded values
+            for position_result in position_results:
+                result = {
+                    "date": deadline['date'],
+                    "id": str(i + 1),  # Use index as ID for now
+                    "name": deadline['name'],
+                    "description": deadline['description'],
+                    "highlight": position_result['highlight']
+                }
+                results.append(result)
+
+        # Log final results
+        print(f"Total results: {len(results)}")
 
         # Return search results
         return results
