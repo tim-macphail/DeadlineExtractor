@@ -80,15 +80,10 @@ def find_text_with_position(pdf_path, search_text):
         return []
 
 def main():
-    # Example usage
-    pdf_path = "your_document.pdf"  # Replace with your PDF path
-    search_text = "May 5, 2020"
-    
-    if len(sys.argv) > 1:
-        pdf_path = sys.argv[1]
-    if len(sys.argv) > 2:
-        search_text = sys.argv[2]
-    
+    assert len(sys.argv) > 1, "PDF path is required"
+    assert len(sys.argv) > 2, "Search text is required"
+    pdf_path = sys.argv[1]
+    search_text = sys.argv[2]
     
     results = find_text_with_position(pdf_path, search_text)
     
