@@ -89,9 +89,17 @@ export function App() {
           overflow: "hidden",
         }}
       >
-        {/* This div is a button in the bottom right corner */}
-        <div style={{ position: "absolute", bottom: "20px", right: "20px" }}>
-          <button>Next</button>
+        <div style={{ position: "absolute", bottom: "40px", right: "40px" }}>
+          <button style={{
+            height: "80px",
+            width: "80px",
+            borderRadius: "50%",
+            textAlign: "center",
+            fontSize: "40px",
+          }}
+            disabled={deadlines.length === 0}>
+            ⮕
+          </button>
         </div>
         {url ? (
           <>
