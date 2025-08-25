@@ -1,7 +1,9 @@
 
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import type { Deadline } from './App';
+import type { Deadline } from '../../App';
+
+import './DeadlineCalendar.css';
 
 interface Props {
   deadlines: Array<Deadline>;

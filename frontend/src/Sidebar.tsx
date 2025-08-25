@@ -1,6 +1,6 @@
 import type { IHighlight } from "react-pdf-highlighter";
 import type { Deadline } from "./App";
-import { DeadlineCalendar } from "./DeadlineCalendar";
+import { DeadlineCalendar } from "./components/DeadlineCalendar/DeadlineCalendar";
 import { DeadlineList } from "./DeadlineList";
 import { UpsertDeadlineForm } from "./UpsertDeadlineForm";
 
@@ -57,38 +57,49 @@ export function Sidebar({
       display: "flex",
       flexDirection: "column",
     }}>
+      <div style={{
+        flex: 1,
+        overflow: 'hidden',
+      }}>
+        {showAddForm ? (
+          <UpsertDeadlineForm
+            onClose={() => onShowAddForm?.(false)}
+            onOpen={() => { }}
+            onAdd={(deadlineData) => {
+              onAddDeadline?.(deadlineData);
+              onShowAddForm?.(false);
+            }}
+          />
+        ) : showEditForm ? (
+          <UpsertDeadlineForm
+            isEditing={true}
+            editingDeadline={editingDeadline}
+            onAdd={() => { }} // Not used in edit mode
+            onClose={() => onShowEditForm?.(false)}
+            onOpen={() => { }}
+            onUpdate={(deadlineId, deadlineData) => {
+              onUpdateDeadline?.(deadlineId, deadlineData);
+              onShowEditForm?.(false);
+            }}
+          />
+        ) : (
+          <DeadlineList
+            deadlines={deadlines}
+            highlights={highlights}
+            onDeadlineClick={onDeadlineClick}
+            onDeleteDeadline={onDeleteDeadline}
+            onShowAddForm={() => onShowAddForm?.(true)}
+            onEditDeadline={(deadline) => onShowEditForm?.(true, deadline)}
+          />
+        )}
+      </div>
 
-      {showAddForm ? (
-        <UpsertDeadlineForm
-          onClose={() => onShowAddForm?.(false)}
-          onOpen={() => { }}
-          onAdd={(deadlineData) => {
-            onAddDeadline?.(deadlineData);
-            onShowAddForm?.(false);
-          }}
-        />
-      ) : showEditForm ? (
-        <UpsertDeadlineForm
-          isEditing={true}
-          editingDeadline={editingDeadline}
-          onAdd={() => { }}
-          onClose={() => onShowEditForm?.(false)}
-          onOpen={() => { }}
-          onUpdate={(deadlineId, deadlineData) => {
-            onUpdateDeadline?.(deadlineId, deadlineData);
-            onShowEditForm?.(false);
-          }}
-        />
-      ) : (
-        <DeadlineList
+      <div>
+        <DeadlineCalendar
           deadlines={deadlines}
-          highlights={highlights}
-          onDeadlineClick={onDeadlineClick}
-          onDeleteDeadline={onDeleteDeadline}
-          onShowAddForm={() => onShowAddForm?.(true)}
-          onEditDeadline={(deadline) => onShowEditForm?.(true, deadline)}
+          onEventClick={(deadline) => handleDeadlineClick(deadline, onDeadlineClick)}
         />
-      )}
+      </div>
     </div>
   );
 }
