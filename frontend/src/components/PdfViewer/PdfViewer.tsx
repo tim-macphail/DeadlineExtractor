@@ -6,7 +6,7 @@ import type {
   IHighlight,
   ScaledPosition,
 } from "react-pdf-highlighter";
-import { Spinner } from "../Spinner";
+import { Spinner } from "../Spinner/Spinner";
 
 interface PdfViewerProps {
   url: string;

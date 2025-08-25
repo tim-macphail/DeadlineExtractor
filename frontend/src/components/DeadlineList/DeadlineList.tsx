@@ -1,6 +1,6 @@
 import type { IHighlight } from "react-pdf-highlighter";
-import type { Deadline } from "./App";
-import { primary, secondary } from "./style/constants";
+import type { Deadline } from "../../App";
+import { primary, secondary } from "../../style/constants";
 
 interface DeadlineListProps {
   deadlines: Array<Deadline>;

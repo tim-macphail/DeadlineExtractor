@@ -1,7 +1,6 @@
-import { Sidebar } from "./Sidebar";
-import { UploadPrompt } from "./UploadPrompt";
-import { PdfViewer } from "./components/PdfViewer";
-import { Spinner } from "./Spinner";
+import { Sidebar } from "./components/Sidebar/Sidebar";
+import { PdfViewer } from "./components/PdfViewer/PdfViewer";
+import { Spinner } from "./components/Spinner/Spinner";
 import { useFileUpload } from "./hooks/useFileUpload";
 import { useDeadlineManagement } from "./hooks/useDeadlineManagement";
 import { useHighlightManagement } from "./hooks/useHighlightManagement";
@@ -9,9 +8,10 @@ import { useHashNavigation } from "./hooks/useHashNavigation";
 import { usePdfCallbacks } from "./hooks/usePdfCallbacks";
 import type { Deadline } from "./types";
 
-import "./style/App.css";
+import "./App.css";
 import "react-pdf-highlighter/dist/style.css";
 import { primary } from "./style/constants";
+import { UploadPrompt } from "./components/UploadPrompt/UploadPrompt";
 
 // Re-export Deadline type for other files that import it
 export type { Deadline };

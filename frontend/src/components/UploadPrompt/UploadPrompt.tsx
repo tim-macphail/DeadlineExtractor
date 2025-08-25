@@ -1,6 +1,6 @@
 import React from "react";
-import { primary, secondary } from "./style/constants";
-import DocumentIcon from "./icons/Document";
+import { primary, secondary } from "../../style/constants";
+import DocumentIcon from "../../icons/Document";
 
 interface UploadPromptProps {
   isDragOver: boolean;

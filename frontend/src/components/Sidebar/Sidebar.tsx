@@ -1,8 +1,8 @@
 import type { IHighlight } from "react-pdf-highlighter";
-import type { Deadline } from "./App";
-import { DeadlineCalendar } from "./components/DeadlineCalendar/DeadlineCalendar";
-import { DeadlineList } from "./DeadlineList";
-import { UpsertDeadlineForm } from "./UpsertDeadlineForm";
+import type { Deadline } from "../../App";
+import { DeadlineCalendar } from "../DeadlineCalendar/DeadlineCalendar";
+import { DeadlineList } from "../DeadlineList/DeadlineList";
+import { UpsertDeadlineForm } from "../UpsertDeadlineForm/UpsertDeadlineForm";
 
 interface Props {
   deadlines: Array<Deadline>;

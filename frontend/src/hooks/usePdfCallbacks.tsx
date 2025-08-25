@@ -9,9 +9,9 @@ import type {
   ScaledPosition,
 } from "react-pdf-highlighter";
 
-import { UpsertDeadlineForm } from "../UpsertDeadlineForm";
-import { HighlightPopup } from "../components/HighlightPopup";
+import { HighlightPopup } from "../components/HighlightPopup/HighlightPopup";
 import { getNextId } from "../utils/helpers";
+import { UpsertDeadlineForm } from "../components/UpsertDeadlineForm/UpsertDeadlineForm";
 
 interface UsePdfCallbacksProps {
   addDeadline: (deadlineData: { name: string; date: string; description?: string }, highlight: IHighlight) => void;
