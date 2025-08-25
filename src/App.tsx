@@ -43,6 +43,7 @@ export function App() {
     handleDragLeave,
     handleUploadClick,
     resetToUpload,
+    error,
   } = useFileUpload(setDeadlines);
 
   // Highlight management
@@ -114,6 +115,75 @@ export function App() {
                 }}
               >
                 <Spinner />
+              </div>
+            )}
+            {error && (
+              <div
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  height: "100%",
+                  backgroundColor: "rgba(255, 255, 255, 0.95)",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  zIndex: 1000,
+                  padding: "20px",
+                }}
+              >
+                <div
+                  style={{
+                    backgroundColor: "#fee",
+                    border: "2px solid #fcc",
+                    borderRadius: "8px",
+                    padding: "20px",
+                    maxWidth: "400px",
+                    textAlign: "center",
+                    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
+                  }}
+                >
+                  <div
+                    style={{
+                      color: "#c33",
+                      fontSize: "18px",
+                      fontWeight: "bold",
+                      marginBottom: "10px",
+                    }}
+                  >
+                    ⚠️ Upload Failed
+                  </div>
+                  <div
+                    style={{
+                      color: "#666",
+                      fontSize: "14px",
+                      lineHeight: "1.4",
+                      marginBottom: "15px",
+                    }}
+                  >
+                    {error}
+                  </div>
+                  <button
+                    onClick={() => {
+                      // Clear the error by resetting to upload state
+                      resetToUpload();
+                    }}
+                    style={{
+                      backgroundColor: "#007bff",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "4px",
+                      padding: "8px 16px",
+                      fontSize: "14px",
+                      cursor: "pointer",
+                      fontWeight: "500",
+                    }}
+                  >
+                    Try Again
+                  </button>
+                </div>
               </div>
             )}
           </>

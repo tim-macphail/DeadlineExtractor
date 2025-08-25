@@ -4,21 +4,39 @@ export const useFileUpload = (onApiComplete?: (deadlines: any[]) => void) => {
   const [url, setUrl] = useState<string>("");
   const [isDragOver, setIsDragOver] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const apiCall = async (file: File) => {
     setIsLoading(true);
+    setError(null); // Clear any previous errors
 
+    try {
+      // GET http://localhost:8000/api/document
+      const response = await fetch("http://localhost:8000/api/document");
 
-    // GET http://localhost:8000/api/document
-    const response = await fetch("http://localhost:8000/api/document");
-    const apiResponse = await response.json();
+      if (!response.ok) {
+        throw new Error(`Server error: ${response.status} ${response.statusText}`);
+      }
 
-    setIsLoading(false);
+      let apiResponse;
+      try {
+        apiResponse = await response.json();
+      } catch (parseError) {
+        throw new Error("Failed to parse server response");
+      }
 
-    // Call the callback with the mock deadlines
-    if (onApiComplete) {
-      onApiComplete(apiResponse);
+      setIsLoading(false);
+
+      // Call the callback with the mock deadlines
+      if (onApiComplete) {
+        onApiComplete(apiResponse);
+      }
+    } catch (error) {
+      setIsLoading(false);
+      const errorMessage = error instanceof Error ? error.message : "An unexpected error occurred";
+      setError(errorMessage);
+      console.error("API call failed:", error);
     }
   };
 
@@ -81,6 +99,7 @@ export const useFileUpload = (onApiComplete?: (deadlines: any[]) => void) => {
     setUrl,
     isDragOver,
     isLoading,
+    error,
     fileInputRef,
     handleFileSelect,
     handleDrop,
