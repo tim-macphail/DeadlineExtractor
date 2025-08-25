@@ -60,6 +60,7 @@ export function Sidebar({
       <div style={{
         flex: 1,
         overflow: 'hidden',
+        borderRight: '1px solid #ccc',
       }}>
         {showAddForm ? (
           <UpsertDeadlineForm

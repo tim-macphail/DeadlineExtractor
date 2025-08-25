@@ -70,12 +70,14 @@ export function DeadlineList({
                 borderBottom: "1px solid #ccc",
                 position: "relative",
                 padding: "8px",
-                cursor: "pointer",
               }}
               onClick={(e) => {
                 e.stopPropagation();
                 onEditDeadline(deadline);
               }}
+              // darken when hovered
+              onMouseOver={(e) => { (e.currentTarget as HTMLDivElement).style.backgroundColor = "#dddbdbff"; }}
+              onMouseOut={(e) => { (e.currentTarget as HTMLDivElement).style.backgroundColor = "transparent"; }}
             >
               <div>
                 <div>
@@ -87,8 +89,11 @@ export function DeadlineList({
                       &nbsp;(<a onClick={(e) => {
                         e.stopPropagation();
                         updateHash(associatedHighlight);
-                      }} href={`#highlight-${associatedHighlight.id}`}>
-                        Page {associatedHighlight.position.pageNumber}
+                      }}
+                        href={`#highlight-${associatedHighlight.id}`}
+                        style={{ textDecoration: "underline", color: "inherit", cursor: "pointer" }}
+                      >
+                        page {associatedHighlight.position.pageNumber}
                       </a>)
                     </>
                   )}
@@ -100,8 +105,11 @@ export function DeadlineList({
                     title="Delete deadline"
                     style={{
                       position: "absolute",
-                      top: "0",
-                      right: "0",
+                      top: "8px",
+                      right: "8px",
+                      border: "none",
+                      background: "none",
+                      cursor: "pointer",
                     }}
                   >
                     <TrashIcon />
@@ -114,10 +122,15 @@ export function DeadlineList({
                     day: "numeric",
                   })}
                 </div>
-                {deadline.description &&
-                  <div>
-                    {deadline.description}
-                  </div>}
+                <div style={{
+                  height: "1.5em",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  marginTop: "4px",
+                  color: "#555",
+                }}>
+                  {deadline.description}
+                </div>
               </div>
             </div>
           );
