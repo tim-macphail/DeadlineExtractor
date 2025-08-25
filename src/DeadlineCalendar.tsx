@@ -34,7 +34,7 @@ export function DeadlineCalendar({ deadlines, onEventClick }: Props) {
         <div style={{
           position: 'relative',
           height: '14px',
-          width: '100%'
+          width: '100%',
         }}>
           {hasEvents(date) && (
             <div
@@ -73,22 +73,16 @@ export function DeadlineCalendar({ deadlines, onEventClick }: Props) {
 
   return (
     <div style={{
-      borderTop: '1px solid #ddd',
-      padding: '1rem',
-      backgroundColor: '#fff'
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '1rem'
     }}>
-      <div style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '1rem'
-      }}>
-        <Calendar
-          value={null}
-          onChange={() => { }}
-          tileContent={tileContent}
-          className="deadline-calendar"
-        />
-      </div>
+      <Calendar
+        value={null}
+        onChange={() => { }}
+        tileContent={tileContent}
+        className="deadline-calendar"
+      />
     </div>
   );
 }

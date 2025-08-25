@@ -102,24 +102,9 @@ export function UploadPrompt({
           flexShrink: 0,
           whiteSpace: "nowrap",
         }}
-        onMouseOver={(e) => {
-          e.currentTarget.style.backgroundColor = "#0056b3";
-        }}
-        onMouseOut={(e) => {
-          e.currentTarget.style.backgroundColor = "#007bff";
-        }}
       >
         Choose PDF File
       </button>
-
-      <p style={{
-        marginTop: "1rem",
-        color: "#999",
-        fontSize: "14px",
-        flexShrink: 0
-      }}>
-        Only PDF files are supported
-      </p>
     </div>
   );
 }

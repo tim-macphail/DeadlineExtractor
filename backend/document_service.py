@@ -1,3 +1,4 @@
+import random
 import tempfile
 import os
 from get_highlight_positions import get_highlight_position, NoHighlightFoundError
@@ -36,7 +37,10 @@ def process_document(file_content: bytes, filename: str) -> list:
 
         for deadline in deadlines:
             try:
+                id  = str(random.randint(1000, 9999))  # Assign a random ID
                 deadline['highlight'] = get_highlight_position(temp_file_path, deadline['sourceText'])
+                deadline['highlight']['id'] = id
+                deadline['id'] = id
             except NoHighlightFoundError as e:
                 print(f"Warning: {e}. Skipping deadline '{deadline['name']}'")
 

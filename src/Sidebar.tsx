@@ -1,6 +1,6 @@
 import type { IHighlight } from "react-pdf-highlighter";
 import type { Deadline } from "./App";
-import { DeadlineCalendar } from "./Calendar";
+import { DeadlineCalendar } from "./DeadlineCalendar";
 import { DeadlineList } from "./DeadlineList";
 import { UpsertDeadlineForm } from "./UpsertDeadlineForm";
 
@@ -57,18 +57,6 @@ export function Sidebar({
       flexDirection: "column",
       overflow: "hidden"
     }}>
-      <div className="description" style={{ padding: "1rem", flexShrink: 0 }}>
-        <h2 style={{ marginBottom: "1rem" }}>
-          Deadline Extractor
-        </h2>
-        <p>
-          <small>
-            To create area highlight hold ⌥ Option key (Alt), then click and
-            drag.
-          </small>
-        </p>
-      </div>
-
       <div style={{
         flex: 1,
         overflow: "hidden",
@@ -93,7 +81,7 @@ export function Sidebar({
             <UpsertDeadlineForm
               isEditing={true}
               editingDeadline={editingDeadline}
-              onAdd={() => {}} // Not used in edit mode
+              onAdd={() => { }} // Not used in edit mode
               onClose={() => onShowEditForm?.(false)}
               onOpen={() => { }}
               onUpdate={(deadlineId, deadlineData) => {
@@ -113,28 +101,16 @@ export function Sidebar({
           )}
         </div>
 
-        <DeadlineCalendar
-          deadlines={deadlines}
-          onEventClick={(deadline) => handleDeadlineClick(deadline, onDeadlineClick)}
-        />
-      </div>
-
-      <div style={{ padding: "1rem", flexShrink: 0 }}>
-        <button
-          type="button"
-          onClick={resetToUpload}
-          style={{
-            width: "100%",
-            padding: "0.5rem",
-            border: "1px solid #007bff",
-            borderRadius: "4px",
-            backgroundColor: "#007bff",
-            color: "white",
-            cursor: "pointer",
-          }}
-        >
-          Upload New PDF
-        </button>
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+          <DeadlineCalendar
+            deadlines={deadlines}
+            onEventClick={(deadline) => handleDeadlineClick(deadline, onDeadlineClick)}
+          />
+        </div>
       </div>
     </div>
   );
