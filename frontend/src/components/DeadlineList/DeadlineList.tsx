@@ -65,7 +65,6 @@ export function DeadlineList({
           return (
             <div
               key={index}
-              onClick={() => handleDeadlineClick(deadline, onDeadlineClick)}
               style={{
                 borderBottom: "1px solid #ccc",
               }}
@@ -84,9 +83,9 @@ export function DeadlineList({
                 }
               </div>
               {associatedHighlight && (
-                <div>
+                <button onClick={() => handleDeadlineClick(deadline, onDeadlineClick)}>
                   Page {associatedHighlight.position.pageNumber}
-                </div>
+                </button>
               )}
 
               <button

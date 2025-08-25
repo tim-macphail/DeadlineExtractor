@@ -7,6 +7,7 @@ import type {
   ScaledPosition,
 } from "react-pdf-highlighter";
 import { Spinner } from "../Spinner/Spinner";
+import { T_ViewportHighlight } from "react-pdf-highlighter/dist/components/PdfHighlighter";
 
 export interface PdfViewerProps {
   url: string;
@@ -20,9 +21,9 @@ export interface PdfViewerProps {
     transformSelection: () => void,
   ) => React.JSX.Element;
   onHighlightTransform: (
-    highlight: any,
+    highlight: T_ViewportHighlight<IHighlight>,
     index: number,
-    setTip: (highlight: any, callback: (highlight: any) => React.JSX.Element) => void,
+    setTip: (highlight: T_ViewportHighlight<IHighlight>, callback: (highlight: T_ViewportHighlight<IHighlight>) => React.JSX.Element) => void,
     hideTip: () => void,
     viewportToScaled: (rect: any) => any,
     screenshot: (position: any) => string,
@@ -39,14 +40,7 @@ export const PdfViewer = ({
   onHighlightTransform,
 }: PdfViewerProps) => {
   return (
-    <div
-      style={{
-        height: "100vh",
-        width: "75vw",
-        position: "relative",
-        overflow: "hidden",
-      }}
-    >
+    <div style={{ height: "100%", backgroundColor: "lightgreen" }}>
       <PdfLoader url={url} beforeLoad={<Spinner />}>
         {(pdfDocument) => (
           <PdfHighlighter
