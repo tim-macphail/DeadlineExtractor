@@ -1,5 +1,6 @@
 import type { IHighlight } from "react-pdf-highlighter";
 import { Deadline } from "../../types";
+import TrashIcon from "../../icons/Trash";
 
 export interface DeadlineListProps {
   deadlines: Array<Deadline>;
@@ -67,45 +68,57 @@ export function DeadlineList({
               key={index}
               style={{
                 borderBottom: "1px solid #ccc",
+                position: "relative",
+                padding: "8px",
+                cursor: "pointer",
+              }}
+              onClick={(e) => {
+                e.stopPropagation();
+                onEditDeadline(deadline);
               }}
             >
               <div>
                 <div>
-                  {deadline.name}
+                  <strong>
+                    {deadline.name}
+                  </strong>
+                  {associatedHighlight && (
+                    <>
+                      &nbsp;(<a onClick={(e) => {
+                        e.stopPropagation();
+                        updateHash(associatedHighlight);
+                      }} href={`#highlight-${associatedHighlight.id}`}>
+                        Page {associatedHighlight.position.pageNumber}
+                      </a>)
+                    </>
+                  )}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onDeleteDeadline(deadline.id);
+                    }}
+                    title="Delete deadline"
+                    style={{
+                      position: "absolute",
+                      top: "0",
+                      right: "0",
+                    }}
+                  >
+                    <TrashIcon />
+                  </button>
                 </div>
                 <div>
-                  {new Date(deadline.date).toLocaleDateString()}
+                  {new Date(deadline.date).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })}
                 </div>
                 {deadline.description &&
-                  <blockquote>
+                  <div>
                     {deadline.description}
-                  </blockquote>
-                }
+                  </div>}
               </div>
-              {associatedHighlight && (
-                <button onClick={() => handleDeadlineClick(deadline, onDeadlineClick)}>
-                  Page {associatedHighlight.position.pageNumber}
-                </button>
-              )}
-
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onEditDeadline(deadline);
-                }}
-                title="Edit deadline"
-              >
-                Edit
-              </button>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onDeleteDeadline(deadline.id);
-                }}
-                title="Delete deadline"
-              >
-                Delete
-              </button>
             </div>
           );
         })}

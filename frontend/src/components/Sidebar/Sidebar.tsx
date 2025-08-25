@@ -93,13 +93,6 @@ export function Sidebar({
           />
         )}
       </div>
-
-      <div>
-        <DeadlineCalendar
-          deadlines={deadlines}
-          onEventClick={(deadline) => handleDeadlineClick(deadline, onDeadlineClick)}
-        />
-      </div>
     </div>
   );
 }

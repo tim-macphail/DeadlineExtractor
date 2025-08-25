@@ -16,6 +16,8 @@ import ErrorOverlay from "./components/ErrorOverlay/ErrorOverlay";
 import LoadingOverlay from "./components/LoadingOverlay/LoadingOverlay";
 import Modal from "./components/Modal/Modal";
 import { useState } from "react";
+import { DeadlineCalendar } from "./components/DeadlineCalendar/DeadlineCalendar";
+import PreviewModalContent from "./components/PreviewModalContent/PreviewModalContent";
 
 export function App() {
   // Deadline management
@@ -106,8 +108,7 @@ export function App() {
               fontSize: "40px",
             }}
             disabled={deadlines.length === 0}
-            // onClick={() => { console.log("circle button clicked"); }}
-          onClick={handleOpenModal}
+            onClick={handleOpenModal}
           >
             ⮕
           </button>
@@ -139,9 +140,7 @@ export function App() {
           />
         )}
         <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-          <h2>Modal Title</h2>
-          <p>This is the modal content. You can put any content here, such as a form, list, or message.</p>
-          <button onClick={handleCloseModal}>Close</button>
+          <PreviewModalContent deadlines={deadlines} />
         </Modal>
       </div>
     </div >
