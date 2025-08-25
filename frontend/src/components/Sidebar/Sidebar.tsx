@@ -1,8 +1,8 @@
 import type { IHighlight } from "react-pdf-highlighter";
-import type { Deadline } from "../../App";
 import { DeadlineCalendar } from "../DeadlineCalendar/DeadlineCalendar";
 import { DeadlineList } from "../DeadlineList/DeadlineList";
 import { UpsertDeadlineForm } from "../UpsertDeadlineForm/UpsertDeadlineForm";
+import { Deadline } from "../../types";
 
 export interface SidebarProps {
   deadlines: Array<Deadline>;
@@ -51,7 +51,7 @@ export function Sidebar({
 }: SidebarProps) {
   return (
     <div className="sidebar" style={{
-      width: "25vw",
+      width: "300px",
       height: "100vh",
       maxHeight: "100vh",
       display: "flex",

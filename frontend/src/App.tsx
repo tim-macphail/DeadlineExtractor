@@ -82,7 +82,7 @@ export function App() {
       <div
         style={{
           height: "100vh",
-          width: "75vw",
+          flex: 1,
           position: "relative",
           overflow: "hidden",
         }}
