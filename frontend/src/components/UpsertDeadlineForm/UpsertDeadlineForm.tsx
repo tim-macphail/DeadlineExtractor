@@ -6,9 +6,9 @@ interface DeadlineData {
   description?: string;
 }
 
-import type { Deadline as AppDeadline } from "./App";
+import type { Deadline as AppDeadline } from "../../App";
 
-interface Deadline extends AppDeadline {}
+interface Deadline extends AppDeadline { }
 
 interface UpsertDeadlineFormProps {
   onAdd: (deadlineData: DeadlineData) => void;
