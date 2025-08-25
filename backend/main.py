@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -54,6 +54,21 @@ response = [
 
 @app.get("/api/document")
 async def get_document():
+    return response
+
+@app.post("/api/document")
+async def upload_document(file: UploadFile = File(...)):
+    # Log PDF information
+    print(f"Received PDF file: {file.filename}")
+    print(f"Content type: {file.content_type}")
+    print(f"File size: {file.size} bytes")
+
+    # Read file content to verify it's a PDF
+    content = await file.read()
+    print(f"File content length: {len(content)} bytes")
+
+    # For now, just return the hardcoded response
+    # In the future, this could process the PDF and extract deadlines
     return response
 
 @app.get("/health")

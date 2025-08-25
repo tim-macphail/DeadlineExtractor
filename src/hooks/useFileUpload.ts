@@ -12,7 +12,14 @@ export const useFileUpload = (onApiComplete?: (deadlines: any[]) => void) => {
     setError(null); // Clear any previous errors
 
     try {
-      const response = await fetch("http://localhost:8000/api/document");
+      // Create FormData to send the PDF file
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const response = await fetch("http://localhost:8000/api/document", {
+        method: "POST",
+        body: formData,
+      });
 
       if (!response.ok) {
         throw new Error(`Server error: ${response.status} ${response.statusText}`);
@@ -27,7 +34,7 @@ export const useFileUpload = (onApiComplete?: (deadlines: any[]) => void) => {
 
       setIsLoading(false);
 
-      // Call the callback with the mock deadlines
+      // Call the callback with the deadlines
       if (onApiComplete) {
         onApiComplete(apiResponse);
       }
