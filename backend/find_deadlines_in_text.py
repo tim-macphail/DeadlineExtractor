@@ -22,7 +22,7 @@ def find_deadlines_in_text(text: str):
         # Create deadline object
         deadline = {
             "sourceText": substring,
-            "name": f"Assignment {i + 1}",
+            "name": f"Assignment {substring}",
             "date": f"2025-08-{day:02d}",
             "description": ""
         }

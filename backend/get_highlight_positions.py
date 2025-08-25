@@ -1,16 +1,23 @@
 import random
 import pymupdf  # PyMuPDF
 
-def get_highlight_positions(pdf_path, search_text):
+class NoHighlightFoundError(Exception):
+    """Raised when no highlight positions are found for the given search text."""
+    pass
+
+def get_highlight_position(pdf_path, search_text):
     """
-    Find specific text in PDF and return position in react-pdf-highlighter format
-    
+    Find specific text in PDF and return the first position in react-pdf-highlighter format
+
     Args:
         pdf_path (str): Path to the PDF file
         search_text (str): Text to search for (e.g., "May 5, 2020")
-    
+
     Returns:
-        list: List of position objects matching the react-pdf-highlighter format
+        dict: The first highlight position object matching the react-pdf-highlighter format
+
+    Raises:
+        NoHighlightFoundError: If no positions are found for the search text
     """
     try:
         # Open the PDF
@@ -69,8 +76,16 @@ def get_highlight_positions(pdf_path, search_text):
                 })
         
         doc.close()
-        return results
-    
+
+        if not results:
+            raise NoHighlightFoundError(f"No highlights found for text: '{search_text}'")
+
+        # Return the first highlight position
+        return results[0]['highlight']
+
+    except NoHighlightFoundError:
+        # Re-raise our custom exception
+        raise
     except Exception as e:
         print(f"Error processing PDF: {e}")
-        return []
+        raise NoHighlightFoundError(f"Error searching for text: '{search_text}'") from e

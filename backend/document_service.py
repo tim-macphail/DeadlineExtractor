@@ -1,8 +1,8 @@
 import tempfile
 import os
-from backend.get_highlight_positions import get_highlight_positions
-from backend.get_text_from_pdf import get_text_from_pdf
-from backend.find_deadlines_in_text import find_deadlines_in_text
+from get_highlight_positions import get_highlight_position, NoHighlightFoundError
+from get_text_from_pdf import get_text_from_pdf
+from find_deadlines_in_text import find_deadlines_in_text
 
 
 def process_document(file_content: bytes, filename: str) -> list:
@@ -34,29 +34,14 @@ def process_document(file_content: bytes, filename: str) -> list:
         deadlines = find_deadlines_in_text(extracted_text)
         print(f"LLM found {len(deadlines)} deadlines")
 
-        # For each deadline, find its position in the PDF
-        results = []
         for deadline in deadlines:
-            source_text = deadline['sourceText']
-            print(f"Searching for deadline: '{source_text}'")
-
-            # Find position data for this source text
-            highlight_position = get_highlight_positions(temp_file_path, source_text)[0] # only use first result
-
-            result = {
-                "date": deadline['date'],
-                "name": deadline['name'],
-                "description": deadline['description'],
-                "id": highlight_position['id'],
-                "highlight": highlight_position['highlight']
-            }
-            results.append(result)
-
-        # Log final results
-        print(f"Total results: {len(results)}")
+            try:
+                deadline['highlight'] = get_highlight_position(temp_file_path, deadline['sourceText'])
+            except NoHighlightFoundError as e:
+                print(f"Warning: {e}. Skipping deadline '{deadline['name']}'")
 
         # Return search results
-        return results
+        return deadlines
 
     except Exception as e:
         print(f"Error processing document: {e}")
