@@ -13,9 +13,6 @@ import "react-pdf-highlighter/dist/style.css";
 import { primary } from "./style/constants";
 import { UploadPrompt } from "./components/UploadPrompt/UploadPrompt";
 
-// Re-export Deadline type for other files that import it
-export type { Deadline };
-
 export function App() {
   // Deadline management
   const {

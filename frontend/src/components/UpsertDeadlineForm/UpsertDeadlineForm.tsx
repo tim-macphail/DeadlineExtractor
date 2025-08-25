@@ -1,14 +1,6 @@
 import { useEffect, useState } from "react";
+import { Deadline, DeadlineData } from "../../types";
 
-interface DeadlineData {
-  name: string;
-  date: string;
-  description?: string;
-}
-
-import type { Deadline as AppDeadline } from "../../App";
-
-interface Deadline extends AppDeadline { }
 
 export interface UpsertDeadlineFormProps {
   onAdd: (deadlineData: DeadlineData) => void;
@@ -18,7 +10,6 @@ export interface UpsertDeadlineFormProps {
   editingDeadline?: Deadline;
   onUpdate?: (deadlineId: string, deadlineData: DeadlineData) => void;
 }
-
 
 export const UpsertDeadlineForm = ({
   onAdd,
