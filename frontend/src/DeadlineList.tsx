@@ -50,7 +50,6 @@ export function DeadlineList({
   return (
     <div
       style={{
-        backgroundColor: "blue",
         height: "100%",
         overflowY: "auto",
       }}
