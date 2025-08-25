@@ -2,8 +2,7 @@ import { Sidebar } from "./components/Sidebar/Sidebar";
 import { PdfViewer } from "./components/PdfViewer/PdfViewer";
 import { Spinner } from "./components/Spinner/Spinner";
 import { useFileUpload } from "./hooks/useFileUpload";
-import { useDeadlineManagement } from "./hooks/useDeadlineManagement";
-import { useHighlightManagement } from "./hooks/useHighlightManagement";
+import { useDeadlineHighlightManagement } from "./hooks/useDeadlineHighlightManagement";
 import { useHashNavigation } from "./hooks/useHashNavigation";
 import { usePdfCallbacks } from "./hooks/usePdfCallbacks";
 import type { Deadline } from "./types";
@@ -21,7 +20,7 @@ import { DeadlineCalendar } from "./components/DeadlineCalendar/DeadlineCalendar
 import PreviewModalContent from "./components/PreviewModalContent/PreviewModalContent";
 
 export function App() {
-  // Deadline management
+  // Combined deadline and highlight management
   const {
     deadlines,
     setDeadlines,
@@ -33,8 +32,10 @@ export function App() {
     addStandaloneDeadline,
     deleteDeadline,
     updateDeadline,
+    updateHighlight,
     handleShowEditForm,
-  } = useDeadlineManagement();
+    highlights,
+  } = useDeadlineHighlightManagement();
 
   // File upload management
   const {
@@ -50,12 +51,6 @@ export function App() {
     resetToUpload,
     error,
   } = useFileUpload(setDeadlines);
-
-  // Highlight management
-  const { updateHighlight, highlights } = useHighlightManagement(
-    deadlines,
-    setDeadlines
-  );
 
   // Hash navigation
   const { handleScrollRef, scrollToDeadline, resetHash } = useHashNavigation(deadlines);

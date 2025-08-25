@@ -1,9 +1,9 @@
 import { useState } from "react";
-import type { IHighlight } from "react-pdf-highlighter";
+import type { IHighlight, ScaledPosition } from "react-pdf-highlighter";
 import type { Deadline, DeadlineData } from "../types";
 import { getNextId } from "../utils/helpers";
 
-export const useDeadlineManagement = () => {
+export const useDeadlineHighlightManagement = () => {
   const [deadlines, setDeadlines] = useState<Array<Deadline>>([]);
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingDeadline, setEditingDeadline] = useState<Deadline>();
@@ -64,6 +64,27 @@ export const useDeadlineManagement = () => {
     );
   };
 
+  const updateHighlight = (
+    highlightId: string,
+    position: Partial<ScaledPosition>,
+    content: Partial<{ text?: string; image?: string }>,
+  ) => {
+    console.log("Updating highlight", highlightId, position, content);
+    setDeadlines((prevDeadlines) =>
+      prevDeadlines.map((deadline) => {
+        if (deadline.highlight?.id === highlightId) {
+          const updatedHighlight = {
+            ...deadline.highlight,
+            position: { ...deadline.highlight.position, ...position },
+            content: { ...deadline.highlight.content, ...content },
+          };
+          return { ...deadline, highlight: updatedHighlight };
+        }
+        return deadline;
+      }),
+    );
+  };
+
   const handleShowEditForm = (show: boolean, deadline?: Deadline) => {
     setShowEditForm(show);
     setEditingDeadline(deadline);
@@ -76,6 +97,11 @@ export const useDeadlineManagement = () => {
     setDeadlines([]);
   };
 
+  // Compute highlights array from deadlines for PdfHighlighter
+  const highlights = deadlines
+    .filter(deadline => deadline.highlight)
+    .map(deadline => deadline.highlight!);
+
   return {
     deadlines,
     setDeadlines,
@@ -87,7 +113,9 @@ export const useDeadlineManagement = () => {
     addStandaloneDeadline,
     deleteDeadline,
     updateDeadline,
+    updateHighlight,
     handleShowEditForm,
     resetDeadlines,
+    highlights,
   };
 };
