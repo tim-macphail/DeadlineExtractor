@@ -35,18 +35,22 @@ export function DeadlineList({
       }}
     >
       <div>
-        {deadlines.sort(sortDeadlines).map((deadline, index) => (
-          <DeadlineListItem
-            key={index}
-            deadline={deadline}
-            onDeleteDeadline={onDeleteDeadline}
-            onEditDeadline={onEditDeadline}
-          />
-        ))}
+        {deadlines.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: '20px' }}>No deadlines</div>
+        ) : (
+          deadlines.sort(sortDeadlines).map((deadline, index) => (
+            <DeadlineListItem
+              key={index}
+              deadline={deadline}
+              onDeleteDeadline={onDeleteDeadline}
+              onEditDeadline={onEditDeadline}
+            />
+          ))
+        )}
         <div
           style={{
             borderBottom: "1px solid #ccc",
-            position: "relative",
+            // position: "relative",
           }}
           // darken when hovered
           onMouseOver={(e) => { (e.currentTarget as HTMLDivElement).style.backgroundColor = "#dddbdbff"; }}

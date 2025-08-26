@@ -94,7 +94,7 @@ export function App() {
         />
         <div
           style={{
-            height: "100%",
+            // height: "100%",
             flex: 1,
             position: "relative",
             overflow: "hidden",
