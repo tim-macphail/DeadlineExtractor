@@ -5,20 +5,17 @@ import {
   Popup,
 } from "react-pdf-highlighter";
 import type {
-  IHighlight,
   ScaledPosition,
 } from "react-pdf-highlighter";
 
 import { HighlightPopup } from "../components/HighlightPopup/HighlightPopup";
-import { getNextId } from "../utils/helpers";
 
 export interface UsePdfCallbacksProps {
-  addDeadline: (deadlineData: { name: string; date: string; description?: string }, highlight: IHighlight) => void;
   updateHighlight: (highlightId: string, position: Partial<ScaledPosition>, content: Partial<{ text?: string; image?: string }>) => void;
   addDeadlineWithHighlightAndEdit: (position: ScaledPosition, content: { text?: string; image?: string }) => void;
 }
 
-export const usePdfCallbacks = ({ addDeadline, updateHighlight, addDeadlineWithHighlightAndEdit }: UsePdfCallbacksProps) => {
+export const usePdfCallbacks = ({ updateHighlight, addDeadlineWithHighlightAndEdit }: UsePdfCallbacksProps) => {
   const handleSelectionFinished = React.useCallback((
     position: ScaledPosition,
     content: { text?: string; image?: string },
@@ -39,6 +36,7 @@ export const usePdfCallbacks = ({ addDeadline, updateHighlight, addDeadlineWithH
         onClick={() => {
           addDeadlineWithHighlightAndEdit(position, content);
           hideTipAndSelection();
+          transformSelection();
         }}
       >
         Add deadline

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Deadline, DeadlineData } from "../../types";
-import { secondary } from "../../style/constants";
 
 
 export interface UpsertDeadlineFormProps {

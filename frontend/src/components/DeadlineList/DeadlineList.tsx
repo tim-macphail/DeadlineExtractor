@@ -4,10 +4,7 @@ import TrashIcon from "../../icons/Trash";
 
 export interface DeadlineListProps {
   deadlines: Array<Deadline>;
-  highlights: Array<IHighlight>;
-  onDeadlineClick?: (deadline: Deadline) => void;
   onDeleteDeadline: (deadlineId: string) => void;
-  onShowAddForm?: () => void;
   onEditDeadline: (deadline: Deadline) => void;
   onAddStandaloneDeadlineAndEdit: () => void;
 }
@@ -27,25 +24,10 @@ const sortDeadlines = (a: Deadline, b: Deadline) => {
   return a.name.localeCompare(b.name);
 };
 
-const handleDeadlineClick = (
-  deadline: Deadline,
-  onDeadlineClick?: (deadline: Deadline) => void
-) => {
-  const associatedHighlight = deadline.highlight;
-  if (associatedHighlight) {
-    updateHash(associatedHighlight);
-  }
-  if (onDeadlineClick) {
-    onDeadlineClick(deadline);
-  }
-};
 
 export function DeadlineList({
   deadlines,
-  highlights,
-  onDeadlineClick,
   onDeleteDeadline,
-  onShowAddForm,
   onEditDeadline,
   onAddStandaloneDeadlineAndEdit,
 }: DeadlineListProps) {

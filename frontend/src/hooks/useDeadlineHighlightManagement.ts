@@ -52,7 +52,7 @@ export const useDeadlineHighlightManagement = () => {
               ...updatedDeadline.highlight,
               comment: {
                 text: deadlineText,
-                emoji: "⏰"
+                emoji: ""
               }
             };
           }
@@ -106,7 +106,7 @@ export const useDeadlineHighlightManagement = () => {
       position,
       comment: {
         text: "New deadline",
-        emoji: "⏰"
+        emoji: ""
       }
     };
 
