@@ -1,6 +1,8 @@
 import { DeadlineList } from "../DeadlineList/DeadlineList";
 import { Deadline } from "../../types";
 
+import "./Sidebar.css";
+
 export interface SidebarProps {
   deadlines: Array<Deadline>;
   onDeleteDeadline: (deadlineId: string) => void;
@@ -23,6 +25,7 @@ export function Sidebar({
       display: "flex",
       flexDirection: "column",
     }}>
+      <div className="sidebar-header">Deadlines</div>
       <div style={{
         flex: 1,
         overflow: 'hidden',
