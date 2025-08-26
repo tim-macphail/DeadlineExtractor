@@ -34,18 +34,24 @@ const PreviewModalContent = ({ deadlines }: PreviewModalContentProps) => {
     <div style={{
       width: '50vw',
       minWidth: '600px',
-      maxHeight: '80vh',
+      // maxHeight: '80vh',
+      height: '80vh',
       padding: '1em',
       display: 'flex',
       flexDirection: 'column',
       gap: '1em',
       alignItems: 'center',
-      justifyContent: 'center',
+      justifyContent: 'space-between',
     }}>
       <DeadlineCalendar onEventClick={() => { }} deadlines={deadlines} />
       <div style={{
+        // backgroundColor: '#a9b6bdff',
         display: 'flex',
         gap: '1em',
+        width: '100%',
+        // flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
       }}>
         <button
           style={{
