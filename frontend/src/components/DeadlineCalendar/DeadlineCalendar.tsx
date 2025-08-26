@@ -5,6 +5,12 @@ import 'react-calendar/dist/Calendar.css';
 import './DeadlineCalendar.css';
 import { Deadline } from '../../types';
 
+// Helper function to truncate text
+const truncateText = (text: string, maxLength: number = 15): string => {
+  if (text.length <= maxLength) return text;
+  return text.substring(0, maxLength - 3) + '...';
+};
+
 export interface DeadlineCalendarProps {
   deadlines: Array<Deadline>;
   onEventClick: (deadline: Deadline) => void;
@@ -23,67 +29,39 @@ export function DeadlineCalendar({ deadlines, onEventClick }: DeadlineCalendarPr
     });
   };
 
-  // Check if a date has events
-  const hasEvents = (date: Date) => {
-    return getEventsForDate(date).length > 0;
-  };
-
-  // Custom tile content to show event indicators
+  // Render content for calendar tiles
   const tileContent = ({ date, view }: { date: Date; view: string }) => {
-    if (view === 'month') {
-      const events = getEventsForDate(date);
-      return (
-        <div style={{
-          position: 'relative',
-          height: '14px',
-          width: '100%',
-        }}>
-          {hasEvents(date) && (
-            <div
-              style={{
-                position: 'absolute',
-                top: '2px',
-                right: '2px',
-                borderRadius: '50%',
-                backgroundColor: '#2563eb',
-                color: 'white',
-                width: '20px',
-                height: '20px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '12px',
-                fontWeight: 'bold',
-                cursor: 'pointer',
-                zIndex: 1
-              }}
-              onClick={(e) => {
-                if (onEventClick) {
-                  e.stopPropagation();
-                  onEventClick(events[0]); // Pass the first event for now
-                }
-              }}
-            >
-              {events.length}
-            </div>
-          )}
-        </div>
-      );
-    }
-    return null;
+    if (view !== 'month') return null;
+
+    const events = getEventsForDate(date);
+    if (events.length === 0) return null;
+
+    // Show up to 3 events, truncate titles
+    const displayEvents = events.slice(0, 3);
+    const hasMore = events.length > 3;
+
+    return (
+      <div className="calendar-events">
+        {displayEvents.map((event, index) => (
+          <div key={event.id} className="calendar-event-item">
+            {truncateText(event.name)}
+          </div>
+        ))}
+        {hasMore && (
+          <div className="calendar-event-more">
+            +{events.length - 3} more
+          </div>
+        )}
+      </div>
+    );
   };
 
   return (
-    <div style={{
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '1rem'
-    }}>
+    <div>
       <Calendar
         value={null}
-        onChange={() => { }}
-        tileContent={tileContent}
         className="deadline-calendar"
+        tileContent={tileContent}
       />
     </div>
   );
