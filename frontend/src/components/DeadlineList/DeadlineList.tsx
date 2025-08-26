@@ -9,6 +9,7 @@ export interface DeadlineListProps {
   onDeleteDeadline: (deadlineId: string) => void;
   onShowAddForm?: () => void;
   onEditDeadline: (deadline: Deadline) => void;
+  onAddStandaloneDeadlineAndEdit: () => void;
 }
 
 const updateHash = (highlight: IHighlight) => {
@@ -46,6 +47,7 @@ export function DeadlineList({
   onDeleteDeadline,
   onShowAddForm,
   onEditDeadline,
+  onAddStandaloneDeadlineAndEdit,
 }: DeadlineListProps) {
   return (
     <div
@@ -151,7 +153,7 @@ export function DeadlineList({
             justifyContent: "center",
           }}>
             <button
-              onClick={onShowAddForm}
+              onClick={onAddStandaloneDeadlineAndEdit}
               style={{
                 borderRadius: "50%",
                 width: "40px",

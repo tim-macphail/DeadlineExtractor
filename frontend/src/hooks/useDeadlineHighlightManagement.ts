@@ -126,6 +126,23 @@ export const useDeadlineHighlightManagement = () => {
     onOpenEditModal(newDeadline);
   };
 
+  const addStandaloneDeadlineAndEdit = (onOpenEditModal: (deadline: Deadline) => void) => {
+    // Create standalone deadline with default name (no highlight)
+    const newDeadline: Deadline = {
+      id: getNextId(),
+      name: "New Deadline",
+      date: "",
+      description: "",
+      // No highlight for standalone deadlines
+    };
+
+    // Add to deadlines list
+    setDeadlines((prevDeadlines) => [newDeadline, ...prevDeadlines]);
+
+    // Open edit modal immediately
+    onOpenEditModal(newDeadline);
+  };
+
   const resetDeadlines = () => {
     setDeadlines([]);
   };
@@ -149,6 +166,7 @@ export const useDeadlineHighlightManagement = () => {
     updateHighlight,
     handleShowEditForm,
     addDeadlineWithHighlightAndEdit,
+    addStandaloneDeadlineAndEdit,
     resetDeadlines,
     highlights,
   };

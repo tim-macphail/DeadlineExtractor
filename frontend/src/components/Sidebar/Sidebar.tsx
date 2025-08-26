@@ -14,6 +14,7 @@ export interface SidebarProps {
   onShowAddForm?: (show: boolean) => void;
   onAddDeadline?: (deadlineData: { name: string; date: string; description?: string }) => void;
   onEditDeadline: (deadline: Deadline) => void;
+  onAddStandaloneDeadlineAndEdit: () => void;
 }
 
 const updateHash = (highlight: IHighlight) => {
@@ -42,6 +43,7 @@ export function Sidebar({
   onShowAddForm,
   onAddDeadline,
   onEditDeadline,
+  onAddStandaloneDeadlineAndEdit,
 }: SidebarProps) {
   return (
     <div className="sidebar" style={{
@@ -73,6 +75,7 @@ export function Sidebar({
             onDeleteDeadline={onDeleteDeadline}
             onShowAddForm={() => onShowAddForm?.(true)}
             onEditDeadline={onEditDeadline}
+            onAddStandaloneDeadlineAndEdit={onAddStandaloneDeadlineAndEdit}
           />
         )}
       </div>

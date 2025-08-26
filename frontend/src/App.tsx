@@ -36,6 +36,7 @@ export function App() {
     updateHighlight,
     handleShowEditForm,
     addDeadlineWithHighlightAndEdit,
+    addStandaloneDeadlineAndEdit,
     highlights,
   } = useDeadlineHighlightManagement();
 
@@ -88,6 +89,11 @@ export function App() {
     handleShowEditForm(false);
   };
 
+  // Handler for adding standalone deadline and opening edit modal
+  const handleAddStandaloneDeadlineAndEdit = () => {
+    addStandaloneDeadlineAndEdit(handleOpenEditModal);
+  };
+
   return (
     <div className="App" style={{ display: "flex", height: "100vh" }}>
       <Sidebar
@@ -100,6 +106,7 @@ export function App() {
         onShowAddForm={setShowAddForm}
         onAddDeadline={addStandaloneDeadline}
         onEditDeadline={handleOpenEditModal}
+        onAddStandaloneDeadlineAndEdit={handleAddStandaloneDeadlineAndEdit}
       />
       <div
         style={{
