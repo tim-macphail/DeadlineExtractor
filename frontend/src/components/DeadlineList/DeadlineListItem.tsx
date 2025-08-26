@@ -1,4 +1,3 @@
-import type { IHighlight } from "react-pdf-highlighter";
 import { Deadline } from "../../types";
 import TrashIcon from "../../icons/Trash";
 
@@ -7,10 +6,6 @@ export interface DeadlineListItemProps {
   onDeleteDeadline: (deadlineId: string) => void;
   onEditDeadline: (deadline: Deadline) => void;
 }
-
-const updateHash = (highlight: IHighlight) => {
-  document.location.hash = `highlight-${highlight.id}`;
-};
 
 export function DeadlineListItem({
   deadline,
@@ -24,6 +19,8 @@ export function DeadlineListItem({
         position: "relative",
         padding: "8px",
         cursor: "pointer",
+        // shadow on bottom
+        boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
       }}
       onClick={(e) => {
         e.stopPropagation();
