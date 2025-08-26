@@ -1,6 +1,7 @@
 import { Sidebar } from "./components/Sidebar/Sidebar";
 import { PdfViewer } from "./components/PdfViewer/PdfViewer";
 import { TopBar } from "./components/TopBar/TopBar";
+import { FloatingActionButton } from "./components/FloatingActionButton/FloatingActionButton";
 import { useFileUpload } from "./hooks/useFileUpload";
 import { useDeadlineHighlightManagement } from "./hooks/useDeadlineHighlightManagement";
 import { useHashNavigation } from "./hooks/useHashNavigation";
@@ -62,9 +63,9 @@ export function App() {
   });
 
   // Modal state
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const handleOpenModal = () => setIsModalOpen(true);
-  const handleCloseModal = () => setIsModalOpen(false);
+  const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
+  const handleOpenModal = () => setIsPreviewModalOpen(true);
+  const handleCloseModal = () => setIsPreviewModalOpen(false);
 
   // Edit modal state
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -100,26 +101,10 @@ export function App() {
             overflow: "hidden",
           }}
         >
-          <div style={{ position: "absolute", bottom: "40px", right: "40px", zIndex: 900 }}>
-            <button
-              style={{
-                border: "none",
-                backgroundColor: "#007bff",
-                height: "80px",
-                width: "80px",
-                borderRadius: "50%",
-                textAlign: "center",
-                fontSize: "40px",
-                cursor: "pointer",
-                color: "white",
-                boxShadow: "0 4px 10px black",
-              }}
-              disabled={deadlines.length === 0}
-              onClick={handleOpenModal}
-            >
-              ⮕
-            </button>
-          </div>
+          <FloatingActionButton
+            onClick={handleOpenModal}
+            disabled={deadlines.length === 0}
+          />
           {url ? (
             <>
               <PdfViewer
@@ -146,7 +131,7 @@ export function App() {
               onUploadClick={handleUploadClick}
             />
           )}
-          <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+          <Modal isOpen={isPreviewModalOpen} onClose={handleCloseModal}>
             <PreviewModalContent deadlines={deadlines} />
           </Modal>
 
