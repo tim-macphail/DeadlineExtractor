@@ -5,16 +5,11 @@ import 'react-calendar/dist/Calendar.css';
 import './DeadlineCalendar.css';
 import { Deadline } from '../../types';
 
-// Helper function to truncate text
-const truncateText = (text: string, maxLength: number = 15): string => {
-  if (text.length <= maxLength) return text;
-  return text.substring(0, maxLength - 3) + '...';
-};
-
 export interface DeadlineCalendarProps {
   deadlines: Array<Deadline>;
   onEventClick: (deadline: Deadline) => void;
 }
+
 
 export function DeadlineCalendar({ deadlines, onEventClick }: DeadlineCalendarProps) {
   // Get events for a specific date
@@ -34,35 +29,36 @@ export function DeadlineCalendar({ deadlines, onEventClick }: DeadlineCalendarPr
     if (view !== 'month') return null;
 
     const events = getEventsForDate(date);
-    if (events.length === 0) return null;
 
-    // Show up to 3 events, truncate titles
-    const displayEvents = events.slice(0, 3);
-    const hasMore = events.length > 3;
 
     return (
-      <div className="calendar-events">
-        {displayEvents.map((event, _index) => (
-          <div key={event.id} className="calendar-event-item">
-            {truncateText(event.name)}
+      <div style={{ height: '3em', overflowY: 'auto' }}>
+        {events.map((event, _index) => (
+          <div key={event.id} style={{
+            backgroundColor: 'rosybrown',
+            color: '#333',
+            borderRadius: '0.5em',
+            marginBottom: '2px',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            fontWeight: 500,
+            fontSize: '1em',
+          }}
+            title={event.name}
+          >
+            <span>{event.name}</span>
           </div>
         ))}
-        {hasMore && (
-          <div className="calendar-event-more">
-            +{events.length - 3} more
-          </div>
-        )}
-      </div>
+      </div >
     );
   };
 
   return (
-    <div>
-      <Calendar
-        value={null}
-        className="deadline-calendar"
-        tileContent={tileContent}
-      />
-    </div>
+    <Calendar
+      value={null}
+      className="deadline-calendar"
+      tileContent={tileContent}
+    />
   );
 }

@@ -65,7 +65,7 @@ export function App() {
   // Modal state
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
   const handleOpenModal = () => setIsPreviewModalOpen(true);
-  const handleCloseModal = () => setIsPreviewModalOpen(false);
+  const handleClosePreviewModal = () => setIsPreviewModalOpen(false);
 
   // Edit modal state
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -131,7 +131,7 @@ export function App() {
               onUploadClick={handleUploadClick}
             />
           )}
-          <Modal isOpen={isPreviewModalOpen} onClose={handleCloseModal}>
+          <Modal isOpen={isPreviewModalOpen} onClose={handleClosePreviewModal}>
             <PreviewModalContent deadlines={deadlines} />
           </Modal>
 

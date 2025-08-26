@@ -1,26 +1,7 @@
-/* Calendar styles */
-.deadline-calendar .react-calendar {
-  font-family: inherit;
-}
-
 .deadline-calendar .react-calendar__tile {
-  border-radius: 4px;
-  transition: background-color 0.2s ease;
-  /* min-height: 140px; */
-  position: relative;
-}
-
-.deadline-calendar .react-calendar__tile:hover {
-  background-color: rgba(0, 123, 255, 0.1);
-}
-
-.deadline-calendar .react-calendar__tile--active {
-  background-color: #007bff;
-  color: white;
-}
-
-.deadline-calendar .react-calendar__tile--active:hover {
-  background-color: #0056b3;
+  border: 1px solid #ddd;
+  height: 6em;
+  /* border-radius: 1em; */
 }
 
 .deadline-calendar .react-calendar__navigation button {
@@ -46,32 +27,7 @@
   color: #666;
 }
 
-/* Event display styles */
-.calendar-events {
-  /* background-color: rgb(41, 123, 123); */
-  height: 5em;
-}
-
-.calendar-event-item {
-  background-color: rosybrown;
-  color: #333;
-  margin-bottom: 2px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-weight: 500;
-}
-
-.calendar-event-more {
-  color: #666;
-  font-style: italic;
-  font-size: 11px;
-}
-
 .deadline-calendar {
-  border-radius: 0.5em;
-  padding: 1rem;
   width: 100%;
-  border: none;
-  height: 50vh;
+  background-color: #e9e9e9;
 }

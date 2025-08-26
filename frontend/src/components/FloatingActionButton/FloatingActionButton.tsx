@@ -22,14 +22,13 @@ export const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
           fontSize: "40px",
           cursor: disabled ? "not-allowed" : "pointer",
           color: "white",
-          boxShadow: "0 4px 10px black",
+          boxShadow: "0 2px 10px rgba(0, 0, 0, 0.7)",
           opacity: disabled ? 0.6 : 1,
-          transition: "all 0.2s ease",
         }}
         disabled={disabled}
         onClick={onClick}
       >
-        ⮕
+        🗓️
       </button>
     </div>
   );

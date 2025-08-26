@@ -31,7 +31,11 @@ const handleDownloadClick = (deadlines: Array<Deadline>) => {
 
 const PreviewModalContent = ({ deadlines }: PreviewModalContentProps) => {
   return (
-    <div style={{ width: '100%', height: '100%' }}>
+    <div style={{
+      width: '50vw',
+      minWidth: '600px',
+      maxHeight: '80vh',
+    }}>
       <DeadlineCalendar onEventClick={() => { }} deadlines={deadlines} />
       <button onClick={() => handleDownloadClick(deadlines)}>
         Download .ics

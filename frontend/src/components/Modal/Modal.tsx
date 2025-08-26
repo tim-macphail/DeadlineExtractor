@@ -28,7 +28,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
   if (!isOpen) return null;
 
   return (
-    <div
+    <div // Backdrop
       style={{
         position: 'fixed',
         top: 0,
@@ -46,8 +46,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
       <div
         style={{
           backgroundColor: 'white',
-          padding: '20px',
-          borderRadius: '8px',
+          borderRadius: '1em',
           maxWidth: '90%',
           overflow: 'auto',
           pointerEvents: 'auto',
