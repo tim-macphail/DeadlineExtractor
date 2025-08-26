@@ -11,14 +11,14 @@ import type {
 
 import { HighlightPopup } from "../components/HighlightPopup/HighlightPopup";
 import { getNextId } from "../utils/helpers";
-import { UpsertDeadlineForm } from "../components/UpsertDeadlineForm/UpsertDeadlineForm";
 
 export interface UsePdfCallbacksProps {
   addDeadline: (deadlineData: { name: string; date: string; description?: string }, highlight: IHighlight) => void;
   updateHighlight: (highlightId: string, position: Partial<ScaledPosition>, content: Partial<{ text?: string; image?: string }>) => void;
+  addDeadlineWithHighlightAndEdit: (position: ScaledPosition, content: { text?: string; image?: string }) => void;
 }
 
-export const usePdfCallbacks = ({ addDeadline, updateHighlight }: UsePdfCallbacksProps) => {
+export const usePdfCallbacks = ({ addDeadline, updateHighlight, addDeadlineWithHighlightAndEdit }: UsePdfCallbacksProps) => {
   const handleSelectionFinished = React.useCallback((
     position: ScaledPosition,
     content: { text?: string; image?: string },
@@ -26,32 +26,25 @@ export const usePdfCallbacks = ({ addDeadline, updateHighlight }: UsePdfCallback
     transformSelection: () => void,
   ) => {
     return (
-      <UpsertDeadlineForm
-        onClose={hideTipAndSelection}
-        onOpen={transformSelection}
-        onAdd={(deadlineData: { name: string; date: string; description?: string }) => {
-          // Create highlight first
-          const newHighlightId = getNextId();
-          const deadlineText = `${deadlineData.name} - ${new Date(deadlineData.date).toLocaleString()}`;
-
-          const newHighlight: IHighlight = {
-            id: newHighlightId,
-            content,
-            position,
-            comment: {
-              text: deadlineText,
-              emoji: "⏰"
-            }
-          };
-
-          // Create and add deadline with embedded highlight
-          addDeadline(deadlineData, newHighlight);
-
+      <button
+        style={{
+          padding: "8px 16px",
+          backgroundColor: "#007bff",
+          color: "white",
+          border: "none",
+          borderRadius: "4px",
+          cursor: "pointer",
+          fontSize: "14px",
+        }}
+        onClick={() => {
+          addDeadlineWithHighlightAndEdit(position, content);
           hideTipAndSelection();
         }}
-      />
+      >
+        Add deadline
+      </button>
     );
-  }, [addDeadline]);
+  }, [addDeadlineWithHighlightAndEdit]);
 
   const handleHighlightTransform = React.useCallback((
     highlight: any,

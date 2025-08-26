@@ -6,6 +6,7 @@ import { useDeadlineHighlightManagement } from "./hooks/useDeadlineHighlightMana
 import { useHashNavigation } from "./hooks/useHashNavigation";
 import { usePdfCallbacks } from "./hooks/usePdfCallbacks";
 import type { Deadline } from "./types";
+import type { ScaledPosition } from "react-pdf-highlighter";
 
 import "./App.css";
 import "react-pdf-highlighter/dist/style.css";
@@ -34,6 +35,7 @@ export function App() {
     updateDeadline,
     updateHighlight,
     handleShowEditForm,
+    addDeadlineWithHighlightAndEdit,
     highlights,
   } = useDeadlineHighlightManagement();
 
@@ -56,9 +58,14 @@ export function App() {
   const { handleScrollRef, scrollToDeadline, resetHash } = useHashNavigation(deadlines);
 
   // PDF callbacks
+  const handleAddDeadlineWithHighlightAndEdit = (position: ScaledPosition, content: { text?: string; image?: string }) => {
+    addDeadlineWithHighlightAndEdit(position, content, handleOpenEditModal);
+  };
+
   const { handleSelectionFinished, handleHighlightTransform } = usePdfCallbacks({
     addDeadline,
     updateHighlight,
+    addDeadlineWithHighlightAndEdit: handleAddDeadlineWithHighlightAndEdit,
   });
 
   const handleDeadlineClick = (deadline: Deadline) => {

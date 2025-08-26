@@ -93,6 +93,39 @@ export const useDeadlineHighlightManagement = () => {
     }
   };
 
+  const addDeadlineWithHighlightAndEdit = (
+    position: ScaledPosition,
+    content: { text?: string; image?: string },
+    onOpenEditModal: (deadline: Deadline) => void
+  ) => {
+    // Create highlight first
+    const newHighlightId = getNextId();
+    const newHighlight: IHighlight = {
+      id: newHighlightId,
+      content,
+      position,
+      comment: {
+        text: "New deadline",
+        emoji: "⏰"
+      }
+    };
+
+    // Create deadline with default name
+    const newDeadline: Deadline = {
+      id: getNextId(),
+      name: "New Deadline",
+      date: "",
+      description: "",
+      highlight: newHighlight,
+    };
+
+    // Add to deadlines list
+    setDeadlines((prevDeadlines) => [newDeadline, ...prevDeadlines]);
+
+    // Open edit modal immediately
+    onOpenEditModal(newDeadline);
+  };
+
   const resetDeadlines = () => {
     setDeadlines([]);
   };
@@ -115,6 +148,7 @@ export const useDeadlineHighlightManagement = () => {
     updateDeadline,
     updateHighlight,
     handleShowEditForm,
+    addDeadlineWithHighlightAndEdit,
     resetDeadlines,
     highlights,
   };
