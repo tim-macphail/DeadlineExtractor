@@ -66,7 +66,7 @@ export const UpsertDeadlineForm = ({
   };
 
   return (
-    <div style={{ backgroundColor: secondary }}>
+    <div>
       <div style={{
         display: "flex",
         justifyContent: "space-between",
@@ -79,7 +79,10 @@ export const UpsertDeadlineForm = ({
         <button onClick={handleClose}>x</button>
       </div>
 
-      <form onSubmit={handleSubmit}>
+      <form
+        style={{ display: "flex", flexDirection: "column", gap: "1em" }}
+        onSubmit={handleSubmit}
+      >
         <div>
           <label>
             Name

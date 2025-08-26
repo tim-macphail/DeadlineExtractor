@@ -52,6 +52,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
           maxHeight: '80%',
           overflow: 'auto',
           pointerEvents: 'auto',
+          boxShadow: '0 2px 100px black',
         }}
         onClick={(e) => e.stopPropagation()}
       >
