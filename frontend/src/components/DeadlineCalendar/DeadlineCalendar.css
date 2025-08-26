@@ -72,4 +72,6 @@
   border-radius: 0.5em;
   padding: 1rem;
   width: 100%;
+  border: none;
+  height: 50vh;
 }

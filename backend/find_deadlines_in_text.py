@@ -24,8 +24,8 @@ def find_deadlines_in_text(text: str):
         deadline = {
             "sourceText": substring,
             "name": f"Assignment {i+1}",
-            # "date": f"2025-08-{day:02d}T23:11",
-            "date": f"2025-08-{i+1:02d}T23:11",
+            "date": f"2025-08-{day:02d}T23:11",
+            # "date": f"2025-08-{i+1:02d}T23:11",
             "description": ""
         }
 
