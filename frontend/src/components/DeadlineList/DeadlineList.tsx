@@ -35,20 +35,10 @@ export function DeadlineList({
       }}
     >
       <div>
-        {deadlines.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '20px' }}>
-            No deadlines
-          </div>
-        ) : (
-          <h2 style={{
-            fontSize: '1.5em',
-            color: '#333',
-            fontWeight: 400,
-            paddingLeft: "1em",
-          }}>
-            Deadlines
-          </h2>
-        )}
+        <div style={{ textAlign: 'center', padding: '20px', borderBottom: '1px solid #ccc' }}>
+          {deadlines.length === 0 ? "No deadlines yet" : "Deadlines"}
+        </div>
+
         {deadlines.sort(sortDeadlines).map((deadline, index) => (
           <DeadlineListItem
             key={index}
