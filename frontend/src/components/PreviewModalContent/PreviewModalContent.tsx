@@ -1,29 +1,25 @@
 import { Deadline } from "../../types";
 import { DeadlineCalendar } from "../DeadlineCalendar/DeadlineCalendar";
 
+import ical from "ical-generator"
+
 export interface PreviewModalContentProps {
     deadlines: Array<Deadline>;
 }
 
 const handleDownloadClick = (deadlines: Array<Deadline>) => {
-    // Create a simple .ics file content
-    let icsContent = `BEGIN:VCALENDAR
-VERSION:2.0
-CALSCALE:GREGORIAN
-`;
+    const cal = ical({ name: 'Deadlines', timezone: 'UTC' });
 
     deadlines.forEach(deadline => {
-        icsContent += `BEGIN:VEVENT
-SUMMARY:${deadline.name}
-DTSTART:${deadline.date}
-DESCRIPTION:${deadline.description || ""}
-END:VEVENT
-`;
+        cal.createEvent({
+            start: new Date(deadline.date),
+            summary: deadline.name,
+            description: deadline.description || "",
+        });
     });
 
-    icsContent += `END:VCALENDAR`;
-
-    // Create a blob and download the .ics file
+    // Download the .ics file
+    const icsContent = cal.toString();
     const blob = new Blob([icsContent], { type: 'text/calendar' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
