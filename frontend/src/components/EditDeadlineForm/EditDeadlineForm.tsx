@@ -2,23 +2,21 @@ import { useEffect, useState } from "react";
 import { Deadline, DeadlineData } from "../../types";
 
 
-export interface UpsertDeadlineFormProps {
+export interface EditDeadlineFormProps {
   onAdd: (deadlineData: DeadlineData) => void;
   onOpen: () => void;
   onClose: () => void;
-  isEditing?: boolean;
   editingDeadline?: Deadline;
   onUpdate?: (deadlineId: string, deadlineData: DeadlineData) => void;
 }
 
-export const UpsertDeadlineForm = ({
+export const EditDeadlineForm = ({
   onAdd,
   onOpen,
   onClose,
-  isEditing = false,
   editingDeadline,
   onUpdate
-}: UpsertDeadlineFormProps) => {
+}: EditDeadlineFormProps) => {
   const [name, setName] = useState("");
   const [date, setDate] = useState("");
   const [description, setDescription] = useState("");
@@ -28,12 +26,12 @@ export const UpsertDeadlineForm = ({
   }, []);
 
   useEffect(() => {
-    if (isEditing && editingDeadline) {
+    if (editingDeadline) {
       setName(editingDeadline.name);
       setDate(editingDeadline.date);
       setDescription(editingDeadline.description || "");
     }
-  }, [isEditing, editingDeadline]);
+  }, [editingDeadline]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,17 +41,10 @@ export const UpsertDeadlineForm = ({
       description: description.trim() || undefined
     };
 
-    if (isEditing && editingDeadline && onUpdate) {
+    if (editingDeadline && onUpdate) {
       onUpdate(editingDeadline.id, deadlineData);
     } else {
       onAdd(deadlineData);
-    }
-
-    // Only clear form if not editing
-    if (!isEditing) {
-      setName("");
-      setDate("");
-      setDescription("");
     }
   };
 
@@ -65,17 +56,36 @@ export const UpsertDeadlineForm = ({
   };
 
   return (
-    <div>
+    <div
+      style={{
+        padding: "1em",
+        display: "flex",
+        flexDirection: "column",
+        gap: "1em",
+      }}
+    >
       <div style={{
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        marginBottom: "20px"
+        // backgroundColor: "#6e2121ff",
       }}>
-        <h3>
-          {isEditing ? "Edit" : "Add"} Deadline
-        </h3>
-        <button onClick={handleClose}>x</button>
+        <div>
+          Edit Deadline
+        </div>
+        <button
+          style={{
+            background: "none",
+            border: "none",
+            fontSize: "1.5em",
+            cursor: "pointer",
+            lineHeight: "1em",
+            padding: 0,
+            margin: 0,
+          }}
+          onClick={handleClose}>
+          x
+        </button>
       </div>
 
       <form
@@ -132,9 +142,18 @@ export const UpsertDeadlineForm = ({
 
         <button
           type="submit"
-          style={{ width: "100%" }}
+          style={{
+            backgroundColor: "#007bff",
+            padding: "0.5em 1em",
+            color: "white",
+            border: "none",
+            borderRadius: "0.5em",
+            cursor: "pointer",
+            fontSize: "1em",
+            boxShadow: "0 2px 10px rgba(0, 0, 0, 0.3)",
+          }}
         >
-          {isEditing ? "Save" : "Add"}
+          Save
         </button>
       </form>
     </div>

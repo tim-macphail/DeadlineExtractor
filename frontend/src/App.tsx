@@ -15,7 +15,7 @@ import { UploadPrompt } from "./components/UploadPrompt/UploadPrompt";
 import ErrorOverlay from "./components/ErrorOverlay/ErrorOverlay";
 import LoadingOverlay from "./components/LoadingOverlay/LoadingOverlay";
 import Modal from "./components/Modal/Modal";
-import { UpsertDeadlineForm } from "./components/UpsertDeadlineForm/UpsertDeadlineForm";
+import { EditDeadlineForm } from "./components/EditDeadlineForm/EditDeadlineForm";
 import { useState } from "react";
 import PreviewModalContent from "./components/PreviewModalContent/PreviewModalContent";
 
@@ -136,8 +136,7 @@ export function App() {
           </Modal>
 
           <Modal isOpen={isEditModalOpen} onClose={handleCloseEditModal}>
-            <UpsertDeadlineForm
-              isEditing={true}
+            <EditDeadlineForm
               editingDeadline={editingDeadline}
               onAdd={() => { }} // Not used in edit mode
               onClose={handleCloseEditModal}
