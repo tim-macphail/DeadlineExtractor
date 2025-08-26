@@ -42,7 +42,7 @@ export function DeadlineCalendar({ deadlines, onEventClick }: DeadlineCalendarPr
 
     return (
       <div className="calendar-events">
-        {displayEvents.map((event, index) => (
+        {displayEvents.map((event, _index) => (
           <div key={event.id} className="calendar-event-item">
             {truncateText(event.name)}
           </div>

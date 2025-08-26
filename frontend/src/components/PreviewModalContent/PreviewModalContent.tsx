@@ -9,6 +9,9 @@ const PreviewModalContent = ({ deadlines }: PreviewModalContentProps) => {
     return (
         <div style={{ width: '100%', height: '100%' }}>
             <DeadlineCalendar onEventClick={() => { }} deadlines={deadlines} />
+            <button>
+                Download .ics
+            </button>
         </div>
     )
 }

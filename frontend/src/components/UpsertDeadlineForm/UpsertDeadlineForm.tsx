@@ -103,7 +103,10 @@ export const UpsertDeadlineForm = ({
           <input
             type="datetime-local"
             value={date}
-            onChange={(e) => setDate(e.target.value)}
+            onChange={(e) => {
+              console.log(e.target.value);
+              setDate(e.target.value);
+            }}
             style={{ width: "100%" }}
             required
           />
