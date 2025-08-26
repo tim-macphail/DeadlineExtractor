@@ -36,17 +36,27 @@ export function DeadlineList({
     >
       <div>
         {deadlines.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '20px' }}>No deadlines</div>
+          <div style={{ textAlign: 'center', padding: '20px' }}>
+            No deadlines
+          </div>
         ) : (
-          deadlines.sort(sortDeadlines).map((deadline, index) => (
-            <DeadlineListItem
-              key={index}
-              deadline={deadline}
-              onDeleteDeadline={onDeleteDeadline}
-              onEditDeadline={onEditDeadline}
-            />
-          ))
+          <h2 style={{
+            fontSize: '1.5em',
+            color: '#333',
+            fontWeight: 400,
+            paddingLeft: "1em",
+          }}>
+            Deadlines
+          </h2>
         )}
+        {deadlines.sort(sortDeadlines).map((deadline, index) => (
+          <DeadlineListItem
+            key={index}
+            deadline={deadline}
+            onDeleteDeadline={onDeleteDeadline}
+            onEditDeadline={onEditDeadline}
+          />
+        ))}
         <div
           style={{
             borderBottom: "1px solid #ccc",
