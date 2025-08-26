@@ -1,8 +1,15 @@
 .deadline-calendar .react-calendar__tile {
   border: 1px solid #ddd;
+  /* border-top: 1px solid #ddd;
+  border-left: 1px solid #ddd; */
   height: 6em;
   /* border-radius: 1em; */
 }
+
+/* for the bottom row they should have no bottom border */
+/* .deadline-calendar .react-calendar__month-view__days__day--weekend {
+  border-bottom: none;
+} */
 
 .deadline-calendar .react-calendar__navigation button {
   border-radius: 4px;
@@ -28,6 +35,7 @@
 }
 
 .deadline-calendar {
+  /* border-radius: 1em; */
   width: 100%;
   background-color: #e9e9e9;
 }

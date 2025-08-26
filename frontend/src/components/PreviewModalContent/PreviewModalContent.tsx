@@ -35,11 +35,57 @@ const PreviewModalContent = ({ deadlines }: PreviewModalContentProps) => {
       width: '50vw',
       minWidth: '600px',
       maxHeight: '80vh',
+      padding: '1em',
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '1em',
+      alignItems: 'center',
+      justifyContent: 'center',
     }}>
       <DeadlineCalendar onEventClick={() => { }} deadlines={deadlines} />
-      <button onClick={() => handleDownloadClick(deadlines)}>
-        Download .ics
-      </button>
+      <div style={{
+        display: 'flex',
+        gap: '1em',
+      }}>
+        <button
+          style={{
+            backgroundColor: "#007bff",
+            padding: "1em 2em",
+            color: "white",
+            border: "none",
+            borderRadius: "1em",
+            cursor: "pointer",
+            fontSize: "1em",
+            boxShadow: "0 2px 10px rgba(0, 0, 0, 0.3)",
+          }}
+          onClick={() => handleDownloadClick(deadlines)}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = "#0056b3";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = "#007bff";
+          }}
+        >
+          Download calendar
+        </button>
+        {/* <button
+          style={{
+            backgroundColor: "#b9b9b9b9",
+            aspectRatio: "1 / 1",
+            height: "2em",
+            color: "white",
+            border: "none",
+            borderRadius: "50%",
+            cursor: "pointer",
+            fontSize: "1.5em",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          ?
+        </button> */}
+      </div>
     </div>
   )
 }
