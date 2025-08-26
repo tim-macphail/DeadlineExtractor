@@ -1,6 +1,5 @@
 import { Sidebar } from "./components/Sidebar/Sidebar";
 import { PdfViewer } from "./components/PdfViewer/PdfViewer";
-import { Spinner } from "./components/Spinner/Spinner";
 import { useFileUpload } from "./hooks/useFileUpload";
 import { useDeadlineHighlightManagement } from "./hooks/useDeadlineHighlightManagement";
 import { useHashNavigation } from "./hooks/useHashNavigation";
@@ -10,14 +9,12 @@ import type { ScaledPosition } from "react-pdf-highlighter";
 
 import "./App.css";
 import "react-pdf-highlighter/dist/style.css";
-import { primary } from "./style/constants";
 import { UploadPrompt } from "./components/UploadPrompt/UploadPrompt";
 import ErrorOverlay from "./components/ErrorOverlay/ErrorOverlay";
 import LoadingOverlay from "./components/LoadingOverlay/LoadingOverlay";
 import Modal from "./components/Modal/Modal";
 import { UpsertDeadlineForm } from "./components/UpsertDeadlineForm/UpsertDeadlineForm";
 import { useState } from "react";
-import { DeadlineCalendar } from "./components/DeadlineCalendar/DeadlineCalendar";
 import PreviewModalContent from "./components/PreviewModalContent/PreviewModalContent";
 
 export function App() {
@@ -25,12 +22,7 @@ export function App() {
   const {
     deadlines,
     setDeadlines,
-    showAddForm,
-    setShowAddForm,
     editingDeadline,
-    showEditForm,
-    addDeadline,
-    addStandaloneDeadline,
     deleteDeadline,
     updateDeadline,
     updateHighlight,
@@ -56,7 +48,7 @@ export function App() {
   } = useFileUpload(setDeadlines);
 
   // Hash navigation
-  const { handleScrollRef, scrollToDeadline, resetHash } = useHashNavigation(deadlines);
+  const { handleScrollRef, resetHash } = useHashNavigation(deadlines);
 
   // PDF callbacks
   const handleAddDeadlineWithHighlightAndEdit = (position: ScaledPosition, content: { text?: string; image?: string }) => {
@@ -64,14 +56,9 @@ export function App() {
   };
 
   const { handleSelectionFinished, handleHighlightTransform } = usePdfCallbacks({
-    addDeadline,
     updateHighlight,
     addDeadlineWithHighlightAndEdit: handleAddDeadlineWithHighlightAndEdit,
   });
-
-  const handleDeadlineClick = (deadline: Deadline) => {
-    scrollToDeadline(deadline.id);
-  };
 
   // Modal state
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -98,13 +85,7 @@ export function App() {
     <div className="App" style={{ display: "flex", height: "100vh" }}>
       <Sidebar
         deadlines={deadlines}
-        highlights={highlights}
-        resetToUpload={resetToUpload}
-        onDeadlineClick={handleDeadlineClick}
         onDeleteDeadline={deleteDeadline}
-        showAddForm={showAddForm}
-        onShowAddForm={setShowAddForm}
-        onAddDeadline={addStandaloneDeadline}
         onEditDeadline={handleOpenEditModal}
         onAddStandaloneDeadlineAndEdit={handleAddStandaloneDeadlineAndEdit}
       />
@@ -170,9 +151,9 @@ export function App() {
           <UpsertDeadlineForm
             isEditing={true}
             editingDeadline={editingDeadline}
-            onAdd={() => {}} // Not used in edit mode
+            onAdd={() => { }} // Not used in edit mode
             onClose={handleCloseEditModal}
-            onOpen={() => {}}
+            onOpen={() => { }}
             onUpdate={(deadlineId, deadlineData) => {
               updateDeadline(deadlineId, deadlineData);
               handleCloseEditModal();
