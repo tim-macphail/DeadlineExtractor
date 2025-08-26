@@ -9,6 +9,7 @@ import type {
 } from "react-pdf-highlighter";
 
 import { HighlightPopup } from "../components/HighlightPopup/HighlightPopup";
+import { PlusButton } from "../components/PlusButton/PlusButton";
 
 export interface UsePdfCallbacksProps {
   updateHighlight: (highlightId: string, position: Partial<ScaledPosition>, content: Partial<{ text?: string; image?: string }>) => void;
@@ -23,24 +24,14 @@ export const usePdfCallbacks = ({ updateHighlight, addDeadlineWithHighlightAndEd
     transformSelection: () => void,
   ) => {
     return (
-      <button
-        style={{
-          padding: "8px 16px",
-          backgroundColor: "#007bff",
-          color: "white",
-          border: "none",
-          borderRadius: "4px",
-          cursor: "pointer",
-          fontSize: "14px",
-        }}
+      <PlusButton
         onClick={() => {
           addDeadlineWithHighlightAndEdit(position, content);
           hideTipAndSelection();
           transformSelection();
         }}
-      >
-        Add deadline
-      </button>
+      />
+
     );
   }, [addDeadlineWithHighlightAndEdit]);
 

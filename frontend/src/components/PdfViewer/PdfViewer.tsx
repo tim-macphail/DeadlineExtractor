@@ -40,7 +40,7 @@ export const PdfViewer = ({
   onHighlightTransform,
 }: PdfViewerProps) => {
   return (
-    <div style={{ height: "100%", backgroundColor: "lightgreen" }}>
+    <div style={{ height: "100%", backgroundColor: "lightgray" }}>
       <PdfLoader url={url} beforeLoad={<Spinner />}>
         {(pdfDocument) => (
           <PdfHighlighter

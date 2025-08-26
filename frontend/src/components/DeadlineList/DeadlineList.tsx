@@ -1,6 +1,7 @@
 import type { IHighlight } from "react-pdf-highlighter";
 import { Deadline } from "../../types";
 import TrashIcon from "../../icons/Trash";
+import { PlusButton } from "../PlusButton/PlusButton";
 
 export interface DeadlineListProps {
   deadlines: Array<Deadline>;
@@ -35,7 +36,7 @@ export function DeadlineList({
     <div
       style={{
         height: "100%",
-        overflowY: "auto",
+        overflowY: "scroll",
       }}
     >
       <div>
@@ -134,26 +135,7 @@ export function DeadlineList({
             alignItems: "center",
             justifyContent: "center",
           }}>
-            <button
-              onClick={onAddStandaloneDeadlineAndEdit}
-              style={{
-                borderRadius: "50%",
-                width: "40px",
-                height: "40px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                backgroundColor: "#007bff",
-                border: "none",
-                color: "white",
-                fontSize: "24px",
-                cursor: "pointer",
-                margin: "16px",
-                boxShadow: "0 2px 6px black",
-              }}
-            >
-              +
-            </button>
+            <PlusButton onClick={onAddStandaloneDeadlineAndEdit} />
           </div>
         </div>
       </div>
