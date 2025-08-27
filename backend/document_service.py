@@ -1,6 +1,7 @@
 import random
 import tempfile
 import os
+from ai import get_deadlines
 from get_highlight_positions import get_highlight_position, NoHighlightFoundError
 from get_text_from_pdf import get_text_from_pdf
 from find_deadlines_in_text import find_deadlines_in_text
@@ -32,7 +33,7 @@ def process_document(file_content: bytes, filename: str) -> list:
         print(f"Extracted {len(extracted_text)} characters")
 
         # Send text to LLM to find deadlines
-        deadlines = find_deadlines_in_text(extracted_text)
+        deadlines = get_deadlines(extracted_text[2900:3900])
         print(f"LLM found {len(deadlines)} deadlines")
 
         for deadline in deadlines:
