@@ -19,6 +19,8 @@ export const EditDeadlineForm = ({
 }: EditDeadlineFormProps) => {
   const [name, setName] = useState("");
   const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
+  const [hasTime, setHasTime] = useState(false);
   const [description, setDescription] = useState("");
 
   useEffect(() => {
@@ -28,16 +30,29 @@ export const EditDeadlineForm = ({
   useEffect(() => {
     if (editingDeadline) {
       setName(editingDeadline.name);
-      setDate(editingDeadline.date);
+      const deadlineDate = editingDeadline.date;
       setDescription(editingDeadline.description || "");
+
+      // Check if date includes time (format: YYYY-MM-DDTHH:MM)
+      if (deadlineDate.includes('T')) {
+        const [datePart, timePart] = deadlineDate.split('T');
+        setDate(datePart);
+        setTime(timePart);
+        setHasTime(true);
+      } else {
+        setDate(deadlineDate);
+        setTime("");
+        setHasTime(false);
+      }
     }
   }, [editingDeadline]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const finalDate = hasTime && time ? `${date}T${time}` : date;
     const deadlineData = {
       name: name.trim(),
-      date,
+      date: finalDate,
       description: description.trim() || undefined
     };
 
@@ -51,6 +66,8 @@ export const EditDeadlineForm = ({
   const handleClose = () => {
     setName("");
     setDate("");
+    setTime("");
+    setHasTime(false);
     setDescription("");
     onClose();
   };
@@ -111,15 +128,37 @@ export const EditDeadlineForm = ({
             Due Date
           </label>
           <input
-            type="datetime-local"
+            type="date"
             value={date}
-            onChange={(e) => {
-              console.log(e.target.value);
-              setDate(e.target.value);
-            }}
+            onChange={(e) => setDate(e.target.value)}
             style={{ width: "100%" }}
             required
           />
+        </div>
+
+        <div>
+          <label style={{ display: "flex", alignItems: "center", gap: "0.5em" }}>
+            <input
+              type="checkbox"
+              checked={hasTime}
+              onChange={(e) => {
+                setHasTime(e.target.checked);
+                if (!e.target.checked) {
+                  setTime("");
+                }
+              }}
+            />
+            Include time
+          </label>
+          {hasTime && (
+            <input
+              type="time"
+              value={time}
+              onChange={(e) => setTime(e.target.value)}
+              style={{ width: "100%", marginTop: "0.5em" }}
+              required
+            />
+          )}
         </div>
 
         <div>
