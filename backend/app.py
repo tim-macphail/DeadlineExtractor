@@ -1,15 +1,26 @@
+from fastapi import FastAPI, File, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
+from document_service import process_document
+import os
+import logging
 from dotenv import load_dotenv
+from logging_config import setup_logging
+
 load_dotenv()
 
-import os
-from document_service import process_document
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi import FastAPI, File, UploadFile
+# Set up logging
+setup_logging()
+logger = logging.getLogger(__name__)
+
+# Sanity check: Verify environment variables are loaded
+logger.info(f"GENAI_API_KEY loaded: {'Yes' if os.getenv('GENAI_API_KEY') else 'No'}")
+logger.info(f"CORS_ORIGINS loaded: {os.getenv('CORS_ORIGINS')}")
 
 app = FastAPI()
 
 # Configure CORS
-cors_origins = os.getenv("CORS_ORIGINS").split(",")
+cors_origins_str = os.getenv("CORS_ORIGINS", "http://localhost:5173")
+cors_origins = cors_origins_str.split(",")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=cors_origins,

@@ -1,5 +1,8 @@
 import random
+import logging
 import pymupdf  # PyMuPDF
+
+logger = logging.getLogger(__name__)
 
 class NoHighlightFoundError(Exception):
     """Raised when no highlight positions are found for the given search text."""
@@ -87,5 +90,5 @@ def get_highlight_position(pdf_path, search_text):
         # Re-raise our custom exception
         raise
     except Exception as e:
-        print(f"Error processing PDF: {e}")
+        logger.error(f"Error processing PDF: {e}")
         raise NoHighlightFoundError(f"Error searching for text: '{search_text}'") from e

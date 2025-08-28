@@ -1,11 +1,16 @@
 import os
+import logging
 from google import genai
 import json
 
-if "GENAI_API_KEY" not in os.environ:
-    raise ValueError("GENAI_API_KEY environment variable not set")
+logger = logging.getLogger(__name__)
 
-client = genai.Client(api_key=os.getenv("GENAI_API_KEY"))
+def get_genai_client():
+    """Get GenAI client with lazy loading."""
+    api_key = os.getenv("GENAI_API_KEY")
+    if not api_key:
+        raise ValueError("GENAI_API_KEY environment variable not set")
+    return genai.Client(api_key=api_key)
 
 
 prompt = """Extract deadlines from the following text that was read from a pdf document using pymupdf. The schema is
@@ -42,15 +47,17 @@ Here is the text to analyze:
 def get_deadlines(text: str):
     message = prompt + '"""' + text + '"""'
 
-    print("Sending to LLM:")
-    print(message)
+    logger.info("Sending to LLM:")
+    logger.debug(message)
 
+    # Get client lazily when needed
+    client = get_genai_client()
     response = client.models.generate_content(
         model="gemini-2.5-flash",
         contents=message,
     )
 
-    print(response.text)
+    logger.debug(response.text)
 
     # Remove extra characters added by Gemini
     response_text = response.text[7:-3]

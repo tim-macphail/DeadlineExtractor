@@ -1,10 +1,13 @@
 import random
 import tempfile
 import os
+import logging
 from ai import get_deadlines
 from get_highlight_positions import get_highlight_position, NoHighlightFoundError
 from get_text_from_pdf import get_text_from_pdf
 from find_deadlines_in_text import find_deadlines_in_text
+
+logger = logging.getLogger(__name__)
 
 
 def process_document(file_content: bytes, filename: str) -> list:
@@ -19,8 +22,8 @@ def process_document(file_content: bytes, filename: str) -> list:
         list: List of deadline objects with position information, or empty list on error
     """
     # Log PDF information
-    print(f"Processing document: {filename}")
-    print(f"File size: {len(file_content)} bytes")
+    logger.info(f"Processing document: {filename}")
+    logger.info(f"File size: {len(file_content)} bytes")
 
     # Create temporary file
     with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as temp_file:
@@ -30,11 +33,11 @@ def process_document(file_content: bytes, filename: str) -> list:
     try:
         # Extract text from the PDF (without tables)
         extracted_text = get_text_from_pdf(temp_file_path, include_tables=False)['text']
-        print(f"Extracted {len(extracted_text)} characters")
+        logger.info(f"Extracted {len(extracted_text)} characters")
 
         # Send text to LLM to find deadlines
         deadlines = get_deadlines(extracted_text[2900:3900])
-        print(f"LLM found {len(deadlines)} deadlines")
+        logger.info(f"LLM found {len(deadlines)} deadlines")
 
         for deadline in deadlines:
             try:
@@ -43,13 +46,13 @@ def process_document(file_content: bytes, filename: str) -> list:
                 deadline['highlight']['id'] = id
                 deadline['id'] = id
             except NoHighlightFoundError as e:
-                print(f"Warning: {e}. Skipping deadline '{deadline['name']}'")
+                logger.warning(f"Warning: {e}. Skipping deadline '{deadline['name']}'")
 
         # Return search results
         return deadlines
 
     except Exception as e:
-        print(f"Error processing document: {e}")
+        logger.error(f"Error processing document: {e}")
         # Return empty list on error
         return []
 
@@ -57,4 +60,4 @@ def process_document(file_content: bytes, filename: str) -> list:
         # Clean up temporary file
         if os.path.exists(temp_file_path):
             os.unlink(temp_file_path)
-            print(f"Cleaned up temporary file: {temp_file_path}")
+            logger.info(f"Cleaned up temporary file: {temp_file_path}")

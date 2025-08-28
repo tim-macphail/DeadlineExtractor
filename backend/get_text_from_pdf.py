@@ -1,4 +1,7 @@
 import pymupdf
+import logging
+
+logger = logging.getLogger(__name__)
 
 def get_text_from_pdf(pdf_path, include_tables=False):
     """Extract text from the PDF, and optionally tables."""
@@ -15,12 +18,12 @@ def get_text_from_pdf(pdf_path, include_tables=False):
         doc.close()
         return {'text': text, 'tables': tables}
     except Exception as e:
-        print(f"Error reading PDF: {e}")
+        logger.error(f"Error reading PDF: {e}")
         return {'text': '', 'tables': []}
 
 def mock_api_call(data):
     """Pretend to send text and tables to an API and return a response."""
     # Simulate processing time or API call
-    print(f"Text length: {len(data['text'])} characters")
-    print(f"Number of tables: {len(data['tables'])}")
+    logger.info(f"Text length: {len(data['text'])} characters")
+    logger.info(f"Number of tables: {len(data['tables'])}")
     return {"deadlines": []}
