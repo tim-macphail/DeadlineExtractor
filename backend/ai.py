@@ -2,6 +2,9 @@ import os
 from google import genai
 import json
 
+if "GENAI_API_KEY" not in os.environ:
+    raise ValueError("GENAI_API_KEY environment variable not set")
+
 client = genai.Client(api_key=os.getenv("GENAI_API_KEY"))
 
 
@@ -49,7 +52,7 @@ def get_deadlines(text: str):
 
     print(response.text)
 
+    # Remove extra characters added by Gemini
     response_text = response.text[7:-3]
 
     return json.loads(response_text)
-

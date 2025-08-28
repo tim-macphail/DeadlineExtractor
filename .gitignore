@@ -7,3 +7,4 @@ dist
 /blob-report/
 /playwright/.cache/
 backend/__pycache__/
+.env
