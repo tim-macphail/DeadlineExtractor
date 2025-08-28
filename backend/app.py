@@ -14,13 +14,13 @@ logger = logging.getLogger(__name__)
 
 # Sanity check: Verify environment variables are loaded
 logger.info(f"GENAI_API_KEY loaded: {'Yes' if os.getenv('GENAI_API_KEY') else 'No'}")
-logger.info(f"CORS_ORIGINS loaded: {os.getenv('CORS_ORIGINS')}")
 
 app = FastAPI()
 
 # Configure CORS
 cors_origins_str = os.getenv("CORS_ORIGINS", "http://localhost:5173")
 cors_origins = cors_origins_str.split(",")
+logger.info(f"Configured CORS origins: {cors_origins}")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=cors_origins,
@@ -40,3 +40,7 @@ async def upload_document(file: UploadFile = File(...)):
 
     # Return the results
     return results
+
+@app.get("/api/health")
+async def health_check():
+    return {"status": "ok"}
